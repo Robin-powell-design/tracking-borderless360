@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tracking Page Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body { font-family: 'Montserrat', sans-serif; background: #f5f6f8; display: flex; flex-direction: column; }
+
+    /* ── Header ── */
+    .admin-header { height: 68px; background: #6B1AFF; display: flex; align-items: center; justify-content: space-between; padding: 0 24px 0 82px; flex-shrink: 0; z-index: 100; }
+    .admin-header-logo { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: #fff; letter-spacing: 0.8px; }
+    .admin-header-logo span { color: #05e7ff; }
+    .admin-header-right { display: flex; align-items: center; gap: 10px; }
+    .admin-header-icons { display: flex; align-items: center; gap: 10px; }
+    .admin-header-icon { width: 32px; height: 32px; border-radius: 4px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); cursor: pointer; transition: background 0.15s; }
+    .admin-header-icon:hover { background: rgba(255,255,255,0.2); }
+    .admin-header-icon img { width: 32px; height: 32px; object-fit: contain; }
+    .admin-header-divider { width: 1px; height: 16px; background: #3f00b2; margin: 0 4px; }
+    .admin-header-user { display: flex; align-items: center; gap: 10px; padding-left: 6px; }
+    .admin-header-user-text { text-align: right; }
+    .admin-header-user-name { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700; color: #fff; line-height: 12px; }
+    .admin-header-user-role { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700; color: #05e7ff; line-height: 12px; }
+    .admin-header-avatar { width: 40px; height: 40px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; }
+    .admin-header-avatar-inner { width: 32px; height: 32px; border-radius: 50%; background: #ceb2ff; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; color: #6b1aff; }
+
+    /* ── Body layout ── */
+    .admin-body { flex: 1; display: flex; overflow: hidden; }
+
+    /* ── Sidebar nav ── */
+    .admin-sidebar { width: 72px; background: rgba(255,255,255,0.45); backdrop-filter: blur(12px); border-right: 1px solid rgba(255,255,255,0.13); display: flex; flex-direction: column; align-items: center; padding: 8px 0; gap: 0; flex-shrink: 0; overflow-y: auto; box-shadow: 3px 5px 13px 0px rgba(96,95,171,0.1); }
+    .sidebar-icon { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 8px; cursor: default; transition: background 0.15s; padding: 6px; }
+    .sidebar-icon:hover { background: rgba(255,255,255,0.2); }
+    .sidebar-icon img { width: 44px; height: 44px; object-fit: contain; }
+
+    /* ── Main content ── */
+    .admin-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    /* ── Progress stepper ── */
+    .progress-bar { height: 56px; background: #fff; border-bottom: 1px solid #ebedef; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; }
+    .progress-link { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 600; color: #6b1aff; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; min-width: 104px; }
+    .progress-link:hover { color: #5214cc; }
+    .progress-dots { display: flex; align-items: center; gap: 0; }
+    .progress-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #6b1aff; background: #fff; position: relative; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+    .progress-dot::after { content: ''; width: 12.8px; height: 12.8px; border-radius: 50%; background: transparent; transition: background 0.2s; }
+    .progress-dot.active::after { background: #6b1aff; }
+    .progress-dot.completed::after { background: #6b1aff; }
+    .progress-line { width: 193px; height: 2px; background: #ebedef; }
+    .progress-line.active { background: #6b1aff; }
+    .progress-label { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 600; color: #96a0ab; min-width: 104px; text-align: right; }
+
+    /* ── Content area (form + preview) ── */
+    .content-area { flex: 1; display: flex; overflow: hidden; }
+
+    /* ── Left panel: Form ── */
+    .form-panel { flex: 4; min-width: 0; padding: 0; overflow-y: auto; }
+    .step-content { padding: 32px 24px 100px; }
+    .form-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 22px; color: rgba(0,0,0,0.8); margin-bottom: 4px; }
+    .form-subtitle { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: #66727f; line-height: 1.6; margin-bottom: 20px; }
+
+    /* ── Cards ── */
+    .form-card { background: #f9fafb; border-radius: 8px; box-shadow: 0 2px 2px rgba(30,40,130,0.08); border-bottom: 1px solid #fff; margin-bottom: 16px; overflow: hidden; }
+    .card-header { padding: 20px 24px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 20px; color: #1e2125; border-bottom: 1px solid rgba(0,0,0,0.1); line-height: 28px; }
+    .card-section { padding: 20px 24px; }
+    .card-section + .card-section { border-top: 1px solid #ebedef; }
+
+    /* ── Form fields ── */
+    .field-group { margin-bottom: 16px; }
+    .field-group:last-child { margin-bottom: 0; }
+    .field-label { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 16px; color: #1e2125; margin-bottom: 2px; display: flex; align-items: center; gap: 8px; line-height: 24px; }
+    .field-hint { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: #66727f; margin-bottom: 8px; line-height: 24px; }
+    .field-input { width: 100%; padding: 12px; border: 1px solid #b3bac2; border-radius: 8px; font-family: 'Montserrat', sans-serif; font-size: 16px; color: #1e2125; background: #fff; outline: none; }
+    .field-input:focus { border-color: #6b1aff; box-shadow: 0 0 0 3px rgba(107,26,255,0.1); }
+    .field-input::placeholder { color: #66727f; font-weight: 500; font-size: 14px; }
+    .field-input-sm { padding: 8px 14px; font-size: 14px; }
+
+    /* ── Colour picker row ── */
+    .colour-row { display: flex; gap: 48px; }
+    .colour-field { flex: 1; }
+    .colour-field label { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: #4a535c; display: block; margin-bottom: 6px; line-height: 24px; }
+    .colour-input-wrap { display: flex; gap: 8px; align-items: flex-end; }
+    .colour-input-wrap .field-input { flex: 1; }
+    .colour-swatch { width: 46px; height: 46px; border-radius: 8px; cursor: pointer; border: none; flex-shrink: 0; }
+    .colour-swatch::-webkit-color-swatch-wrapper { padding: 0; }
+    .colour-swatch::-webkit-color-swatch { border: none; border-radius: 8px; }
+
+    /* ── Upload areas ── */
+    .upload-row { display: flex; flex-direction: column; gap: 8px; }
+    .upload-area { flex: 1; background: #f1f2f4; border: 1px dashed #cfd3d8; border-radius: 8px; padding: 12px 14px; cursor: pointer; display: flex; flex-direction: row; align-items: center; gap: 10px; transition: all 0.15s; position: relative; overflow: hidden; }
+    .upload-area:hover { border-color: #6b1aff; background: #f5f0ff; }
+    .upload-area.has-file { border-style: solid; border-color: #6b1aff; background: #f9f5ff; }
+    .upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 2; }
+    .upload-icon-box { width: 36px; height: 36px; background: #fafafa; border: 1px solid #cfd3d8; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: auto; }
+    .upload-text { font-family: 'Montserrat', sans-serif; font-size: 14px; color: #6b1aff; font-weight: 600; line-height: 20px; flex: 1; }
+    .upload-text span { color: #66727f; font-weight: 500; }
+    .upload-preview { max-width: 80px; max-height: 50px; object-fit: contain; border-radius: 4px; }
+
+    /* ── Font selects ── */
+    .font-row { display: flex; gap: 8px; }
+    .font-field { flex: 1; }
+    .font-field label { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: #4a535c; display: block; margin-bottom: 6px; }
+    .font-field select { width: 100%; padding: 12px; border: 1px solid #b3bac2; border-radius: 8px; font-family: 'Montserrat', sans-serif; font-size: 16px; color: #7a8794; background: #fff; outline: none; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 7.5l5 5 5-5' stroke='%2396a0ab' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; cursor: pointer; }
+    .font-field select:focus { border-color: #6b1aff; }
+
+    /* ── Toggle row ── */
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; cursor: pointer; transition: background 0.1s; }
+    .toggle-row:hover { background: rgba(107,26,255,0.02); }
+    .toggle-info { flex: 1; }
+    .toggle-title { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 16px; color: #1e2125; line-height: 24px; }
+    .toggle-title.heading { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 20px; line-height: 28px; }
+    .toggle-desc { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: #757575; margin-top: 2px; line-height: 24px; }
+    .toggle-switch { width: 35px; height: 20px; border-radius: 20px; background: #ebedef; border: 1.25px solid #b3bac2; position: relative; cursor: pointer; transition: all 0.2s; flex-shrink: 0; margin-left: 16px; }
+    .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(16,24,40,0.1), 0 1px 2px rgba(16,24,40,0.06); transition: all 0.2s; }
+    .toggle-switch.on { background: #6b1aff; border-color: #6b1aff; }
+    .toggle-switch.on::after { left: 15px; }
+    .toggle-expand { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .toggle-expand.open { max-height: 800px; }
+    .toggle-expand-content { padding: 0 24px 20px; }
+
+    /* ── Sub-toggle (expanded content) ── */
+    .sub-toggle-row { display: flex; align-items: flex-start; justify-content: space-between; padding: 20px 24px 20px 40px; }
+    .sub-toggle-label { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 14px; color: #1e2125; line-height: 20px; }
+    .sub-toggle-label .arrow { font-family: 'Inter', sans-serif; font-weight: 600; }
+    .sub-toggle-desc { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: #66727f; line-height: 24px; margin-top: 2px; }
+    .sub-field-row { display: flex; align-items: center; gap: 8px; padding: 0 24px 20px; }
+    .sub-field-input { width: 66px; height: 40px; padding: 8px 14px; border: 1px solid #b3bac2; border-radius: 8px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #66727f; background: #fff; outline: none; text-align: center; }
+    .sub-field-text { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: #66727f; line-height: 24px; }
+
+    /* ── Textarea ── */
+    .field-textarea { width: 100%; height: 109px; padding: 12px 14px; border: 1px solid #d0d5dd; border-radius: 8px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #667085; background: #fff; outline: none; resize: vertical; line-height: 20px; box-shadow: 0 1px 2px rgba(16,24,40,0.05); }
+    .field-textarea:focus { border-color: #6b1aff; box-shadow: 0 0 0 3px rgba(107,26,255,0.1); }
+    .field-textarea::placeholder { color: #667085; }
+
+    /* ── Divider ── */
+    .card-divider { height: 1px; background: #ebedef; margin: 0 23px; }
+
+    /* ── Nav links section ── */
+    .nav-link-row { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
+    .nav-link-row .field-input { flex: 1; }
+    .remove-link-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: none; background: none; cursor: pointer; color: #96a0ab; font-size: 18px; border-radius: 4px; }
+    .remove-link-btn:hover { color: #f63d68; background: #fff0f3; }
+    .add-link-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid #6b1aff; border-radius: 8px; background: none; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 14px; color: #6b1aff; margin-top: 4px; }
+    .add-link-btn:hover { background: #f5f0ff; }
+
+    /* ── Info icon ── */
+    .info-icon { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #96a0ab; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #96a0ab; cursor: help; flex-shrink: 0; }
+
+    /* ── Right panel: Preview ── */
+    .preview-panel { flex: 6; min-width: 0; background: #e8eaed; padding: 24px; display: flex; flex-direction: column; overflow: hidden; }
+    .preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .preview-title { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 14px; color: #1e2125; }
+    .preview-toggles { display: flex; gap: 4px; }
+    .preview-toggle { width: 36px; height: 28px; border: 1px solid #cfd3d8; border-radius: 6px; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .preview-toggle.active { background: #6b1aff; border-color: #6b1aff; color: #fff; }
+    .preview-toggle:not(.active) { color: #66727f; }
+    .preview-toggle svg { width: 16px; height: 16px; }
+    .preview-frame { flex: 1; display: flex; flex-direction: column; transition: all 0.3s; }
+    .preview-frame.mobile { max-width: 390px; margin: 0 auto; width: 100%; }
+    .browser-chrome { background: #e8e8e8; border-radius: 8px 8px 0 0; padding: 10px 12px; display: flex; align-items: center; gap: 6px; }
+    .browser-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .browser-dot.red { background: #ff5f57; }
+    .browser-dot.yellow { background: #febc2e; }
+    .browser-dot.green { background: #28c840; }
+    .browser-url { flex: 1; background: #fff; border-radius: 4px; padding: 3px 8px; font-size: 11px; color: #999; margin-left: 8px; font-family: 'Inter', sans-serif; line-height: 16px; }
+    .preview-iframe { flex: 1; border: none; width: 100%; background: #fff; border-radius: 0 0 8px 8px; }
+
+    /* ── Bottom bar ── */
+    .bottom-bar { height: 68px; background: #fff; border-top: 1px solid #ebedef; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; }
+    .btn-back { display: flex; align-items: center; gap: 6px; padding: 10px 20px; border: 1px solid #d0d5dd; border-radius: 8px; background: #fff; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 14px; color: #344054; }
+    .btn-back:hover { background: #f9fafb; }
+    .btn-primary { padding: 12px 24px; border-radius: 8px; background: #6b1aff; color: #fff; border: none; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 15px; }
+    .btn-primary:hover { background: #5a14d9; }
+    .btn-primary.finish { background: #6b1aff; }
+    .btn-primary.finish:hover { background: #5a14d9; }
+
+    /* ── Step visibility ── */
+    .step-content { display: none; }
+    .step-content.active { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="admin-header">
+  <div class="admin-header-logo">BORDERLESS<span>360</span></div>
+  <div class="admin-header-right">
+    <div class="admin-header-icons">
+      <div class="admin-header-icon"><img src="icons/admin-nav/top-nav/Container.png" alt="Calculator"></div>
+      <div class="admin-header-icon"><img src="icons/admin-nav/top-nav/Container-1.png" alt="Calendar"></div>
+      <div class="admin-header-icon"><img src="icons/admin-nav/top-nav/Container-2.png" alt="Notifications"></div>
+      <div class="admin-header-icon"><img src="icons/admin-nav/top-nav/Container-3.png" alt="Help"></div>
+    </div>
+    <div class="admin-header-divider"></div>
+    <div class="admin-header-user">
+      <div class="admin-header-user-text">
+        <div class="admin-header-user-name">Emil</div>
+        <div class="admin-header-user-role">Release Borderless360</div>
+      </div>
+      <div class="admin-header-avatar">
+        <div class="admin-header-avatar-inner">E</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="admin-body">
+  <!-- ═══ SIDEBAR ═══ -->
+  <nav class="admin-sidebar">
+    <div class="sidebar-icon"><img src="icons/admin-nav/Menu.png" alt="Menu"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/home.png" alt="Home"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/sales orders.png" alt="Sales Orders"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/retuens.png" alt="Returns"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/asn orders.png" alt="ASN Orders"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/work orders.png" alt="Work Orders"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/mainfest.png" alt="Manifest"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/Product.png" alt="Product"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/Shipping.png" alt="Shipping"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/Pricing.png" alt="Pricing"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/Inventory.png" alt="Inventory"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/analytics.png" alt="Analytics"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/Tickets.png" alt="Tickets"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/Billing.png" alt="Billing"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/AI agent.png" alt="AI Agent"></div>
+    <div class="sidebar-icon"><img src="icons/admin-nav/Settings.png" alt="Settings"></div>
+  </nav>
+
+  <!-- ═══ MAIN ═══ -->
+  <div class="admin-main">
+    <!-- Progress stepper -->
+    <div class="progress-bar">
+      <a class="progress-link" href="#">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Save and Exit
+      </a>
+      <div class="progress-dots">
+        <div class="progress-dot active" id="dot-1" onclick="goToStep(1)"></div>
+        <div class="progress-line" id="progress-line"></div>
+        <div class="progress-dot" id="dot-2" onclick="goToStep(2)"></div>
+      </div>
+      <span class="progress-label" id="step-label">Step 1 of 2</span>
+    </div>
+
+    <!-- Content area -->
+    <div class="content-area">
+      <!-- ═══ LEFT: FORM PANEL ═══ -->
+      <div class="form-panel">
+        <!-- ══ STEP 1: Order Search Page ══ -->
+        <div class="step-content active" id="step-1">
+          <h1 class="form-title">Search Page</h1>
+          <p class="form-subtitle">Customise how your tracking search page looks and feels to your customers</p>
+
+          <!-- Branding -->
+          <div class="form-card">
+            <div class="card-header">Branding</div>
+
+            <!-- Page title -->
+            <div class="card-section">
+              <div class="field-group">
+                <div class="field-label">Page title</div>
+                <div class="field-hint">Appears as the main heading on your order search page</div>
+                <input class="field-input" type="text" id="page-title" placeholder="Track your items" value="Track your items" oninput="sendConfig()">
+              </div>
+            </div>
+
+            <!-- Logo & favicon -->
+            <div class="card-section">
+              <div class="field-group">
+                <div class="field-label">Logo, favicon and page image</div>
+                <div class="field-hint">Upload your logo and favicon to brand the tracking page</div>
+                <div class="upload-row" style="margin-top:8px;">
+                  <div class="upload-area" id="logo-upload-area">
+                    <input type="file" accept="image/*" onchange="handleUpload(this,'logo')">
+                    <div class="upload-text">Upload <span>your company logo</span></div>
+                    <div class="upload-icon-box">
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3.33 13.33L6.86 9.8a1.67 1.67 0 012.36 0l3.53 3.53m-1.42-1.42l1.2-1.2a1.67 1.67 0 012.35 0l2.45 2.46M5.83 16.67h8.34a2.5 2.5 0 002.5-2.5V5.83a2.5 2.5 0 00-2.5-2.5H5.83a2.5 2.5 0 00-2.5 2.5v8.34a2.5 2.5 0 002.5 2.5z" stroke="#66727f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                  </div>
+                  <div class="upload-area" id="favicon-upload-area">
+                    <input type="file" accept="image/*" onchange="handleUpload(this,'favicon')">
+                    <div class="upload-text">Upload <span>your company favicon</span></div>
+                    <div class="upload-icon-box">
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3.33 13.33L6.86 9.8a1.67 1.67 0 012.36 0l3.53 3.53m-1.42-1.42l1.2-1.2a1.67 1.67 0 012.35 0l2.45 2.46M5.83 16.67h8.34a2.5 2.5 0 002.5-2.5V5.83a2.5 2.5 0 00-2.5-2.5H5.83a2.5 2.5 0 00-2.5 2.5v8.34a2.5 2.5 0 002.5 2.5z" stroke="#66727f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                  </div>
+                </div>
+                <div class="upload-area" style="margin-top:8px;width:100%;" id="page-image-upload-area">
+                  <input type="file" accept="image/*" onchange="handleUpload(this,'pageImage')">
+                  <div class="upload-text">Upload <span>your page hero image</span></div>
+                  <div class="upload-icon-box">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3.33 13.33L6.86 9.8a1.67 1.67 0 012.36 0l3.53 3.53m-1.42-1.42l1.2-1.2a1.67 1.67 0 012.35 0l2.45 2.46M5.83 16.67h8.34a2.5 2.5 0 002.5-2.5V5.83a2.5 2.5 0 00-2.5-2.5H5.83a2.5 2.5 0 00-2.5 2.5v8.34a2.5 2.5 0 002.5 2.5z" stroke="#66727f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fonts -->
+            <div class="card-section">
+              <div class="field-group">
+                <div class="field-label">Fonts <span class="info-icon">i</span></div>
+                <div class="field-hint">Customise the heading and body fonts on your tracking pages</div>
+                <div class="font-row" style="margin-top:8px;">
+                  <div class="font-field">
+                    <label>Title font</label>
+                    <select id="title-font" onchange="sendConfig()">
+                      <option selected>Plus Jakarta Sans</option>
+                      <option>Montserrat</option>
+                      <option>Georgia</option>
+                      <option>Inter</option>
+                      <option>Roboto</option>
+                      <option>Open Sans</option>
+                      <option>Lato</option>
+                    </select>
+                  </div>
+                  <div class="font-field">
+                    <label>Body font</label>
+                    <select id="body-font" onchange="sendConfig()">
+                      <option>Plus Jakarta Sans</option>
+                      <option>Montserrat</option>
+                      <option selected>Inter</option>
+                      <option>Roboto</option>
+                      <option>Open Sans</option>
+                      <option>Lato</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Colours -->
+            <div class="card-section">
+              <div class="field-group">
+                <div class="field-label">Colours</div>
+                <div class="field-hint">Choose colours for your page header and navigation links</div>
+                <div class="colour-row" style="margin-top:8px;">
+                  <div class="colour-field">
+                    <label>Header colour</label>
+                    <div class="colour-input-wrap">
+                      <input class="field-input" type="text" id="header-colour-text" value="#1F1541" oninput="syncColour('header')">
+                      <input type="color" class="colour-swatch" id="header-colour-picker" value="#1f1541" oninput="syncColourFromPicker('header')">
+                    </div>
+                  </div>
+                  <div class="colour-field">
+                    <label>Navigation link colour</label>
+                    <div class="colour-input-wrap">
+                      <input class="field-input" type="text" id="link-colour-text" value="#47CD89" oninput="syncColour('link')">
+                      <input type="color" class="colour-swatch" id="link-colour-picker" value="#47CD89" oninput="syncColourFromPicker('link')">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nav Links -->
+          <div class="form-card">
+            <div class="card-header">Navigation Links</div>
+            <div class="card-section">
+              <div class="field-group">
+                <div class="field-label">Custom links <span class="info-icon">i</span></div>
+                <div class="field-hint">These links appear in the navigation bar on your tracking page</div>
+                <div id="nav-links-container" style="margin-top:8px;">
+                  <div class="nav-link-row">
+                    <div style="flex:1;">
+                      <label style="font-family:'Montserrat',sans-serif;font-size:12px;color:#4a535c;display:block;margin-bottom:4px;">Link text</label>
+                      <input class="field-input nav-link-text" type="text" value="FAQ" oninput="sendConfig()">
+                    </div>
+                    <div style="flex:2;">
+                      <label style="font-family:'Montserrat',sans-serif;font-size:12px;color:#4a535c;display:block;margin-bottom:4px;">Link url</label>
+                      <input class="field-input nav-link-url" type="text" value="https://myshop.com/FAQ" oninput="sendConfig()">
+                    </div>
+                    <button class="remove-link-btn" onclick="removeNavLink(this)">&times;</button>
+                  </div>
+                </div>
+                <button class="add-link-btn" onclick="addNavLink()">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M8 5v6M5 8h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  Add a custom link
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Client Support -->
+          <div class="form-card">
+            <div class="card-header">Client Support</div>
+            <div class="card-section">
+              <div class="field-hint" style="margin-bottom:16px;">Shown on the tracking page under 'Need help?'. Leave both blank to hide the support card.</div>
+              <div class="field-group">
+                <label style="font-family:'Montserrat',sans-serif;font-size:14px;color:#4a535c;font-weight:500;display:block;margin-bottom:6px;">Support email</label>
+                <input class="field-input" type="email" id="support-email" placeholder="e.g. support@yourcompany.com" value="support@yourcompany.com" oninput="sendConfig()">
+              </div>
+              <div class="field-group" style="margin-top:12px;">
+                <label style="font-family:'Montserrat',sans-serif;font-size:14px;color:#4a535c;font-weight:500;display:block;margin-bottom:6px;">Support phone</label>
+                <input class="field-input" type="tel" id="support-phone" placeholder="e.g. +61 3 9000 1234" value="+61 3 9000 1234" oninput="sendConfig()">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ STEP 2: Tracking Progress Page ══ -->
+        <div class="step-content" id="step-2">
+          <h1 class="form-title">Tracking Page</h1>
+          <p class="form-subtitle">Configure what tracking details your customers see and what actions they can take</p>
+
+          <!-- Delivery info -->
+          <div class="form-card">
+            <div class="card-header">Delivery info</div>
+            <div class="toggle-row" onclick="toggleSwitch(this)">
+              <div class="toggle-info">
+                <div class="toggle-title">Show carrier information</div>
+                <div class="toggle-desc">Display carrier logo, name, and tracking link on the tracking page</div>
+              </div>
+              <div class="toggle-switch" data-key="showCarrier"></div>
+            </div>
+            <div class="card-divider"></div>
+            <div class="toggle-row" onclick="toggleSwitch(this)">
+              <div class="toggle-info">
+                <div class="toggle-title">Show expected delivery date</div>
+                <div class="toggle-desc">Display the estimated delivery date prominently on the tracking page</div>
+              </div>
+              <div class="toggle-switch" data-key="showDeliveryDate"></div>
+            </div>
+            <div class="card-divider"></div>
+            <div class="toggle-row" onclick="toggleSwitch(this)">
+              <div class="toggle-info">
+                <div class="toggle-title">Show delay notifications</div>
+                <div class="toggle-desc">Show a notification banner when delivery is delayed</div>
+              </div>
+              <div class="toggle-switch" data-key="showDelays"></div>
+            </div>
+            <div class="toggle-expand">
+              <div class="toggle-expand-content">
+                <div class="field-group">
+                  <div class="field-label" style="font-size:14px;">Delay notification message</div>
+                  <textarea class="field-textarea" style="height:152px;margin-top:8px;" placeholder="Default: Your order is experiencing a delay. Updated delivery estimate: [date]."></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="card-divider"></div>
+            <div class="toggle-row" onclick="toggleSwitch(this)">
+              <div class="toggle-info">
+                <div class="toggle-title">Enable address notifications</div>
+                <div class="toggle-desc">Notify customers when there's an issue with their delivery address</div>
+              </div>
+              <div class="toggle-switch" data-key="showAddressNotif"></div>
+            </div>
+            <div class="toggle-expand">
+              <div class="sub-toggle-row">
+                <div class="toggle-info">
+                  <div class="sub-toggle-label"><span class="arrow">&#8627;</span> Allow customers to update address</div>
+                  <div class="sub-toggle-desc">When off, customers see a contact-support prompt instead of an edit form</div>
+                </div>
+                <div class="toggle-switch" style="margin-left:16px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Returns -->
+          <div class="form-card">
+            <div class="toggle-row" onclick="toggleSwitch(this)">
+              <div class="toggle-info">
+                <div class="toggle-title heading">Enable returns</div>
+                <div class="toggle-desc">Let customers initiate returns directly from the tracking page</div>
+              </div>
+              <div class="toggle-switch" data-key="enableReturns"></div>
+            </div>
+            <div class="toggle-expand">
+              <div class="sub-toggle-row">
+                <div class="toggle-info">
+                  <div class="sub-toggle-label"><span class="arrow">&#8627;</span> Allow customers to initiate returns</div>
+                  <div class="sub-toggle-desc">When off, only your team can initiate returns &mdash; status still appears on tracking page</div>
+                </div>
+                <div class="toggle-switch on" style="margin-left:16px;"></div>
+              </div>
+              <div class="card-divider"></div>
+              <div class="card-section">
+                <div class="field-group">
+                  <div class="field-label">Return reason categories <span class="info-icon">i</span></div>
+                  <div class="field-hint">Comma-separated list shown in the return reason dropdown</div>
+                  <textarea class="field-textarea" placeholder="Default: Wrong item, Damaged, Changed mind, Doesn't fit, Other"></textarea>
+                </div>
+              </div>
+              <div class="card-divider"></div>
+              <div class="card-section">
+                <div class="field-group">
+                  <div class="field-label">Return success message <span class="info-icon">i</span></div>
+                  <div class="field-hint">Shown to customers after they submit a return request</div>
+                  <textarea class="field-textarea" placeholder="Default: Your return request has been submitted. You'll receive a return label via email shortly."></textarea>
+                </div>
+              </div>
+              <div class="card-divider"></div>
+              <div class="card-section">
+                <div class="field-group">
+                  <div class="field-label">Failed to generate label message <span class="info-icon">i</span></div>
+                  <textarea class="field-textarea" placeholder="Default: We were unable to generate a return label. Please contact support for assistance."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Claims -->
+          <div class="form-card">
+            <div class="toggle-row" onclick="toggleSwitch(this)">
+              <div class="toggle-info">
+                <div class="toggle-title heading">Enable claims</div>
+                <div class="toggle-desc">Allow lost package claims to be filed and tracked</div>
+              </div>
+              <div class="toggle-switch" data-key="enableClaims"></div>
+            </div>
+            <div class="toggle-expand">
+              <div class="sub-toggle-row">
+                <div class="toggle-info">
+                  <div class="sub-toggle-label"><span class="arrow">&#8627;</span> Allow customers to file claims</div>
+                  <div class="sub-toggle-desc">When off, only your team can file claims &mdash; status still appears on tracking page</div>
+                </div>
+                <div class="toggle-switch on" style="margin-left:16px;"></div>
+              </div>
+              <div class="card-section" style="padding-top:0;">
+                <div class="field-group">
+                  <div class="field-label" style="font-size:14px;">Claim eligibility window</div>
+                  <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+                    <input class="sub-field-input" type="text" value="15">
+                    <span class="sub-field-text">days after dispatch with no delivery update</span>
+                  </div>
+                </div>
+              </div>
+              <div class="card-divider"></div>
+              <div class="card-section">
+                <div class="field-group">
+                  <div class="field-label">Claim reason categories <span class="info-icon">i</span></div>
+                  <div class="field-hint">Comma-separated list shown in the claim reason dropdown</div>
+                  <textarea class="field-textarea" placeholder="Default: Parcel never arrived, Empty box, Left on doorstep but stolen"></textarea>
+                </div>
+              </div>
+              <div class="card-divider"></div>
+              <div class="card-section">
+                <div class="field-group">
+                  <div class="field-label">Claim confirmation message <span class="info-icon">i</span></div>
+                  <textarea class="field-textarea" placeholder="Default: Your claim has been submitted. You'll receive an update within 5 business days."></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- GTM -->
+          <div class="form-card">
+            <div class="card-section">
+              <div class="field-group">
+                <div class="field-label">Google tag manager ID <span class="info-icon">i</span></div>
+                <div class="field-hint">Connects your tracking page to Google Analytics for visitor insights</div>
+                <input class="field-input" type="text" id="gtm-id" placeholder="GTM-XXXXXXX">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ RIGHT: PREVIEW PANEL ═══ -->
+      <div class="preview-panel">
+        <div class="preview-header">
+          <span class="preview-title">Live Preview</span>
+          <div class="preview-toggles">
+            <button class="preview-toggle active" id="toggle-desktop" onclick="setPreviewMode('desktop')">
+              <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M5 14h6M8 12v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            </button>
+            <button class="preview-toggle" id="toggle-mobile" onclick="setPreviewMode('mobile')">
+              <svg viewBox="0 0 16 16" fill="none"><rect x="4" y="1" width="8" height="14" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 12.5h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="preview-frame" id="preview-frame">
+          <div class="browser-chrome">
+            <div class="browser-dot red"></div>
+            <div class="browser-dot yellow"></div>
+            <div class="browser-dot green"></div>
+            <div class="browser-url">track.yourbrand.b360.co</div>
+          </div>
+          <iframe class="preview-iframe" id="preview-iframe" src="search-page.html"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ BOTTOM BAR ═══ -->
+    <div class="bottom-bar">
+      <button class="btn-back" id="btn-back" onclick="prevStep()" style="visibility:hidden;">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back
+      </button>
+      <button class="btn-primary" id="btn-next" onclick="nextStep()">Save and continue</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ──
+let currentStep = 1;
+const config = {
+  pageTitle: 'Track your items',
+  headerColour: '#1f1541',
+  linkColour: '#47CD89',
+  titleFont: 'Plus Jakarta Sans',
+  bodyFont: 'Inter',
+  logoUrl: '',
+  faviconUrl: '',
+  pageImageUrl: '',
+  navLinks: [{ text: 'FAQ', url: 'https://myshop.com/FAQ' }],
+  supportEmail: 'support@yourcompany.com',
+  supportPhone: '+61 3 9000 1234',
+  showCarrier: false,
+  showDeliveryDate: false,
+  showDelays: false,
+  showAddressNotif: false,
+  enableReturns: false,
+  enableClaims: false,
+  gtmId: ''
+};
+
+// ── Step navigation ──
+function goToStep(step) {
+  currentStep = step;
+  document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+  document.getElementById('step-' + step).classList.add('active');
+
+  // Update progress dots
+  document.getElementById('dot-1').className = 'progress-dot' + (step >= 1 ? ' active' : '');
+  document.getElementById('dot-2').className = 'progress-dot' + (step >= 2 ? ' active' : '');
+  document.getElementById('progress-line').className = 'progress-line' + (step >= 2 ? ' active' : '');
+
+  // Update step label
+  document.getElementById('step-label').textContent = 'Step ' + step + ' of 2';
+
+  // Update buttons
+  document.getElementById('btn-back').style.visibility = step === 1 ? 'hidden' : 'visible';
+  const btnNext = document.getElementById('btn-next');
+  if (step === 2) {
+    btnNext.textContent = 'Save and Finish';
+    btnNext.classList.add('finish');
+  } else {
+    btnNext.textContent = 'Save and continue';
+    btnNext.classList.remove('finish');
+  }
+
+  // Switch iframe preview based on step
+  const iframe = document.getElementById('preview-iframe');
+  iframe.src = step === 1 ? 'search-page.html' : 'tracking-demo.html';
+
+  // Scroll form to top
+  document.querySelector('.form-panel').scrollTop = 0;
+}
+
+function nextStep() {
+  if (currentStep < 2) goToStep(currentStep + 1);
+  else alert('Configuration saved!');
+}
+
+function prevStep() {
+  if (currentStep > 1) goToStep(currentStep - 1);
+}
+
+// ── Toggle switches ──
+function toggleSwitch(row) {
+  const sw = row.querySelector('.toggle-switch');
+  if (!sw) return;
+  sw.classList.toggle('on');
+  const key = sw.dataset.key;
+  if (key) config[key] = sw.classList.contains('on');
+
+  // Track which feature toggle was last tapped
+  if (key === 'enableReturns' || key === 'enableClaims') {
+    config._lastToggledFeature = key;
+  }
+
+  // Expand content if exists
+  const expand = row.nextElementSibling;
+  if (expand && expand.classList.contains('toggle-expand')) {
+    expand.classList.toggle('open', sw.classList.contains('on'));
+  }
+
+  sendConfig();
+}
+
+// ── Colour sync ──
+function syncColour(type) {
+  const text = document.getElementById(type === 'header' ? 'header-colour-text' : 'link-colour-text').value;
+  const picker = document.getElementById(type === 'header' ? 'header-colour-picker' : 'link-colour-picker');
+  if (/^#[0-9A-Fa-f]{6}$/.test(text)) {
+    picker.value = text;
+  }
+  config[type === 'header' ? 'headerColour' : 'linkColour'] = text;
+  sendConfig();
+}
+
+function syncColourFromPicker(type) {
+  const picker = document.getElementById(type === 'header' ? 'header-colour-picker' : 'link-colour-picker');
+  const input = document.getElementById(type === 'header' ? 'header-colour-text' : 'link-colour-text');
+  input.value = picker.value.toUpperCase();
+  config[type === 'header' ? 'headerColour' : 'linkColour'] = picker.value;
+  sendConfig();
+}
+
+// ── File uploads ──
+function handleUpload(input, type) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    config[type + 'Url'] = e.target.result;
+
+    // Show preview in upload area
+    const area = input.parentElement;
+    area.classList.add('has-file');
+    const existing = area.querySelector('.upload-preview');
+    if (existing) existing.remove();
+    // Hide the upload icon box
+    const iconBox = area.querySelector('.upload-icon-box');
+    if (iconBox) iconBox.style.display = 'none';
+    const img = document.createElement('img');
+    img.src = e.target.result;
+    img.className = 'upload-preview';
+    area.appendChild(img);
+
+    sendConfig();
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── Nav links ──
+function addNavLink() {
+  const container = document.getElementById('nav-links-container');
+  const row = document.createElement('div');
+  row.className = 'nav-link-row';
+  row.innerHTML = `
+    <div style="flex:1;">
+      <label style="font-family:'Montserrat',sans-serif;font-size:12px;color:#4a535c;display:block;margin-bottom:4px;">Link text</label>
+      <input class="field-input nav-link-text" type="text" placeholder="Link text" oninput="sendConfig()">
+    </div>
+    <div style="flex:2;">
+      <label style="font-family:'Montserrat',sans-serif;font-size:12px;color:#4a535c;display:block;margin-bottom:4px;">Link url</label>
+      <input class="field-input nav-link-url" type="text" placeholder="https://" oninput="sendConfig()">
+    </div>
+    <button class="remove-link-btn" onclick="removeNavLink(this)">&times;</button>
+  `;
+  container.appendChild(row);
+}
+
+function removeNavLink(btn) {
+  btn.parentElement.remove();
+  sendConfig();
+}
+
+function collectNavLinks() {
+  const rows = document.querySelectorAll('.nav-link-row');
+  const links = [];
+  rows.forEach(row => {
+    const text = row.querySelector('.nav-link-text').value.trim();
+    const url = row.querySelector('.nav-link-url').value.trim();
+    if (text || url) links.push({ text, url });
+  });
+  return links;
+}
+
+// ── Preview mode ──
+function setPreviewMode(mode) {
+  const frame = document.getElementById('preview-frame');
+  document.getElementById('toggle-desktop').classList.toggle('active', mode === 'desktop');
+  document.getElementById('toggle-mobile').classList.toggle('active', mode === 'mobile');
+  frame.classList.toggle('mobile', mode === 'mobile');
+}
+
+// ── Send config to iframe ──
+function sendConfig() {
+  config.pageTitle = document.getElementById('page-title').value;
+  config.titleFont = document.getElementById('title-font').value;
+  config.bodyFont = document.getElementById('body-font').value;
+  config.supportEmail = document.getElementById('support-email').value;
+  config.supportPhone = document.getElementById('support-phone').value;
+  config.navLinks = collectNavLinks();
+
+  const iframe = document.getElementById('preview-iframe');
+  if (iframe.contentWindow) {
+    iframe.contentWindow.postMessage({ type: 'admin-config', config: config }, '*');
+  }
+
+  // Save to localStorage
+  localStorage.setItem('tracking-admin-config', JSON.stringify(config));
+}
+
+// ── Init: send config when iframe loads ──
+document.getElementById('preview-iframe').addEventListener('load', function() {
+  setTimeout(sendConfig, 300);
+});
+</script>
+</body>
+</html>

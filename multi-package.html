@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgeMate — Multi-Package Tracking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { min-height: 100vh; display: flex; flex-direction: column; font-family: 'Plus Jakarta Sans', sans-serif; background: #f1f2f4; }
+
+    /* ── Nav ── */
+    nav { flex-shrink: 0; width: 100%; background: #1f1541; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 87px; z-index: 200; position: sticky; top: 0; }
+    .nav-logo { flex-shrink: 0; display: flex; align-items: center; }
+    .nav-logo img { display: block; height: 40.5px; width: auto; aspect-ratio: 139.725/40.5; object-fit: contain; max-width: none; }
+    .nav-links { display: flex; align-items: center; }
+    .nav-links a { padding: 6.75px 13.5px; border-radius: 100px; text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: #fff; }
+
+    /* ── Demo tab bar ── */
+    .demo-bar { background: #fff; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; padding: 0 32px; gap: 2px; flex-shrink: 0; flex-wrap: wrap; position: sticky; top: 87px; z-index: 199; }
+    .demo-bar-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: #96a0ab; text-transform: uppercase; letter-spacing: 0.08em; margin-right: 8px; white-space: nowrap; }
+    .demo-tab { padding: 13px 16px; border: none; background: none; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; color: #66727f; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.15s, border-color 0.15s; white-space: nowrap; text-decoration: none; }
+    .demo-tab:hover { color: #1f1541; }
+    .demo-tab.active { color: #4c60ff; border-bottom-color: #4c60ff; font-weight: 600; }
+
+    /* ── Page layout ── */
+    .page-body { flex: 1; display: flex; align-items: stretch; height: calc(100vh - 87px - 43px); overflow: hidden; }
+    .left-panel { flex: 1; min-width: 0; padding: 32px 32px 48px 48px; display: flex; flex-direction: column; gap: 24px; overflow-y: auto; }
+    .right-sidebar { flex-shrink: 0; width: clamp(320px, 35vw, 484px); background: #fff; padding: 16px; display: flex; flex-direction: column; gap: 24px; overflow-y: auto; border-left: 1px solid #f2f4f7; }
+
+    /* ── Shared text styles ── */
+    .page-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 28px; line-height: 32px; color: rgba(0,0,0,0.8); }
+    .info-row { display: flex; gap: 48px; align-items: flex-start; flex-wrap: wrap; }
+    .info-item { display: flex; flex-direction: column; }
+    .info-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 14px; line-height: 24px; color: #858585; }
+    .info-value { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 16px; line-height: 24px; color: #040404; display: flex; align-items: center; gap: 6px; }
+
+    /* ── Summary banner ── */
+    .summary-banner { background: #fff; border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; box-shadow: 0px 1px 2px 0px rgba(17,24,86,0.08); }
+    .summary-icon { width: 48px; height: 48px; border-radius: 50%; background: #f4f5fe; border: 1px solid #7766b0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .summary-text { flex: 1; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 15px; color: #344054; }
+    .summary-badges { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+    /* ── Package numbered badges ── */
+    .pkg-badge { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .pkg-badge-num { background: #1f1541; }
+    .pkg-badge-num span { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 13px; color: #fff; }
+    .pkg-badge-delivered { background: #00a870; }
+    .pkg-badge-sm { width: 24px; height: 24px; }
+    .pkg-badge-sm span { font-size: 11px; }
+    .pkg-badge-btn { cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; border: 2px solid transparent; }
+    .pkg-badge-btn:hover { transform: scale(1.15); }
+    .pkg-badge-btn.active-badge { border-color: #fff; box-shadow: 0 0 0 2px #4c60ff; }
+
+    /* ── Package cards ── */
+    .pkg-cards { display: flex; flex-direction: column; gap: 12px; }
+
+    /* Expanded card */
+    .pkg-card-expanded { border: 2px solid #6450a5; border-radius: 8px; background: #fafafa; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+    .pkg-card-expanded .pkg-exp-header { display: flex; gap: 12px; align-items: center; }
+    .pkg-card-expanded .pkg-exp-header .delivery-info { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .pkg-card-expanded .pkg-exp-header .delivery-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; line-height: 24px; color: #4a535c; }
+    .pkg-card-expanded .pkg-exp-header .delivery-date { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; font-size: 28px; line-height: 1; color: #040404; }
+    .pkg-card-expanded .pkg-exp-header .delivery-note { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 12px; line-height: 20px; color: #96a0ab; }
+    .calendar-icon { width: 72px; height: 72px; border-radius: 7.89px; background: #f4f4f4; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .chevron-btn { background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.2s; }
+    .chevron-btn.up svg { transform: rotate(180deg); }
+
+    /* Items card (inside expanded) */
+    .items-card { background: #fff; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+    .items-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .items-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 20px; line-height: 24px; color: #141414; }
+    .items-tracking-ref { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: #66727f; }
+    .items-tracking-ref span { color: #4c60ff; font-weight: 600; }
+    .items-list { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .item-chip { display: flex; align-items: center; gap: 6.4px; height: 32px; background: #f1f2f4; border: 1px solid #ebedef; border-radius: 3.2px; padding-right: 9.6px; flex-shrink: 0; }
+    .item-chip-img { width: 32px; height: 32px; border-radius: 3.2px 0 0 3.2px; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #96a0ab; }
+    .item-chip-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 12px; color: #4a535c; }
+    .item-chip-qty { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 12px; color: #66727f; }
+
+    /* Progress card (inside expanded) */
+    .progress-card { background: #fff; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+    .progress-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .progress-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 20px; line-height: 24px; color: #141414; }
+    .progress-bar-wrap { border-radius: 8px; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 4px; }
+    .progress-bar-wrap.normal   { background: #fafbff; }
+    .progress-bar-wrap.delivered { background: #f6fef9; border: 1px solid #a9efcc; }
+    .progress-status-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 18px; line-height: 28px; }
+    .progress-status-title.purple { color: #5233b2; }
+    .progress-status-title.green  { color: #027a48; }
+    .progress-status-sub { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 14px; line-height: 24px; color: #707070; }
+
+    /* ── Delivery progress stages ── */
+    .stages { display: flex; align-items: flex-end; padding: 16px 0 44px; }
+    .stage { display: flex; flex-direction: column; justify-content: space-between; height: 48px; position: relative; padding-bottom: 14px; border-bottom: 2px solid #d7d7d7; }
+    .stage.active-purple { border-bottom-color: #5233b2; }
+    .stage.active-green  { border-bottom-color: #12b76a; }
+    .stage-1 { width: 20%; }
+    .stage-2 { width: 28%; }
+    .stage-3 { flex: 1; }
+    .stage-4 { flex: 1; }
+    .stage-label { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px; line-height: 1.4; white-space: nowrap; }
+    .stage-label.dark   { color: #1f1541; }
+    .stage-label.grey   { color: #d7d7d7; }
+    .stage-label.center { text-align: center; }
+    .stage-label.right  { text-align: right; }
+    .stage-dot { position: absolute; display: flex; align-items: center; justify-content: center; }
+    .stage-dot img { display: block; }
+    .stage-dot.dot-grey   { bottom: -9px; }
+    .stage-dot.dot-check  { bottom: -15px; }
+    .stage-dot.dot-active { bottom: -15px; }
+    .stage-1 .stage-dot { left: 0; }
+    .stage-2 .stage-dot { left: 50%; transform: translateX(-50%); }
+    .stage-3 .stage-dot { right: 30px; }
+    .stage-4 .stage-dot { right: 0; }
+
+    /* ── Collapsed card ── */
+    .pkg-card-collapsed { background: #fff; border-radius: 8px; box-shadow: 0px 1px 2px 0px rgba(17,24,86,0.13); padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: box-shadow 0.15s; }
+    .pkg-card-collapsed:hover { box-shadow: 0px 2px 6px 0px rgba(17,24,86,0.18); }
+    .pkg-collapsed-thumb { width: 36px; height: 36px; border-radius: 4px; background: #f6f8fc; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .pkg-collapsed-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .pkg-collapsed-desc { flex: 1; min-width: 0; }
+    .pkg-collapsed-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #344054; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pkg-collapsed-date { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; font-size: 12px; color: #96a0ab; }
+    .pkg-collapsed-tn { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; color: #96a0ab; flex-shrink: 0; display: none; }
+    .pkg-collapsed-status { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 9999px; background: rgba(157,128,249,0.2); flex-shrink: 0; white-space: nowrap; }
+    .pkg-collapsed-status span { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; line-height: 18px; color: #8744ff; }
+    .pkg-collapsed-status.status-green { background: #ecfdf3; }
+    .pkg-collapsed-status.status-green span { color: #027a48; }
+
+    /* ── Compact contact bar ── */
+    .contact-bar { background: #fafafa; border-radius: 8px; padding: 4px 16px; display: flex; align-items: center; gap: 4px; }
+    .contact-bar-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 14px; color: rgba(0,0,0,0.8); flex: 1; line-height: 32px; }
+    .contact-bar-items { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 24px; }
+    .contact-bar-item { display: flex; align-items: center; gap: 4px; }
+    .contact-bar-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .contact-bar-item span { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 14px; color: #66727f; line-height: 24px; }
+
+    /* ── Right sidebar ── */
+    .carrier-card { background: #fafafa; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 24px; }
+    .timeline-card { display: flex; flex-direction: column; gap: 12px; }
+    .carrier-top { display: flex; flex-direction: column; gap: 12px; }
+    .carrier-heading { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 18px; line-height: 32px; color: rgba(0,0,0,0.8); }
+    .carrier-profile { display: flex; gap: 15px; align-items: center; }
+    .carrier-logo { width: 64px; height: 64px; border-radius: 8px; overflow: hidden; flex-shrink: 0; position: relative; }
+    .carrier-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
+    .carrier-info { display: flex; flex-direction: column; gap: 8px; }
+    .carrier-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 18px; line-height: 1; color: #040404; }
+    .carrier-link { display: flex; align-items: center; gap: 4px; text-decoration: none; }
+    .carrier-link span { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; line-height: 18px; color: #4c60ff; }
+    .carrier-link img { width: 16px; height: 16px; }
+
+    /* ── Timeline ── */
+    .timeline { display: flex; flex-direction: column; padding-left: 4px; }
+    .timeline-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 16px; line-height: 24px; color: #141414; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .tl-item { display: flex; gap: 16px; align-items: flex-start; }
+    .tl-col { display: flex; flex-direction: column; align-items: center; width: 44px; flex-shrink: 0; align-self: stretch; }
+    .tl-tick { width: 16px; height: 16px; border-radius: 50%; background: #4c60ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .tl-line { flex: 1; width: 2px; background: #4c60ff; min-height: 20px; }
+    .tl-line.dashed { background: repeating-linear-gradient(to bottom, #d0d5dd 0, #d0d5dd 4px, transparent 4px, transparent 8px); }
+    .tl-text { flex: 1; display: flex; flex-direction: column; gap: 6px; padding-top: 2px; min-width: 0; padding-bottom: 40px; }
+    .tl-event { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px; line-height: 1.4; color: #141414; }
+    .tl-event.muted { font-weight: 500; color: #66727f; font-size: 14px; }
+    .tl-time { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; line-height: 1.6; color: #707070; }
+    .tl-time strong { font-weight: 500; color: #4a535c; }
+
+    .status-badge { display: inline-flex; align-items: center; padding: 2px 12px; border-radius: 9999px; border: 1px solid; white-space: nowrap; flex-shrink: 0; }
+    .status-badge span { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; line-height: 18px; }
+    .badge-purple { background: #f4f3ff; border-color: #d9d6fe; } .badge-purple span { color: #5925dc; }
+    .badge-green  { background: #ecfdf3; border-color: #a9efcc; } .badge-green span  { color: #027a48; }
+
+    /* ── Expand/collapse animation ── */
+    .pkg-card-wrapper { overflow: hidden; transition: max-height 0.35s ease, opacity 0.25s ease; }
+    .pkg-card-wrapper.collapsed-anim { max-height: 70px; }
+    .pkg-card-wrapper.expanded-anim { max-height: 2000px; }
+
+    /* ── Utilities ── */
+    .hidden { display: none !important; }
+
+    /* ── Mobile responsive ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; height: 64px; }
+      .nav-logo img { height: 30px; }
+      .nav-links a { font-size: 15px; padding: 6px 10px; }
+      .page-body { flex-direction: column; height: auto; overflow: visible; background: #f1f2f4; padding: 0; gap: 12px; }
+      .left-panel { padding: 16px 12px; gap: 16px; overflow-y: visible; background: transparent; flex: none; width: 100%; }
+      .right-sidebar { width: 100%; min-height: auto; border-left: none; border-top: none; padding: 0 12px 12px; overflow-y: visible; background: transparent; gap: 0; flex-shrink: 0; }
+      .right-sidebar .carrier-card { background: #fff; border-radius: 8px 8px 0 0; }
+      .right-sidebar .timeline-card { background: #fff; border-radius: 0 0 8px 8px; padding: 16px; }
+      .page-title { font-size: 22px; line-height: 28px; }
+      .info-row { gap: 16px; flex-wrap: wrap; }
+      .info-item { flex: 1 1 calc(50% - 8px); min-width: 0; }
+      .summary-banner { flex-wrap: wrap; }
+      .pkg-card-expanded .pkg-exp-header { flex-wrap: wrap; }
+      .pkg-card-expanded .pkg-exp-header .delivery-date { font-size: 22px; }
+      .contact-bar { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px; }
+      .contact-bar-items { flex-direction: column; gap: 8px; align-items: flex-start; justify-content: flex-start; }
+      .pkg-collapsed-tn { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      nav { height: 56px; padding: 0 16px; }
+      .nav-logo img { height: 26px; }
+      .nav-links a { font-size: 14px; padding: 5px 8px; }
+      .left-panel { padding: 16px 12px 20px; }
+      .right-sidebar { padding: 16px 12px; }
+      .page-title { font-size: 20px; }
+      .stage-label { font-size: 10px; }
+      .carrier-card { padding: 16px; }
+      .carrier-logo { width: 48px; height: 48px; }
+      .carrier-name { font-size: 16px; }
+    }
+
+    @media (min-width: 900px) {
+      .pkg-collapsed-tn { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="main-nav">
+  <div class="nav-logo">
+    <img src="images/image 19 [Vectorized].svg" alt="AgeMate" />
+  </div>
+  <div class="nav-links">
+    <a href="#">Shop</a>
+    <a href="#">FAQ</a>
+  </div>
+</nav>
+
+<!-- Stakeholder demo bar -->
+<div class="demo-bar">
+  <span class="demo-bar-label">Demo:</span>
+  <a href="tracking-demo.html?ref=0210DAD9015248A2" class="demo-tab">Single Package</a>
+  <a href="multi-package.html" class="demo-tab active">Multi Package</a>
+</div>
+
+<div class="page-body">
+  <!-- Left panel -->
+  <div class="left-panel">
+    <!-- Top details -->
+    <div>
+      <div class="page-title" style="margin-bottom:16px;">Your order details</div>
+      <div class="info-row">
+        <div class="info-item">
+          <span class="info-label">Reference</span>
+          <span class="info-value">GVS9431669</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Delivery address</span>
+          <span class="info-value">Boronia, Victoria, AU</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Shipment route</span>
+          <span class="info-value">HK
+            <svg width="18" height="10" viewBox="0 0 18 10" fill="none"><line x1="0" y1="5" x2="14" y2="5" stroke="#040404" stroke-width="1.5"/><path d="M10 1.5L14.5 5L10 8.5" stroke="#040404" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            AU
+          </span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Delivered by</span>
+          <span class="info-value">Australia Post</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary banner -->
+    <div class="summary-banner">
+      <div class="summary-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <rect x="2.5" y="2.5" width="6" height="6" rx="1" stroke="#7766b0" stroke-width="1.5"/>
+          <rect x="11.5" y="2.5" width="6" height="6" rx="1" stroke="#7766b0" stroke-width="1.5"/>
+          <rect x="2.5" y="11.5" width="6" height="6" rx="1" stroke="#7766b0" stroke-width="1.5"/>
+          <rect x="11.5" y="11.5" width="6" height="6" rx="1" stroke="#7766b0" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <span class="summary-text">Your order is on its way in 3 packages</span>
+      <div class="summary-badges" id="summary-badges"></div>
+    </div>
+
+    <!-- Package cards container -->
+    <div class="pkg-cards" id="pkg-cards"></div>
+
+  </div>
+
+  <!-- Right sidebar -->
+  <div class="right-sidebar">
+    <div class="carrier-card">
+      <div class="carrier-top">
+        <p class="carrier-heading">Being delivered by:</p>
+        <div class="carrier-profile">
+          <div class="carrier-logo">
+            <img src="images/aus-post.png" alt="Australia Post" />
+          </div>
+          <div class="carrier-info">
+            <p class="carrier-name">Australia Post</p>
+            <a href="#" class="carrier-link">
+              <span>Track with Australia Post</span>
+              <img src="icons/basic.svg" alt="" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="timeline-card">
+      <p class="timeline-title" id="timeline-title">
+        <span class="pkg-badge pkg-badge-num" style="width:22px;height:22px;"><span style="font-size:11px;">1</span></span>
+        Package 1 tracking history
+      </p>
+      <div class="timeline" id="timeline-items"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Package Data ── */
+const packages = [
+  {
+    id: 1,
+    status: 'In Transit',
+    progressStage: 1, // 0=Shipped,1=InTransit,2=LocalDelivery,3=Delivered
+    statusTitle: 'Your order is in transit',
+    statusSub: 'Your package is on its way to the destination country',
+    items: [
+      { name: 'Face cream', qty: 1, color: '#f6f8fc', img: 'images/img.png' },
+      { name: 'Vitamin water', qty: 1, color: '#fff', img: 'images/img-1.png' },
+      { name: 'Hand cream', qty: 1, color: '#f9f9f9', img: 'images/img-2.png' }
+    ],
+    expectedDate: '18\u201320 Feb 2026',
+    deliveryLabel: 'Expected Delivery',
+    deliveryNote: 'Based on current carrier progress - Last updated 3 mins ago',
+    tn: '0210DAD9015248A2',
+    collapsedDesc: 'Pkg 1: Face cream + 2 others',
+    collapsedBadge: 'In Transit',
+    isDelivered: false,
+    timeline: [
+      { event: 'At sorting center', badge: 'Local Delivery', badgeClass: 'badge-purple', time: 'Feb 10, 2026 12:46am', muted: false },
+      { event: 'Cleared customs', badge: 'In Transit', badgeClass: 'badge-purple', time: 'Feb 9, 2026 3:20pm', muted: true },
+      { event: 'Awaiting customs clearance', badge: 'In Transit', badgeClass: 'badge-purple', time: 'Feb 8, 2026 9:00am', muted: true },
+      { event: 'Arrived at destination country', badge: 'In Transit', badgeClass: 'badge-purple', time: 'Feb 7, 2026 6:15pm', muted: true },
+      { event: 'Arrived at airport', badge: 'In Transit', badgeClass: 'badge-purple', time: 'Feb 6, 2026 2:00pm', muted: true },
+      { event: 'Left the warehouse', badge: 'Shipped', badgeClass: 'badge-purple', time: 'Feb 5, 2026 10:30am', muted: true },
+      { event: 'Arrived at sorting center', badge: 'Shipped', badgeClass: 'badge-purple', time: 'Feb 4, 2026 8:00am', muted: true }
+    ]
+  },
+  {
+    id: 2,
+    status: 'Local Delivery',
+    progressStage: 2,
+    statusTitle: 'Out for local delivery',
+    statusSub: 'Your package is with the local carrier for delivery',
+    items: [
+      { name: 'Face powder', qty: 1, color: '#f9f8fd', img: 'images/img.png' },
+      { name: 'Eye shadow', qty: 2, color: '#f6f8fc', img: 'images/img.png' },
+      { name: 'Lip balm', qty: 3, color: '#fff', img: 'images/img-1.png' },
+      { name: 'Body lotion', qty: 1, color: '#f9f9f9', img: 'images/img-2.png' },
+      { name: 'Nail polish', qty: 2, color: '#f9f8fd', img: 'images/img.png' },
+      { name: 'Hair serum', qty: 1, color: '#f6f8fc', img: 'images/img.png' },
+      { name: 'Moisturizer', qty: 1, color: '#fff', img: 'images/img-1.png' },
+      { name: 'Sunscreen', qty: 2, color: '#f9f9f9', img: 'images/img-2.png' }
+    ],
+    expectedDate: '18\u201320 Feb 2026',
+    deliveryLabel: 'Expected Delivery',
+    deliveryNote: 'Based on current carrier progress - Last updated 10 mins ago',
+    tn: '0210DAD9015248A2',
+    collapsedDesc: 'Pkg 2: Face powder + 11 others',
+    collapsedBadge: 'Local Delivery',
+    isDelivered: false,
+    timeline: [
+      { event: 'Out for delivery', badge: 'Local Delivery', badgeClass: 'badge-purple', time: 'Feb 18, 2026 8:30am', muted: false },
+      { event: 'At local depot', badge: 'Local Delivery', badgeClass: 'badge-purple', time: 'Feb 17, 2026 6:00pm', muted: true },
+      { event: 'Cleared customs', badge: 'In Transit', badgeClass: 'badge-purple', time: 'Feb 16, 2026 2:15pm', muted: true },
+      { event: 'Departed origin', badge: 'In Transit', badgeClass: 'badge-purple', time: 'Feb 15, 2026 10:00am', muted: true },
+      { event: 'Picked up from warehouse', badge: 'Shipped', badgeClass: 'badge-purple', time: 'Feb 14, 2026 3:00pm', muted: true }
+    ]
+  },
+  {
+    id: 3,
+    status: 'Delivered',
+    progressStage: 3,
+    statusTitle: 'Your package has been delivered',
+    statusSub: 'Delivered to your mailbox',
+    items: [
+      { name: 'Vitamin Tablets', qty: 1, color: '#f9f8fd', img: 'images/img.png' },
+      { name: 'Protein bars', qty: 2, color: '#f6f8fc', img: 'images/img.png' },
+      { name: 'Omega-3 capsules', qty: 1, color: '#fff', img: 'images/img-1.png' }
+    ],
+    expectedDate: '17 Feb 2026',
+    deliveryLabel: 'Delivered',
+    deliveryNote: 'Delivered to mailbox on 17 Feb 2026',
+    tn: '0210DAD901524999',
+    collapsedDesc: 'Pkg 3: Vitamin Tablets + 2 others',
+    collapsedBadge: 'Delivered',
+    isDelivered: true,
+    timeline: [
+      { event: 'Delivered to mailbox', badge: 'Delivered', badgeClass: 'badge-green', time: 'Feb 17, 2026 11:30am', muted: false },
+      { event: 'Out for delivery', badge: 'Local Delivery', badgeClass: 'badge-purple', time: 'Feb 17, 2026 8:00am', muted: true },
+      { event: 'At local depot', badge: 'Local Delivery', badgeClass: 'badge-purple', time: 'Feb 16, 2026 5:00pm', muted: true },
+      { event: 'Cleared customs', badge: 'In Transit', badgeClass: 'badge-purple', time: 'Feb 15, 2026 1:00pm', muted: true },
+      { event: 'Picked up from warehouse', badge: 'Shipped', badgeClass: 'badge-purple', time: 'Feb 13, 2026 9:00am', muted: true }
+    ]
+  }
+];
+
+let expandedPkg = 0; // index of currently expanded package (0-based), -1 = none
+
+const stageNames = ['Shipped', 'In Transit', 'Local delivery', 'Delivered'];
+
+function buildStagesHTML(pkg) {
+  const stage = pkg.progressStage;
+  const isDelivered = pkg.isDelivered;
+  let html = '<div class="stages">';
+  for (let i = 0; i < 4; i++) {
+    const stageClass = `stage stage-${i+1}`;
+    let lineClass = '';
+    if (isDelivered) {
+      lineClass = ' active-green';
+    } else if (i <= stage) {
+      lineClass = ' active-purple';
+    }
+    const labelClass = (isDelivered || i <= stage) ? 'dark' : 'grey';
+    let align = '';
+    if (i === 1) align = ' center';
+    if (i === 2) align = ' center';
+    if (i === 3) align = ' right';
+
+    let dotHTML = '';
+    if (isDelivered) {
+      // all green checks
+      dotHTML = `<span class="stage-dot dot-check"><img src="icons/State=Delivered.svg" width="28" height="28" alt=""/></span>`;
+    } else if (i < stage) {
+      // completed purple check
+      dotHTML = `<span class="stage-dot dot-check"><img src="icons/State=complete.svg" width="28" height="28" alt=""/></span>`;
+    } else if (i === stage) {
+      // active icon
+      const iconMap = ['icons/State=Shipped.svg', 'icons/State=in transit.svg', 'icons/State=Local delivery.svg', 'icons/State=Delivered.svg'];
+      dotHTML = `<span class="stage-dot dot-active"><img src="${iconMap[i]}" width="28" height="28" alt=""/></span>`;
+    } else {
+      // future grey
+      dotHTML = `<span class="stage-dot dot-grey"><img src="icons/State=to do.svg" width="16" height="16" alt=""/></span>`;
+    }
+
+    html += `<div class="${stageClass}${lineClass}">
+      <span class="stage-label ${labelClass}${align}">${stageNames[i]}</span>
+      ${dotHTML}
+    </div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+function buildExpandedCard(pkg) {
+  const itemsHTML = pkg.items.map(item => `
+    <div class="item-chip">
+      <div class="item-chip-img" style="background:${item.color};">
+        ${item.img ? '<img src="' + item.img + '" alt="" style="width:100%;height:100%;object-fit:cover;">' : ''}
+      </div>
+      <span class="item-chip-name">${item.name}</span>
+      <span class="item-chip-qty">x${item.qty}</span>
+    </div>
+  `).join('');
+
+  const progressWrapClass = pkg.isDelivered ? 'delivered' : 'normal';
+  const titleColorClass = pkg.isDelivered ? 'green' : 'purple';
+
+  return `
+    <div class="pkg-card-expanded" data-pkg="${pkg.id}">
+      <div class="pkg-exp-header">
+        <div class="pkg-badge ${pkg.isDelivered ? 'pkg-badge-delivered' : 'pkg-badge-num'}">
+          ${pkg.isDelivered
+            ? '<svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            : '<span>' + pkg.id + '</span>'}
+        </div>
+        <div class="calendar-icon">
+          ${pkg.isDelivered
+            ? '<img src="icons/calendar-icons/Icon=success, screen=lg.svg" alt="" width="72" height="72"/>'
+            : '<img src="icons/calendar-icons/Icon=calendar, screen=lg.svg" alt="" width="72" height="72"/>'}
+        </div>
+        <div class="delivery-info">
+          <p class="delivery-label">${pkg.deliveryLabel}</p>
+          <p class="delivery-date">${pkg.expectedDate}</p>
+          <p class="delivery-note">${pkg.deliveryNote}</p>
+        </div>
+        <button class="chevron-btn up" onclick="collapseCard(${pkg.id - 1})" aria-label="Collapse">
+          <svg class="chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5l5 5 5-5" stroke="#344054" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <div class="items-card">
+        <div class="items-header">
+          <span class="items-title">Your items</span>
+          <span class="items-tracking-ref">Tracking Number: <span>${pkg.tn}</span></span>
+        </div>
+        <div class="items-list">${itemsHTML}</div>
+      </div>
+
+      <div class="progress-card">
+        <div class="progress-header">
+          <span class="progress-title">Delivery progress</span>
+        </div>
+        <div class="progress-bar-wrap ${progressWrapClass}">
+          <p class="progress-status-title ${titleColorClass}">${pkg.statusTitle}</p>
+          <p class="progress-status-sub">${pkg.statusSub}</p>
+          ${buildStagesHTML(pkg)}
+        </div>
+      </div>
+
+      <div class="contact-bar">
+        <span class="contact-bar-title">Contact Support</span>
+        <div class="contact-bar-items">
+          <div class="contact-bar-item">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1.33" y="2.67" width="13.33" height="10.67" rx="1.33" stroke="#66727f" stroke-width="1.2"/><path d="M1.33 4.67L8 9.33l6.67-4.66" stroke="#66727f" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>support@youremail.com</span>
+          </div>
+          <div class="contact-bar-item">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3.11 2.22h2.67l1.11 2.89-1.56 1.56a8.44 8.44 0 004 4l1.56-1.56 2.89 1.11v2.67a.89.89 0 01-.89.89C6 13.78 2.22 10 2.22 3.11a.89.89 0 01.89-.89z" stroke="#66727f" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            <span>+852 3001 5360</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function buildCollapsedCard(pkg) {
+  return `
+    <div class="pkg-card-collapsed" data-pkg="${pkg.id}" onclick="expandCard(${pkg.id - 1})">
+      <div class="pkg-badge ${pkg.isDelivered ? 'pkg-badge-delivered' : 'pkg-badge-num'} pkg-badge-sm">
+        ${pkg.isDelivered
+          ? '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+          : '<span>' + pkg.id + '</span>'}
+      </div>
+      <div class="pkg-collapsed-thumb" style="background:${pkg.items[0].color};">
+        ${pkg.items[0].img ? '<img src="' + pkg.items[0].img + '" alt="">' : ''}
+      </div>
+      <div class="pkg-collapsed-desc">
+        <div class="pkg-collapsed-title">${pkg.collapsedDesc}</div>
+        <div class="pkg-collapsed-date">${pkg.isDelivered ? 'Delivered ' : 'Expected '}${pkg.expectedDate}</div>
+      </div>
+      <span class="pkg-collapsed-tn">${pkg.tn}</span>
+      <div class="pkg-collapsed-status${pkg.isDelivered ? ' status-green' : ''}"><span>${pkg.collapsedBadge}</span></div>
+      <button class="chevron-btn" aria-label="Expand" style="pointer-events:none;">
+        <svg class="chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5l5 5 5-5" stroke="#344054" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  `;
+}
+
+function buildTimeline(pkg) {
+  const titleEl = document.getElementById('timeline-title');
+  const badgeHTML = pkg.isDelivered
+    ? '<span class="pkg-badge pkg-badge-delivered" style="width:22px;height:22px;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>'
+    : '<span class="pkg-badge pkg-badge-num" style="width:22px;height:22px;"><span style="font-size:11px;">' + pkg.id + '</span></span>';
+  titleEl.innerHTML = badgeHTML + ' Package ' + pkg.id + ' tracking history';
+
+  const container = document.getElementById('timeline-items');
+  let html = '';
+  pkg.timeline.forEach(function(item, i) {
+    const isLast = i === pkg.timeline.length - 1;
+    const eventClass = item.muted ? 'tl-event muted' : 'tl-event';
+    const lineClass = isLast ? 'tl-line dashed' : 'tl-line';
+    html += `
+      <div class="tl-item">
+        <div class="tl-col">
+          <div class="tl-tick">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          ${!isLast ? '<div class="' + lineClass + '"></div>' : ''}
+        </div>
+        <div class="tl-text">
+          <span class="${eventClass}">${item.event}</span>
+          <span class="tl-time"><strong>${item.badge}</strong> &middot; ${item.time}</span>
+        </div>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function renderBadges() {
+  const container = document.getElementById('summary-badges');
+  let html = '';
+  packages.forEach(function(pkg, i) {
+    const isActive = i === expandedPkg;
+    const activeCls = isActive ? ' active-badge' : '';
+    if (pkg.isDelivered) {
+      html += `<div class="pkg-badge pkg-badge-delivered pkg-badge-sm pkg-badge-btn${activeCls}" onclick="toggleCard(${i})">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>`;
+    } else {
+      html += `<div class="pkg-badge pkg-badge-num pkg-badge-sm pkg-badge-btn${activeCls}" onclick="toggleCard(${i})"><span>${pkg.id}</span></div>`;
+    }
+  });
+  container.innerHTML = html;
+}
+
+function render() {
+  const container = document.getElementById('pkg-cards');
+  let html = '';
+  packages.forEach(function(pkg, i) {
+    if (i === expandedPkg) {
+      html += buildExpandedCard(pkg);
+    } else {
+      html += buildCollapsedCard(pkg);
+    }
+  });
+  container.innerHTML = html;
+  renderBadges();
+
+  // Update timeline for expanded package
+  if (expandedPkg >= 0) {
+    buildTimeline(packages[expandedPkg]);
+  }
+}
+
+function toggleCard(index) {
+  expandedPkg = expandedPkg === index ? -1 : index;
+  render();
+}
+
+function expandCard(index) {
+  expandedPkg = index;
+  render();
+}
+
+function collapseCard(index) {
+  expandedPkg = -1;
+  render();
+}
+
+// Initial render
+render();
+</script>
+
+</body>
+</html>

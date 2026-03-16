@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Track your order</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Montserrat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { min-height: 100vh; display: flex; flex-direction: column; font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; }
+
+    /* ── Nav ── */
+    nav { flex-shrink: 0; width: 100%; background: #1f1541; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(16px, 2.5vw, 48px); height: clamp(60px, 6vw, 87px); z-index: 10; }
+    .nav-logo { flex-shrink: 0; display: flex; align-items: center; }
+    .nav-logo img { display: block; height: clamp(28px, 2.8vw, 40.5px); width: auto; aspect-ratio: 139.725 / 40.5; object-fit: contain; max-width: none; }
+    .nav-logo .logo-text { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 20px; color: #fff; display: none; }
+    .nav-links { display: flex; align-items: center; gap: clamp(4px, 0.5vw, 8px); }
+    .nav-links a { display: flex; align-items: center; justify-content: center; padding: 6px clamp(10px, 0.9vw, 13.5px); border-radius: 100px; text-decoration: none; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 14px; color: #fff; letter-spacing: 0.05px; white-space: nowrap; }
+
+    /* ── Page body ── */
+    .page-body { flex: 1; display: flex; min-height: 0; }
+
+    /* ── Left content column ── */
+    .content-col { flex: 0 0 55.3%; display: flex; align-items: center; padding: clamp(32px, 5vh, 80px) clamp(24px, 4vw, 60px); background: #fff; }
+    .content-inner { display: flex; flex-direction: column; width: 100%; max-width: 900px; }
+
+    /* Badge */
+    .badge { display: inline-flex; align-items: center; justify-content: center; padding: 4px 10px; border-radius: 9999px; background: rgba(202, 187, 248, 0.39); border: 1px solid #714BB7; margin-bottom: clamp(12px, 2vh, 24px); align-self: flex-start; }
+    .badge span { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; line-height: 16px; color: #714BB7; white-space: nowrap; }
+
+    /* Text group */
+    .text-group { display: flex; flex-direction: column; gap: clamp(8px, 1vh, 12px); margin-bottom: clamp(20px, 3.5vh, 36px); }
+    h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: clamp(28px, 3.2vw, 44px); line-height: 1.25; color: #1f1541; letter-spacing: -0.24px; }
+    .subtitle { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: clamp(15px, 1.4vw, 24px); line-height: 1.4; color: #3a3a3a; letter-spacing: 0.036px; }
+    .tip { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: clamp(12px, 0.9vw, 16px); line-height: 1.6; color: #4f4f4f; letter-spacing: 0.024px; }
+
+    /* Search box */
+    .search-box { display: flex; align-items: center; width: 100%; max-width: clamp(300px, 60vw, 865px); background: #fff; border: 1.254px solid rgba(0, 0, 0, 0.2); border-radius: 10px; padding: clamp(6px, 0.7vw, 10px); padding-left: clamp(10px, 1vw, 16px); margin-bottom: clamp(16px, 2.5vh, 32px); gap: 8px; }
+    .search-placeholder { flex: 1; min-width: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: clamp(12px, 0.95vw, 17.5px); line-height: 1.4; color: #040404; border: none; outline: none; background: transparent; padding: 0 8px; }
+    .search-placeholder::placeholder { color: #66727f; }
+    .track-btn { flex-shrink: 0; display: flex; align-items: center; justify-content: center; height: clamp(44px, 4vw, 60px); padding: 0 clamp(16px, 2vw, 30px); background: #1f1541; border-radius: 10px; border: none; cursor: pointer; }
+    .track-btn span { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: clamp(13px, 0.9vw, 16px); color: #fff; letter-spacing: 0.032px; white-space: nowrap; }
+
+    /* Need help card */
+    .help-card { display: inline-flex; flex-direction: column; align-self: flex-start; background: #f7f7f7; border: 1px solid rgba(226, 232, 240, 0.11); border-radius: 16px; padding: clamp(12px, 1.2vw, 20px); gap: 2px; }
+    .help-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: clamp(10px, 0.65vw, 12px); line-height: 18px; color: #0b0b0b; text-transform: uppercase; margin-bottom: 2px; }
+    .help-row { display: flex; align-items: center; gap: clamp(8px, 1.5vw, 24px); flex-wrap: wrap; }
+    .help-item { display: flex; align-items: center; gap: 6px; padding: 4px 0; }
+    .help-icon { width: clamp(14px, 1vw, 18px); height: clamp(14px, 1vw, 18px); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .help-email-text { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: clamp(12px, 0.9vw, 16px); line-height: 1.4; color: #0b0b0b; white-space: nowrap; }
+    .help-tel-text { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; font-size: clamp(12px, 0.9vw, 16px); line-height: 1.4; color: #000; white-space: nowrap; }
+
+    /* ── Right image column ── */
+    .image-col { flex: 1; background: #e8e4fa; overflow: hidden; position: relative; }
+    .image-col .product-img { position: absolute; top: 0; left: -11.38%; width: 114.27%; height: 100%; object-fit: cover; }
+    .image-col .placeholder-img { display: none; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── Footer ── */
+    footer { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 12px clamp(24px, 4vw, 64px); border-top: 1px solid rgba(33, 33, 33, 0.1); opacity: 0.5; }
+    .footer-left p, .footer-right p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(11px, 0.75vw, 14px); line-height: 19.5px; color: rgba(22, 22, 22, 0.35); }
+    .footer-left .normal { font-weight: 500; }
+    .footer-left .bold { font-weight: 600; text-transform: uppercase; }
+    .footer-right p { font-weight: 500; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) { .content-col { flex: 0 0 60%; } }
+    @media (max-width: 768px) {
+      body { background: #2f2064; }
+      .page-body { flex-direction: column; }
+      .image-col { order: -1; flex: none; width: 100%; height: 300px; background: #2f2064; }
+      .image-col .product-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 15%; }
+      .content-col { order: 0; flex: none; width: 100%; background: #f9f7f5; border-radius: 24px 24px 0 0; padding: 32px 24px 48px; margin-top: -24px; z-index: 2; align-items: flex-start; }
+      .content-inner { width: 100%; max-width: 100%; }
+      h1 { font-size: 28px; }
+      .subtitle { font-size: 15px; }
+      .search-box { flex-direction: column; align-items: stretch; background: transparent; border: none; border-radius: 0; padding: 0; gap: 12px; max-width: 100%; }
+      .search-placeholder { height: 52px; background: #fff; border: 0.939px solid rgba(0,0,0,0.2); border-radius: 8px; padding: 0 16px; font-size: 14px; display: block; flex: none; width: 100%; }
+      .track-btn { height: 52px; width: 100%; border-radius: 8px; padding: 0; }
+      .help-card { align-self: stretch; background: #f2f0ed; }
+      footer { background: #f9f7f5; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-logo">
+    <img src="images/image 19 [Vectorized].svg" alt="Logo" />
+    <span class="logo-text">Your Brand</span>
+  </div>
+  <div class="nav-links">
+    <a href="#">Shop</a>
+    <a href="#">FAQ</a>
+  </div>
+</nav>
+
+<!-- Page body -->
+<div class="page-body">
+
+  <!-- Left: content -->
+  <div class="content-col">
+    <div class="content-inner">
+
+      <div class="badge">
+        <span>Delivery you can trust</span>
+      </div>
+
+      <div class="text-group">
+        <h1 id="page-title-display">Track your order</h1>
+        <p class="subtitle">Enter your tracking number to see the latest delivery updates.</p>
+        <p class="tip">&#x1F4A1; Your tracking number is in your shipping confirmation email</p>
+      </div>
+
+      <div class="search-box">
+        <input class="search-placeholder" type="text" placeholder="Enter your tracking number: e.g. AA1223456789AUS" />
+        <button class="track-btn" onclick="doSearch()"><span>Track my delivery</span></button>
+      </div>
+
+      <div class="help-card">
+        <p class="help-label">Need help?</p>
+        <div class="help-row">
+          <div class="help-item">
+            <div class="help-icon">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1.5" y="3.75" width="15" height="10.5" rx="1.5" stroke="#0b0b0b" stroke-width="1.4"/><path d="M1.5 5.25L9 10.5L16.5 5.25" stroke="#0b0b0b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="help-email-text" id="help-email">support@agemate.com</span>
+          </div>
+          <div class="help-item">
+            <div class="help-icon">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 2.5h3l1.25 3.25-1.75 1.75a9.5 9.5 0 004.5 4.5l1.75-1.75 3.25 1.25v3a1 1 0 01-1 1C6.5 15.5 2.5 11.5 2.5 3.5a1 1 0 011-1z" stroke="#000" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="help-tel-text" id="help-phone">+61 3 9000 1234</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Right: product image -->
+  <div class="image-col" id="image-col">
+    <img class="product-img" id="default-img" src="images/Right Image Panel 1.png" alt="Product" />
+    <img class="placeholder-img" id="custom-img" src="" alt="Custom" />
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-left">
+    <p><span class="normal">Powered by </span><span class="bold">Borderless360</span></p>
+  </div>
+  <div class="footer-right">
+    <p>Climate Neutral</p>
+  </div>
+</footer>
+
+<script>
+// ── Search action ──
+function doSearch() {
+  var input = document.querySelector('.search-placeholder');
+  var val = input.value.trim();
+  if (!val) { input.focus(); return; }
+  window.location.href = 'tracking-demo.html?ref=' + encodeURIComponent(val);
+}
+document.querySelector('.search-placeholder').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doSearch();
+});
+
+// ── Admin config listener (live preview via postMessage) ──
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'admin-config') return;
+  const c = e.data.config;
+
+  // Nav background colour
+  const nav = document.querySelector('nav');
+  if (c.headerColour) {
+    nav.style.background = c.headerColour;
+    document.querySelector('.track-btn').style.background = c.headerColour;
+  }
+
+  // Nav link colour
+  if (c.linkColour) {
+    document.querySelectorAll('.nav-links a').forEach(a => a.style.color = c.linkColour);
+  }
+
+  // Logo
+  const logoImg = document.querySelector('.nav-logo img');
+  const logoText = document.querySelector('.nav-logo .logo-text');
+  if (c.logoUrl) {
+    logoImg.src = c.logoUrl;
+    logoImg.style.display = 'block';
+    logoText.style.display = 'none';
+  }
+
+  // Favicon
+  if (c.faviconUrl) {
+    let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.rel = 'icon';
+    link.href = c.faviconUrl;
+    document.head.appendChild(link);
+  }
+
+  // Page image (right column)
+  if (c.pageImageUrl) {
+    const defaultImg = document.getElementById('default-img');
+    const customImg = document.getElementById('custom-img');
+    defaultImg.style.display = 'none';
+    customImg.style.display = 'block';
+    customImg.src = c.pageImageUrl;
+  }
+
+  // Page title
+  if (c.pageTitle) {
+    document.getElementById('page-title-display').textContent = c.pageTitle;
+  }
+
+  // Fonts
+  if (c.titleFont) {
+    document.querySelector('h1').style.fontFamily = c.titleFont + ', sans-serif';
+  }
+  if (c.bodyFont) {
+    document.body.style.fontFamily = c.bodyFont + ', sans-serif';
+  }
+
+  // Nav links
+  if (c.navLinks) {
+    const navLinksEl = document.querySelector('.nav-links');
+    navLinksEl.innerHTML = '';
+    c.navLinks.forEach(link => {
+      if (link.text) {
+        const a = document.createElement('a');
+        a.href = link.url || '#';
+        a.textContent = link.text;
+        if (c.linkColour) a.style.color = c.linkColour;
+        navLinksEl.appendChild(a);
+      }
+    });
+  }
+
+  // Support contact
+  if (c.supportEmail) document.getElementById('help-email').textContent = c.supportEmail;
+  if (c.supportPhone) document.getElementById('help-phone').textContent = c.supportPhone;
+});
+</script>
+</body>
+</html>

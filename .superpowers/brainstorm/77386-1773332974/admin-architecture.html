@@ -1,0 +1,194 @@
+<h2>Admin Page Architecture</h2>
+<p class="subtitle">How the admin controls will connect to the live tracking preview</p>
+
+<div class="section">
+  <h3>Overall Layout</h3>
+  <div class="mockup">
+    <div class="mockup-header">admin.html — Full Page Layout</div>
+    <div class="mockup-body" style="padding:0;background:#f5f6f8;">
+      <!-- Header -->
+      <div style="background:#1f1541;color:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;font-size:13px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-weight:700;letter-spacing:1px;color:#fff;">BORDERLESS<span style="color:#6b1aff;">360</span></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <span style="opacity:0.6;">🔔</span>
+          <span style="opacity:0.6;">❓</span>
+          <span style="background:#6b1aff;padding:4px 10px;border-radius:12px;font-size:11px;">Rob</span>
+        </div>
+      </div>
+
+      <div style="display:flex;min-height:500px;">
+        <!-- Sidebar -->
+        <div style="width:56px;background:#1f1541;display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:16px;">
+          <div style="width:24px;height:24px;background:rgba(255,255,255,0.15);border-radius:4px;"></div>
+          <div style="width:24px;height:24px;background:rgba(255,255,255,0.15);border-radius:4px;"></div>
+          <div style="width:24px;height:24px;background:rgba(255,255,255,0.15);border-radius:4px;"></div>
+          <div style="width:24px;height:24px;background:#6b1aff;border-radius:4px;"></div>
+          <div style="width:24px;height:24px;background:rgba(255,255,255,0.15);border-radius:4px;"></div>
+        </div>
+
+        <!-- Main content area -->
+        <div style="flex:1;display:flex;flex-direction:column;">
+          <!-- Progress stepper -->
+          <div style="background:white;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;">
+            <span style="color:#6b1aff;font-size:12px;font-weight:600;">← Save and Exit</span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:10px;height:10px;background:#6b1aff;border-radius:50%;"></div>
+              <div style="width:80px;height:2px;background:#6b1aff;"></div>
+              <div style="width:10px;height:10px;background:#ccc;border-radius:50%;border:2px solid #6b1aff;"></div>
+            </div>
+            <span style="font-size:12px;color:#999;">Contact Support</span>
+          </div>
+
+          <!-- Two-panel layout -->
+          <div style="display:flex;flex:1;">
+            <!-- Left: Form -->
+            <div style="width:45%;padding:24px;overflow-y:auto;background:#f5f6f8;">
+              <h3 style="margin:0 0 4px 0;font-size:18px;">Order search page</h3>
+              <p style="margin:0 0 16px 0;font-size:12px;color:#666;">Branded tracking and live updates...</p>
+
+              <!-- Branding card -->
+              <div style="background:rgba(255,255,255,0.7);border-radius:8px;padding:16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+                <p style="font-weight:700;font-size:15px;margin:0 0 12px 0;padding-bottom:8px;border-bottom:1px solid #eee;">Branding</p>
+                <p style="font-size:12px;font-weight:600;margin:0 0 4px 0;">Add your page title</p>
+                <p style="font-size:11px;color:#888;margin:0 0 6px 0;">Shown as the heading on the tracking landing page</p>
+                <div style="background:white;border:1px solid #ccc;border-radius:6px;padding:8px 10px;font-size:12px;color:#999;">Track your items</div>
+              </div>
+
+              <!-- Colours section -->
+              <div style="background:rgba(255,255,255,0.7);border-radius:8px;padding:16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+                <div style="display:flex;gap:12px;">
+                  <div style="flex:1;">
+                    <p style="font-size:11px;color:#555;margin:0 0 4px 0;">Header colour</p>
+                    <div style="display:flex;gap:6px;align-items:center;">
+                      <div style="background:white;border:1px solid #ccc;border-radius:6px;padding:6px 8px;font-size:11px;flex:1;">#36B1AFF</div>
+                      <div style="width:28px;height:28px;background:#6b1aff;border-radius:6px;"></div>
+                    </div>
+                  </div>
+                  <div style="flex:1;">
+                    <p style="font-size:11px;color:#555;margin:0 0 4px 0;">Link colour</p>
+                    <div style="display:flex;gap:6px;align-items:center;">
+                      <div style="background:white;border:1px solid #ccc;border-radius:6px;padding:6px 8px;font-size:11px;flex:1;">#47CD89</div>
+                      <div style="width:28px;height:28px;background:#47cd89;border-radius:6px;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="font-size:10px;color:#aaa;text-align:center;padding:8px;">...more form fields below (logos, fonts, nav links, support)</div>
+            </div>
+
+            <!-- Right: Live Preview -->
+            <div style="width:55%;padding:24px;background:#e8eaed;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <span style="font-weight:600;font-size:13px;">Live Preview</span>
+                <div style="display:flex;gap:4px;">
+                  <div style="width:28px;height:20px;background:#6b1aff;border-radius:4px;"></div>
+                  <div style="width:28px;height:20px;background:#ddd;border-radius:4px;"></div>
+                </div>
+              </div>
+
+              <!-- Browser frame -->
+              <div style="background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.1);">
+                <!-- Browser chrome -->
+                <div style="background:#e8e8e8;padding:6px 10px;display:flex;align-items:center;gap:6px;">
+                  <div style="width:8px;height:8px;background:#ff5f57;border-radius:50%;"></div>
+                  <div style="width:8px;height:8px;background:#febc2e;border-radius:50%;"></div>
+                  <div style="width:8px;height:8px;background:#28c840;border-radius:50%;"></div>
+                  <div style="flex:1;background:white;border-radius:4px;padding:2px 8px;font-size:10px;color:#999;margin-left:8px;">track.globalvendlabs.b360.co</div>
+                </div>
+
+                <!-- Preview content (represents iframe) -->
+                <div style="padding:0;">
+                  <div style="background:#6b1aff;color:white;padding:10px 16px;display:flex;justify-content:space-between;font-size:12px;">
+                    <span style="font-weight:700;">AgeMate</span>
+                    <div style="display:flex;gap:12px;font-size:11px;">
+                      <span>Shop</span>
+                      <span>FAQ</span>
+                    </div>
+                  </div>
+                  <div style="padding:16px;">
+                    <div style="display:inline-block;background:#e8f5e9;color:#2e7d32;font-size:10px;padding:2px 8px;border-radius:10px;margin-bottom:8px;">Delivery in progress</div>
+                    <h4 style="margin:4px 0;font-size:16px;">Track your order</h4>
+                    <p style="font-size:11px;color:#666;margin:0 0 12px;">Enter your tracking number to see the latest delivery updates.</p>
+                    <div style="display:flex;gap:8px;">
+                      <div style="flex:1;background:#f5f5f5;border:1px solid #ddd;border-radius:6px;padding:8px;font-size:10px;color:#999;">Enter your tracking number...</div>
+                      <div style="background:#6b1aff;color:white;border-radius:6px;padding:8px 14px;font-size:10px;font-weight:600;">Track my delivery</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p style="font-size:10px;color:#888;text-align:center;margin-top:8px;">↑ This is an iframe loading tracking-demo.html<br>Changes in the form update the preview in real-time</p>
+            </div>
+          </div>
+
+          <!-- Bottom bar -->
+          <div style="background:white;padding:12px 24px;display:flex;justify-content:space-between;border-top:1px solid #eee;">
+            <div style="display:flex;align-items:center;gap:6px;color:#6b1aff;font-size:12px;font-weight:600;">← Back</div>
+            <div style="background:#6b1aff;color:white;border-radius:6px;padding:8px 20px;font-size:12px;font-weight:600;">Save and continue</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>How Live Preview Works</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:12px;">
+    <div style="background:#f0f0ff;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:24px;margin-bottom:8px;">🎨</div>
+      <h4 style="margin:0 0 4px;">Change colour</h4>
+      <p style="font-size:12px;color:#666;margin:0;">Type a hex code or pick from the colour swatch → header colour updates instantly in the iframe</p>
+    </div>
+    <div style="background:#f0fff0;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:24px;margin-bottom:8px;">📤</div>
+      <h4 style="margin:0 0 4px;">Upload logo</h4>
+      <p style="font-size:12px;color:#666;margin:0;">Drag or click to upload → logo appears in the nav bar of the preview instantly</p>
+    </div>
+    <div style="background:#fff5f0;border-radius:8px;padding:16px;text-align:center;">
+      <div style="font-size:24px;margin-bottom:8px;">🔀</div>
+      <h4 style="margin:0 0 4px;">Toggle feature</h4>
+      <p style="font-size:12px;color:#666;margin:0;">Enable/disable returns, claims, carrier info → preview shows/hides those sections</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Data Flow</h3>
+  <div style="background:#1e1e2e;border-radius:8px;padding:20px;color:#ccc;font-family:monospace;font-size:12px;line-height:1.8;">
+    <span style="color:#89b4fa;">admin.html</span> (parent page)<br>
+    &nbsp;&nbsp;├── Form inputs capture user changes<br>
+    &nbsp;&nbsp;├── <span style="color:#f9e2af;">onChange</span> → builds config object<br>
+    &nbsp;&nbsp;├── <span style="color:#a6e3a1;">iframe.postMessage(config)</span> → sends to preview<br>
+    &nbsp;&nbsp;└── Config saved to <span style="color:#f9e2af;">localStorage</span> for persistence<br>
+    <br>
+    <span style="color:#89b4fa;">tracking-demo.html</span> (iframe)<br>
+    &nbsp;&nbsp;├── <span style="color:#a6e3a1;">window.addEventListener('message')</span><br>
+    &nbsp;&nbsp;├── Receives config object<br>
+    &nbsp;&nbsp;├── Applies: colours, logo, fonts, toggles<br>
+    &nbsp;&nbsp;└── Updates DOM in real-time
+  </div>
+</div>
+
+<h3 style="margin-top:24px;">Does this architecture look right?</h3>
+<p class="subtitle">Click an option below</p>
+
+<div class="options">
+  <div class="option" data-choice="approve" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content">
+      <h3>Looks good — proceed to build</h3>
+      <p>Architecture and layout match what I need</p>
+    </div>
+  </div>
+  <div class="option" data-choice="changes" onclick="toggleSelect(this)">
+    <div class="letter">✎</div>
+    <div class="content">
+      <h3>Needs changes</h3>
+      <p>I'll describe what needs adjusting in the terminal</p>
+    </div>
+  </div>
+</div>
