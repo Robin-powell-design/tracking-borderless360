@@ -1,27 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgeMate — Tracking Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgeMate — Tracking Demo V2</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
     body { min-height: 100vh; display: flex; flex-direction: column; font-family: 'Plus Jakarta Sans', sans-serif; background: #f1f2f4; }
 
-    /* ── Nav ── */
+    /* Nav */
     nav { flex-shrink: 0; width: 100%; background: #1f1541; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 87px; z-index: 200; position: sticky; top: 0; }
     .nav-logo { flex-shrink: 0; display: flex; align-items: center; }
-    .nav-logo img { display: block; height: 40.5px; width: auto; aspect-ratio: 139.725/40.5; object-fit: contain; max-width: none; }
+    .nav-logo img { display: block; height: 40.5px; width: auto; object-fit: contain; max-width: none; }
     .nav-links { display: flex; align-items: center; }
     .nav-links a { padding: 6.75px 13.5px; border-radius: 100px; text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: #fff; }
 
-    /* ── Demo tab bar ── */
+    /* Demo bar */
     .demo-bar { background: #fff; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; padding: 0 32px; gap: 2px; flex-shrink: 0; flex-wrap: wrap; position: sticky; top: 87px; z-index: 199; }
-    .demo-bar-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: #96a0ab; text-transform: uppercase; letter-spacing: 0.08em; margin-right: 8px; white-space: nowrap; }
+    .demo-bar-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: #96a0ab; text-transform: uppercase; letter-spacing: 0.08em; margin-right: 8px; }
     .demo-tab { padding: 13px 16px; border: none; background: none; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; color: #66727f; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.15s, border-color 0.15s; white-space: nowrap; }
     .demo-tab:hover { color: #1f1541; }
     .demo-tab.active { color: #4c60ff; border-bottom-color: #4c60ff; font-weight: 600; }
@@ -30,56 +29,82 @@
     .demo-tab.tab-stuck.active { color: #c01048; border-bottom-color: #f63d68; }
     .demo-tab.tab-updateaddress.active { color: #c01048; border-bottom-color: #f63d68; }
 
-    /* ── Sub-state advance bar (claim/return pages) ── */
+    /* Advance bar */
     .advance-bar { background: #f9fafb; border-bottom: 1px solid #e5e7eb; display: none; align-items: center; justify-content: center; gap: 12px; padding: 8px 32px; flex-shrink: 0; position: sticky; top: 130px; z-index: 198; }
     .advance-bar.visible { display: flex; }
     .advance-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: #96a0ab; text-transform: uppercase; letter-spacing: 0.08em; }
-    .advance-btn { padding: 5px 14px; border: 1px solid #d0d5dd; border-radius: 6px; background: #fff; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; color: #344054; transition: background 0.15s; }
+    .advance-btn { padding: 5px 14px; border: 1px solid #d0d5dd; border-radius: 6px; background: #fff; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; color: #344054; }
     .advance-btn:hover { background: #f3f4f6; }
     .advance-btn.active-sub { background: #eef4ff; border-color: #c7d7fe; color: #3538cd; }
 
-    /* ── Page layout ── */
+    /* V2 Layout */
     .page-body { flex: 1; display: flex; align-items: stretch; height: calc(100vh - 87px - 43px); overflow: hidden; }
-    .left-panel { flex: 1; min-width: 0; padding: 32px 32px 48px 48px; display: flex; flex-direction: column; gap: 32px; overflow-y: auto; }
-    .sidebar-wrap { flex-shrink: 0; display: flex; position: relative; }
-    .right-sidebar { width: clamp(320px, 35vw, 484px); background: #fff; padding: 16px; display: flex; flex-direction: column; gap: 24px; overflow-y: auto; border-left: 1px solid #f2f4f7; transition: width 0.35s cubic-bezier(0.4,0,0.2,1), padding 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease; }
-    .right-sidebar.collapsed { width: 0; padding: 16px 0; opacity: 0; overflow: hidden; border-left-color: transparent; }
+    .left-sidebar { flex-shrink: 0; width: 490px; min-width: 490px; background: #fff; padding: 32px 24px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; border-right: 1px solid #e5e7eb; }
+    .main-panel { flex: 1; min-width: 0; padding: 32px 48px 48px; display: flex; flex-direction: column; gap: 24px; overflow-y: auto; }
 
-    /* Sidebar toggle button */
-    .sidebar-toggle { position: absolute; left: 0; top: 16px; transform: translateX(-100%); z-index: 10; width: 28px; height: 56px; border-radius: 8px 0 0 8px; background: #fff; border: 1px solid #e5e7eb; border-right: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: -2px 0 6px rgba(0,0,0,0.05); transition: background 0.15s; }
-    .sidebar-toggle:hover { background: #f3f4f6; }
-    .sidebar-toggle svg { width: 14px; height: 14px; color: #66727f; transition: transform 0.35s ease; }
-    .right-sidebar.collapsed ~ .sidebar-toggle svg { transform: rotate(180deg); }
+    /* Sidebar styles */
+    .sidebar-card { background: #fafafa; border-radius: 12px; padding: 28px 24px; display: flex; flex-direction: column; gap: 20px; }
+    .sidebar-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 20px; line-height: 28px; color: rgba(0,0,0,0.8); }
+    .sidebar-info { display: flex; flex-direction: column; gap: 12px; }
+    .sidebar-info-row { display: flex; gap: 24px; }
+    .sidebar-info-item { display: flex; flex-direction: column; flex: 1; }
+    .sidebar-info-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 14px; line-height: 20px; color: #858585; }
+    .sidebar-info-value { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 18px; line-height: 26px; color: #040404; display: flex; align-items: center; gap: 6px; }
+    .sidebar-divider { border: none; border-top: 1px solid #f2f4f7; }
+    .sidebar-carrier { display: flex; gap: 12px; align-items: center; }
+    .sidebar-carrier-logo { width: 64px; height: 64px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+    .sidebar-carrier-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
+    .sidebar-carrier-info { display: flex; flex-direction: column; gap: 2px; }
+    .sidebar-carrier-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 15px; color: #040404; }
+    .sidebar-carrier-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 15px; color: #040404; }
+    .sidebar-carrier-link { display: flex; align-items: center; gap: 4px; text-decoration: none; }
+    .sidebar-carrier-link span { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 15px; color: #4c60ff; }
+    .sidebar-carrier-link img { width: 16px; height: 16px; }
+    .sidebar-contact-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 18px; color: rgba(0,0,0,0.8); margin-bottom: 12px; }
+    .sidebar-contact-items { display: flex; flex-direction: row; gap: 32px; }
+    .sidebar-contact-item { display: flex; align-items: center; gap: 8px; }
+    .sidebar-contact-item svg { width: 18px; height: 18px; flex-shrink: 0; color: #4c60ff; }
+    .sidebar-contact-item span { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 15px; color: #4c60ff; }
 
-    /* ── Shared text styles ── */
-    .page-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 28px; line-height: 32px; color: rgba(0,0,0,0.8); margin-bottom: 32px; }
-    .info-row { display: flex; gap: 48px; align-items: flex-start; flex-wrap: wrap; }
-    .info-item { display: flex; flex-direction: column; }
-    .info-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 14px; line-height: 24px; color: #858585; }
-    .info-value { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 16px; line-height: 24px; color: #040404; display: flex; align-items: center; gap: 6px; }
+    /* Main panel */
+    .page-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 28px; line-height: 32px; color: rgba(0,0,0,0.8); }
 
-    /* ── Main card ── */
-    .main-card { background: #fafafa; border-radius: 8px; box-shadow: 0px 1px 2px 0px rgba(17,24,86,0.13); display: flex; flex-direction: column; gap: 16px; padding: 16px; }
+    /* Main card wrap */
+    .main-card-wrap { background: #fff; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
 
-    /* Delivery header */
-    .delivery-header { display: flex; gap: 16px; align-items: center; }
+    /* Delivery row */
+    .delivery-row { display: flex; align-items: center; gap: 24px; background: #fafafa; border-radius: 8px; padding: 16px 20px; }
+    .delivery-left { display: flex; gap: 16px; align-items: center; flex: 1; }
     .calendar-icon { width: 72px; height: 72px; border-radius: 7.89px; background: #f4f4f4; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-    .delivery-info { display: flex; flex-direction: column; gap: 4px; flex: 1; }
-    .delivery-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; line-height: 24px; color: #4a535c; }
+    .delivery-info { display: flex; flex-direction: column; gap: 4px; }
+    .delivery-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #4a535c; }
     .delivery-date { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; font-size: 28px; line-height: 1; color: #040404; }
-    .delivery-note { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 12px; line-height: 20px; color: #96a0ab; }
-    .delivery-extra { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; background: #fff; border-radius: 8px; padding: 0 16px; align-self: stretch; text-align: center; }
+    .delivery-note { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 12px; color: #96a0ab; }
+    .delivery-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+    .delivery-right-top { display: flex; align-items: center; gap: 12px; }
+    .delivery-right-text { display: flex; flex-direction: column; align-items: flex-end; }
+    .delivery-right-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 12px; color: #858585; line-height: 1.3; }
+    .delivery-right-value { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #040404; line-height: 1.3; }
+    .delivery-carrier-logo { width: 48px; height: 48px; border-radius: 8px; overflow: hidden; }
+    .delivery-carrier-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .delivery-tracking-num { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 12px; color: #4c60ff; }
+    .delivery-extra { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; background: #fff; border-radius: 8px; padding: 12px 20px; text-align: center; border: 1px solid #e5e7eb; align-self: stretch; min-width: 100px; }
     .delivery-extra-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 14px; color: #4a535c; }
     .delivery-extra-value { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; font-size: 28px; line-height: 1; color: #040404; }
     .delivery-extra-unit { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 14px; color: #4a535c; }
 
-    /* ── Progress card ── */
-    .progress-card { background: #fff; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
-    .progress-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-    .progress-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 20px; line-height: 24px; color: #141414; }
-    .progress-tracking-ref { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: #66727f; }
-    .progress-tracking-ref span { color: #4c60ff; font-weight: 600; }
-    .progress-bar-wrap { border-radius: 8px; padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 4px; }
+    /* Items */
+    .items-card { display: flex; flex-direction: column; gap: 12px; }
+    .items-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 16px; color: #141414; }
+    .items-list { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .item-chip { display: flex; align-items: center; gap: 8px; height: 36px; background: #f1f2f4; border: 1px solid #ebedef; border-radius: 4px; padding-right: 12px; flex-shrink: 0; }
+    .item-chip-img { width: 36px; height: 36px; border-radius: 4px 0 0 4px; overflow: hidden; flex-shrink: 0; object-fit: cover; }
+    .item-chip-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 12px; color: #4a535c; }
+    .item-chip-qty { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 12px; color: #66727f; }
+
+    /* Progress */
+    .progress-card { padding: 0; display: flex; flex-direction: column; gap: 16px; }
+    .progress-bar-wrap { border-radius: 8px; padding: 24px 24px 32px; display: flex; flex-direction: column; gap: 4px; }
     .progress-bar-wrap.normal   { background: #fafbff; }
     .progress-bar-wrap.delivered { background: #f6fef9; border: 1px solid #a9efcc; }
     .progress-bar-wrap.delayed  { background: #fffdf5; border: 1px solid #fedf89; }
@@ -89,140 +114,74 @@
     .progress-status-title.green  { color: #027a48; }
     .progress-status-title.orange { color: #b54708; display: flex; align-items: center; gap: 8px; }
     .progress-status-title.red    { color: #c01048; display: flex; align-items: center; gap: 8px; }
-    .progress-status-sub { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 14px; line-height: 24px; color: #707070; }
-
-    /* ── Delivery progress stages ── */
+    .progress-status-sub { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 14px; color: #707070; }
     .stages { display: flex; align-items: flex-end; padding: 16px 0 44px; }
     .stage { display: flex; flex-direction: column; justify-content: space-between; height: 48px; position: relative; padding-bottom: 14px; border-bottom: 2px solid #d7d7d7; }
     .stage.active-purple { border-bottom-color: #5233b2; }
     .stage.active-green  { border-bottom-color: #12b76a; }
     .stage.active-orange { border-bottom-color: #f79009; }
-    .stage-1 { width: 20%; }
-    .stage-2 { width: 28%; }
-    .stage-3 { flex: 1; }
-    .stage-4 { flex: 1; }
+    .stage-1 { width: 20%; } .stage-2 { width: 28%; } .stage-3 { flex: 1; } .stage-4 { flex: 1; }
     .stage-label { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px; line-height: 1.4; white-space: nowrap; }
-    .stage-label.dark   { color: #1f1541; }
-    .stage-label.grey   { color: #d7d7d7; }
-    .stage-label.center { text-align: center; }
-    .stage-label.right  { text-align: right; }
-    .stage-label.orange { color: #b54708; }
-    .stage-label.red    { color: #c01048; }
-    /* Stage dot positioning */
+    .stage-label.dark { color: #1f1541; } .stage-label.grey { color: #d7d7d7; } .stage-label.center { text-align: center; } .stage-label.right { text-align: right; } .stage-label.orange { color: #b54708; } .stage-label.red { color: #c01048; }
     .stage-dot { position: absolute; }
-    .stage-dot.dot-grey   { bottom: -8px; }
-    .stage-dot.dot-check  { bottom: -12px; }
-    .stage-dot.dot-active { bottom: -14px; }
-    .stage-1 .stage-dot { left: -2px; }
-    .stage-2 .stage-dot { left: 50%; transform: translateX(-50%); }
-    .stage-3 .stage-dot { right: 30px; }
-    .stage-4 .stage-dot { right: -2px; }
+    .stage-dot.dot-grey { bottom: -8px; } .stage-dot.dot-check { bottom: -12px; } .stage-dot.dot-active { bottom: -14px; }
+    .stage-1 .stage-dot { left: -2px; } .stage-2 .stage-dot { left: 50%; transform: translateX(-50%); } .stage-3 .stage-dot { right: 30px; } .stage-4 .stage-dot { right: -2px; }
 
-    /* ── Your items card ── */
-    .items-card { background: #fff; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 24px; }
-    .items-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-    .items-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 20px; line-height: 24px; color: #141414; }
-    .items-tracking-ref { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: #66727f; }
-    .items-tracking-ref span { color: #4c60ff; font-weight: 600; }
-    .items-list { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-    .item-chip { display: flex; align-items: center; gap: 6.4px; height: 32px; background: #f1f2f4; border: 1px solid #ebedef; border-radius: 3.2px; padding-right: 9.6px; flex-shrink: 0; }
-    .item-chip-img { width: 32px; height: 32px; border-radius: 3.2px 0 0 3.2px; overflow: hidden; flex-shrink: 0; object-fit: cover; }
-    .item-chip-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 12px; color: #4a535c; }
-    .item-chip-qty { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 12px; color: #66727f; }
-
-    /* ── Compact contact bar ── */
-    .contact-bar { background: #fafafa; border-radius: 8px; padding: 4px 16px; display: flex; align-items: center; gap: 4px; }
-    .contact-bar-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 14px; color: rgba(0,0,0,0.8); flex: 1; line-height: 32px; }
-    .contact-bar-items { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 24px; }
-    .contact-bar-item { display: flex; align-items: center; gap: 4px; }
-    .contact-bar-item svg { width: 16px; height: 16px; flex-shrink: 0; }
-    .contact-bar-item span { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 14px; color: #66727f; line-height: 24px; }
-
-    /* ── Action buttons ── */
-    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1px solid #d0d5dd; border-radius: 8px; background: #fff; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #344054; text-decoration: none; }
-    .action-btn:hover { background: #f9fafb; }
-
-    /* ── Contact card ── */
-    .contact-card { background: #fff; border-radius: 8px; padding: 16px 24px; display: flex; flex-direction: column; gap: 12px; }
-    .contact-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 18px; line-height: 32px; color: rgba(0,0,0,0.8); }
-    .contact-row { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
-    .contact-item { display: flex; flex-direction: column; gap: 2px; flex: 1; }
-    .contact-item-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 14px; line-height: 24px; color: #858585; }
-    .contact-item-value { display: flex; align-items: flex-end; gap: 8px; }
-    .contact-item-value span { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 16px; line-height: 24px; color: #0037eb; }
-    .contact-icon { width: 18px; height: 18px; flex-shrink: 0; }
-
-    /* ── Address form ── */
-    .address-form-section { display: flex; flex-direction: column; gap: 16px; padding-top: 4px; max-width: 480px; }
-    .address-form-heading { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 18px; color: #141414; display: flex; align-items: center; gap: 8px; }
-    .form-grid { display: flex; flex-direction: column; gap: 12px; }
-    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-label { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 14px; color: #344054; }
-    .form-input, .form-select { width: 100%; padding: 12px 14px; border: 1px solid #d0d5dd; border-radius: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: #344054; background: #fff; outline: none; appearance: none; -webkit-appearance: none; }
-    .form-input::placeholder { color: #b0b8c1; }
-    .form-select { background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%2396a0ab' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
-    .update-address-btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 32px; border-radius: 8px; background: #1f1541; color: #fff; border: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 15px; }
-    .update-address-btn:hover { background: #2d1f5e; }
-
-    /* ── Right sidebar ── */
-    .carrier-card { background: #fafafa; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 24px; }
-    .timeline-card { display: flex; flex-direction: column; gap: 12px; }
-    .carrier-top { display: flex; flex-direction: column; gap: 12px; }
-    .carrier-heading { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 18px; line-height: 32px; color: rgba(0,0,0,0.8); }
-    .carrier-profile { display: flex; gap: 15px; align-items: center; }
-    .carrier-logo { width: 64px; height: 64px; border-radius: 8px; overflow: hidden; flex-shrink: 0; position: relative; }
-    .carrier-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
-    .carrier-info { display: flex; flex-direction: column; gap: 8px; }
-    .carrier-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 18px; line-height: 1; color: #040404; }
-    .carrier-link { display: flex; align-items: center; gap: 4px; text-decoration: none; }
-    .carrier-link span { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; line-height: 18px; color: #4c60ff; }
-    .carrier-link img { width: 16px; height: 16px; }
-    .status-badge { display: inline-flex; align-items: center; padding: 2px 12px; border-radius: 9999px; border: 1px solid; white-space: nowrap; flex-shrink: 0; }
-    .status-badge span { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; line-height: 18px; }
-    .badge-blue    { background: #eff8ff; border-color: #b2ddff; } .badge-blue span    { color: #175cd3; }
-    .badge-indigo  { background: #eef4ff; border-color: #c7d7fe; } .badge-indigo span  { color: #3538cd; }
-    .badge-purple  { background: #f4f3ff; border-color: #d9d6fe; } .badge-purple span  { color: #5925dc; }
-    .badge-green   { background: #ecfdf3; border-color: #a9efcc; } .badge-green span   { color: #027a48; }
-    .badge-orange  { background: #fffaeb; border-color: #fedf89; } .badge-orange span  { color: #b54708; }
-    .badge-red     { background: #fff1f3; border-color: #ffc5d0; } .badge-red span     { color: #c01048; }
-
-    /* ── Timeline ── */
+    /* Tracking history inline */
+    .tracking-history { display: flex; flex-direction: column; gap: 12px; }
+    .tracking-history-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+    .tracking-history-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 16px; color: #141414; }
+    .tracking-history-toggle { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+    .tracking-history-toggle.open { transform: rotate(180deg); }
     .timeline { display: flex; flex-direction: column; padding-left: 4px; }
-    .timeline-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 16px; line-height: 24px; color: #141414; margin-bottom: 8px; }
     .tl-item { display: flex; gap: 16px; align-items: flex-start; }
     .tl-col { display: flex; flex-direction: column; align-items: center; width: 44px; flex-shrink: 0; align-self: stretch; }
-    .tl-icon-pin  { width: 28px; height: 28px; border-radius: 50%; border: 1.5px dashed #d0d5dd; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .tl-icon-pin { width: 28px; height: 28px; border-radius: 50%; border: 1.5px dashed #d0d5dd; background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .tl-tick { width: 16px; height: 16px; border-radius: 50%; background: #4c60ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .tl-line { flex: 1; width: 2px; background: #4c60ff; min-height: 20px; }
     .tl-line.dashed { background: repeating-linear-gradient(to bottom, #d0d5dd 0, #d0d5dd 4px, transparent 4px, transparent 8px); }
     .tl-text { flex: 1; display: flex; flex-direction: column; gap: 6px; padding-top: 2px; min-width: 0; padding-bottom: 40px; }
     .tl-event { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px; line-height: 1.4; color: #141414; }
     .tl-event.muted { font-weight: 500; color: #66727f; font-size: 14px; }
-    .tl-time { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; line-height: 1.6; color: #707070; }
+    .tl-time { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; color: #707070; }
     .tl-time strong { font-weight: 500; color: #4a535c; }
 
-    /* ── Claim / Return single-column page ── */
+    /* Action / form */
+    .action-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1px solid #d0d5dd; border-radius: 8px; background: #fff; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #344054; }
+    .action-btn:hover { background: #f9fafb; }
+    .address-form-section { display: flex; flex-direction: column; gap: 16px; background: #fafafa; border-radius: 8px; padding: 24px; }
+    .address-form-section .form-grid { max-width: 490px; }
+    .address-form-heading { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 18px; color: #141414; display: flex; align-items: center; gap: 8px; }
+    .form-grid { display: flex; flex-direction: column; gap: 12px; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 14px; color: #344054; }
+    .form-input, .form-select { width: 100%; padding: 12px 14px; border: 1px solid #d0d5dd; border-radius: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: #344054; background: #fff; outline: none; }
+    .update-address-btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 32px; border-radius: 8px; background: #1f1541; color: #fff; border: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 15px; }
+
+    /* Badges */
+    .status-badge { display: inline-flex; align-items: center; padding: 2px 12px; border-radius: 9999px; border: 1px solid; white-space: nowrap; }
+    .status-badge span { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; line-height: 18px; }
+    .badge-blue { background: #eff8ff; border-color: #b2ddff; } .badge-blue span { color: #175cd3; }
+    .badge-indigo { background: #eef4ff; border-color: #c7d7fe; } .badge-indigo span { color: #3538cd; }
+    .badge-purple { background: #f4f3ff; border-color: #d9d6fe; } .badge-purple span { color: #5925dc; }
+    .badge-green { background: #ecfdf3; border-color: #a9efcc; } .badge-green span { color: #027a48; }
+    .badge-orange { background: #fffaeb; border-color: #fedf89; } .badge-orange span { color: #b54708; }
+    .badge-red { background: #fff1f3; border-color: #ffc5d0; } .badge-red span { color: #c01048; }
+
+    /* Status pages */
     .status-page { flex: 1; display: flex; align-items: flex-start; justify-content: center; height: calc(100vh - 87px - 43px); overflow-y: auto; }
     .status-page-inner { max-width: 960px; width: 100%; margin: 0 auto; padding: 32px 48px 48px; display: flex; flex-direction: column; gap: 24px; }
-    .status-info-row { display: flex; gap: 48px; }
     .status-card { background: #fafafa; border-radius: 8px; box-shadow: 0px 1px 2px rgba(17,24,86,0.13); display: flex; flex-direction: column; gap: 16px; padding: 16px; }
     .status-card-header { display: flex; gap: 16px; align-items: center; }
-    .status-thumb { width: 80px; height: 68px; border-radius: 6px; overflow: hidden; flex-shrink: 0; position: relative; }
-    .status-thumb img { position: absolute; top: -8.89%; left: 0; width: 100%; height: 118.56%; object-fit: cover; }
     .status-card-header-info { flex: 1; }
     .status-card-header-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #4a535c; }
     .status-card-header-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; font-size: 28px; color: #040404; }
-    .view-order-btn { padding: 10px 16px; border: 1px solid #d0d5dd; border-radius: 8px; background: #fff; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #344054; white-space: nowrap; flex-shrink: 0; }
+    .view-order-btn { padding: 10px 16px; border: 1px solid #d0d5dd; border-radius: 8px; background: #fff; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #344054; white-space: nowrap; }
     .status-card-body { background: #fff; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
-    .status-section-row { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
     .status-section-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 20px; color: #141414; }
-    .status-section-ref { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: #66727f; }
-    .status-section-ref span { color: #4c60ff; font-weight: 600; }
-
-    /* ── Flat progress bar (claim / return) ── */
     .flat-bar-wrap { border-radius: 8px; padding: 20px 20px 32px; display: flex; flex-direction: column; gap: 4px; }
-    .flat-bar-wrap.blue-wrap  { background: #f5f8ff; }
+    .flat-bar-wrap.blue-wrap { background: #f5f8ff; }
     .flat-bar-wrap.green-wrap { background: #f6fef9; border: 1px solid #a9efcc; }
     .toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-100px); background: #ecfdf3; color: #027a48; border: 1px solid #a9efcc; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; padding: 14px 28px; border-radius: 8px; display: flex; align-items: center; gap: 10px; z-index: 9999; box-shadow: 0 4px 16px rgba(0,0,0,0.06); transition: transform 0.35s ease; }
     .toast.show { transform: translateX(-50%) translateY(0); }
@@ -231,285 +190,118 @@
     .rejected-alert-title svg { flex-shrink: 0; }
     .rejected-alert-desc { font-family: 'Inter', sans-serif; font-size: 14px; color: #475467; margin: 0; line-height: 1.5; }
     .flat-bar-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 18px; }
-    .flat-bar-title.blue  { color: #4c60ff; }
-    .flat-bar-title.purple { color: #5233b2; }
-    .flat-bar-title.green { color: #027a48; }
+    .flat-bar-title.blue { color: #4c60ff; } .flat-bar-title.purple { color: #5233b2; } .flat-bar-title.green { color: #027a48; }
     .flat-bar-sub { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 14px; color: #707070; }
     .flat-stages { display: flex; align-items: flex-end; padding: 16px 0 20px; }
     .flat-stage { flex: 1; display: flex; flex-direction: column; justify-content: space-between; height: 48px; position: relative; padding-bottom: 16px; border-bottom: 2px solid #d7d7d7; }
-    .flat-stage.line-blue  { border-bottom-color: #4c60ff; }
-    .flat-stage.line-green { border-bottom-color: #12b76a; }
+    .flat-stage.line-blue { border-bottom-color: #4c60ff; } .flat-stage.line-green { border-bottom-color: #12b76a; }
     .flat-stage-label { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px; }
-    .flat-stage-label.dark { color: #1f1541; }
-    .flat-stage-label.grey { color: #d7d7d7; }
+    .flat-stage-label.dark { color: #1f1541; } .flat-stage-label.grey { color: #d7d7d7; }
     .flat-stage:last-child .flat-stage-label { text-align: right; }
     .flat-stage:not(:first-child):not(:last-child) .flat-stage-label { text-align: center; }
     .flat-dot { position: absolute; bottom: 0; transform: translateY(50%); }
-    .flat-stage:first-child .flat-dot  { left: 0; }
-    .flat-stage:last-child .flat-dot   { right: 0; }
+    .flat-stage:first-child .flat-dot { left: 0; }
+    .flat-stage:last-child .flat-dot { right: 0; }
     .flat-stage:not(:first-child):not(:last-child) .flat-dot { left: 50%; transform: translateX(-50%) translateY(50%); }
+    .contact-bar { background: #fafafa; border-radius: 8px; padding: 4px 16px; display: flex; align-items: center; gap: 4px; }
+    .contact-bar-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 14px; color: rgba(0,0,0,0.8); flex: 1; line-height: 32px; }
+    .contact-bar-items { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 24px; }
+    .contact-bar-item { display: flex; align-items: center; gap: 4px; }
+    .contact-bar-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .contact-bar-item span { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 14px; color: #66727f; }
 
-    /* ── Contact support button (status pages) ── */
-    .contact-support-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: 1px solid #d0d5dd; border-radius: 8px; background: #fff; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #344054; width: fit-content; }
-    .contact-support-btn:hover { background: #f9fafb; }
-    .status-divider { border: none; border-top: 1px solid #f2f4f7; }
-
-    /* ── Modals ── */
+    /* Modals */
     .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
     .modal-box { background: #fff; border-radius: 16px; width: 100%; max-width: 680px; padding: 40px 48px; display: flex; flex-direction: column; gap: 20px; max-height: 90vh; overflow-y: auto; }
     .modal-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 26px; color: #040404; }
     .modal-desc { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 15px; color: #4a535c; line-height: 1.6; }
     .modal-info-box { background: #fffaeb; border: 1px solid #f6a723; border-radius: 8px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px; }
-    .modal-info-line { font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6; color: #4a535c; display: flex; align-items: center; gap: 8px; }
+    .modal-info-line { font-family: 'Inter', sans-serif; font-size: 14px; color: #4a535c; display: flex; align-items: center; gap: 8px; }
     .modal-info-line strong { color: #b54708; }
     .modal-info-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #f6a723; flex-shrink: 0; }
-    .modal-select { width: 100%; padding: 14px 16px; border: 1px solid #d0d5dd; border-radius: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; color: #b0b8c1; background: #fff; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 7.5l5 5 5-5' stroke='%2396a0ab' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; cursor: pointer; }
+    .modal-select { width: 100%; padding: 14px 16px; border: 1px solid #d0d5dd; border-radius: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; color: #b0b8c1; background: #fff; appearance: none; }
     .modal-textarea-label { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #4c60ff; }
     .modal-textarea { width: 100%; min-height: 140px; padding: 14px 16px; border: 1px solid #d0d5dd; border-radius: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: #344054; resize: vertical; outline: none; }
-    .modal-textarea::placeholder { color: #b0b8c1; }
     .modal-actions { display: flex; align-items: center; gap: 16px; }
     .modal-btn-primary { padding: 12px 24px; border-radius: 8px; background: #1f1541; color: #fff; border: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 15px; }
-    .modal-btn-primary:hover { background: #2d1f5e; }
     .modal-btn-cancel { padding: 12px 16px; background: none; border: 1px solid #d0d5dd; border-radius: 8px; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 15px; color: #344054; }
-    .modal-btn-cancel:hover { background: #f9fafb; }
-
-    /* ── Modal success state ── */
     .modal-success { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; padding: 20px 0; }
-    .modal-success-icon { width: 64px; height: 64px; border-radius: 50%; background: #ecfdf3; display: flex; align-items: center; justify-content: center; animation: successPop 0.4s ease; }
-    @keyframes successPop { 0% { transform: scale(0); opacity: 0; } 60% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
+    .modal-success-icon { width: 64px; height: 64px; border-radius: 50%; background: #ecfdf3; display: flex; align-items: center; justify-content: center; }
     .modal-success-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 22px; color: #040404; }
     .modal-success-ref { font-family: 'Inter', sans-serif; font-size: 14px; color: #4a535c; display: flex; align-items: center; gap: 8px; background: #f9fafb; border-radius: 8px; padding: 10px 16px; }
-    .modal-success-ref code { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 15px; color: #1f1541; letter-spacing: 0.5px; }
+    .modal-success-ref code { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 15px; color: #1f1541; }
     .modal-copy-btn { background: none; border: none; cursor: pointer; color: #4c60ff; padding: 2px; display: flex; align-items: center; }
-    .modal-copy-btn:hover { color: #1f1541; }
     .modal-next-steps { text-align: left; width: 100%; background: #f9fafb; border-radius: 8px; padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
     .modal-next-steps-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; color: #040404; }
-    .modal-next-step { font-family: 'Inter', sans-serif; font-size: 14px; color: #4a535c; line-height: 1.5; display: flex; align-items: flex-start; gap: 8px; }
+    .modal-next-step { font-family: 'Inter', sans-serif; font-size: 14px; color: #4a535c; display: flex; align-items: flex-start; gap: 8px; }
     .modal-next-step-dot { width: 6px; height: 6px; border-radius: 50%; background: #4c60ff; flex-shrink: 0; margin-top: 7px; }
     .modal-success-email { font-family: 'Inter', sans-serif; font-size: 13px; color: #96a0ab; }
     .modal-btn-view { padding: 14px 32px; border-radius: 8px; background: #1f1541; color: #fff; border: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 15px; width: 100%; }
-    .modal-btn-view:hover { background: #2d1f5e; }
-    .modal-loading .modal-btn-primary { pointer-events: none; opacity: 0.7; }
     .modal-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 8px; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Utilities ── */
     .hidden { display: none !important; }
 
-    /* ── Mobile responsive ── */
-    @media (max-width: 768px) {
-      /* Nav */
-      nav { padding: 0 20px; height: 64px; }
-      .nav-logo img { height: 30px; }
-      .nav-links a { font-size: 15px; padding: 6px 10px; }
-
-      /* Demo bar — scrollable */
-      .demo-bar { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding: 0 16px; gap: 0; -webkit-overflow-scrolling: touch; scrollbar-width: none; top: 64px; }
-      .demo-bar::-webkit-scrollbar { display: none; }
-      .demo-bar-label { display: none; }
-      .demo-tab { padding: 10px 12px; font-size: 12px; flex-shrink: 0; }
-
-      /* Advance bar */
-      .advance-bar { padding: 8px 16px; flex-wrap: wrap; gap: 8px; top: 107px; }
-
-      /* Stack layout vertically */
-      .page-body { flex-direction: column; height: auto; overflow: visible; background: #f1f2f4; padding: 0; gap: 12px; box-sizing: border-box; }
-      .left-panel { padding: 0 12px; gap: 12px; overflow-y: visible; background: transparent; flex: none; width: 100%; box-sizing: border-box; }
-      .details-header { background: #fff; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 16px; box-sizing: border-box; }
-      .main-card { border-radius: 8px; padding: 16px 0; box-sizing: border-box; }
-      .sidebar-wrap { flex-shrink: 0; }
-      .sidebar-toggle { display: none; }
-      .right-sidebar { width: 100% !important; min-height: auto; border-left: none; border-top: none; padding: 0 12px 12px !important; overflow-y: visible; background: transparent; gap: 0; box-sizing: border-box; flex-shrink: 0; opacity: 1 !important; }
-      .right-sidebar .carrier-card { background: #fff; border-radius: 8px 8px 0 0; }
-      .right-sidebar .timeline-card { background: #fff; border-radius: 0 0 8px 8px; padding: 16px; }
-      .status-page { height: auto; overflow-y: visible; }
-
-      /* Text */
-      .page-title { font-size: 22px; line-height: 28px; }
-
-      /* Info row — 2 per row on mobile */
-      .info-row { gap: 16px; flex-wrap: wrap; }
-      .info-item { flex: 1 1 calc(50% - 8px); min-width: 0; }
-
-      /* Delivery header — stack extra box below */
-      .delivery-header { flex-wrap: wrap; padding: 0 16px; }
-      .delivery-extra { width: 100%; flex-direction: row; align-items: center; justify-content: space-between; padding: 12px 16px; align-self: auto; }
-      .delivery-extra-label { font-size: 13px; }
-      .delivery-extra-value { font-size: 22px; }
-      .delivery-extra-unit { font-size: 13px; }
-
-      /* Progress */
-      .progress-card { margin-top: -16px; }
-      .progress-header { flex-direction: column; gap: 2px; align-items: flex-start; }
-
-      /* Stage labels smaller */
-      .stage-label { font-size: 11px; }
-
-      /* Contact bar */
-      .contact-bar { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 16px; margin-top: -12px; }
-      .contact-bar-items { flex-direction: column; gap: 8px; align-items: flex-start; justify-content: flex-start; }
-
-      /* Items */
-      .items-header { flex-direction: column; gap: 4px; align-items: flex-start; }
-      .items-list { flex-wrap: wrap; }
-
-      /* Address form */
-      .form-row-2 { grid-template-columns: 1fr; }
-
-      /* Status pages */
-      .status-page-inner { padding: 16px 16px 24px; gap: 16px; }
-      .status-info-row { flex-wrap: wrap; gap: 12px; }
-      .status-card-header { flex-wrap: wrap; gap: 12px; }
-      .view-order-btn { width: 100%; }
-      .status-section-row { flex-direction: column; gap: 4px; }
-
-      /* Modals */
-      .modal-box { padding: 28px 20px; gap: 16px; }
-      .modal-title { font-size: 21px; }
-    }
-
-    @media (max-width: 480px) {
-      nav { height: 56px; padding: 0 16px; }
-      .demo-bar { top: 56px; }
-      .advance-bar { top: 99px; }
-      .nav-logo img { height: 26px; }
-      .nav-links a { font-size: 14px; padding: 5px 8px; }
-
-      .left-panel { padding: 16px 12px 20px; }
-      .right-sidebar { padding: 16px 12px; }
-
-      .page-title { font-size: 20px; }
-      .delivery-date { font-size: 22px; }
-      .delivery-extra-value { font-size: 20px; }
-
-      .progress-title { font-size: 17px; }
-      .progress-status-title { font-size: 15px; }
-      .progress-tracking-ref { font-size: 12px; }
-
-      .stage-label { font-size: 10px; }
-
-      .modal-box { padding: 20px 16px; }
-      .modal-actions { flex-direction: column; }
-      .modal-btn-primary, .modal-btn-cancel { width: 100%; text-align: center; }
-
-      /* Carrier card */
-      .carrier-card { padding: 16px; }
-      .carrier-logo { width: 48px; height: 48px; }
-      .carrier-name { font-size: 16px; }
-    }
-
-    /* ── Preview embedded mode (shrink to fit admin preview) ── */
-    body.preview-embedded { font-size: 12px; }
-    body.preview-embedded nav { height: 52px; padding: 0 20px; }
-    body.preview-embedded .nav-logo img { height: 24px; }
-    body.preview-embedded .nav-links a { font-size: 13px; padding: 4px 8px; }
-    body.preview-embedded .page-body { height: calc(100vh - 52px); }
-    body.preview-embedded .left-panel { padding: 16px 16px 24px 24px; gap: 16px; }
-    body.preview-embedded .page-title { font-size: 20px; line-height: 24px; }
-    body.preview-embedded .info-label { font-size: 11px; }
-    body.preview-embedded .info-value { font-size: 13px; }
-    body.preview-embedded .delivery-header { gap: 10px; }
-    body.preview-embedded .calendar-icon { width: 48px; height: 48px; }
-    body.preview-embedded .calendar-icon img { width: 48px; height: 48px; }
-    body.preview-embedded .delivery-date { font-size: 20px; }
-    body.preview-embedded .delivery-label { font-size: 12px; }
-    body.preview-embedded .delivery-note { font-size: 10px; }
-    body.preview-embedded .items-title { font-size: 14px; }
-    body.preview-embedded .items-tracking-ref { font-size: 11px; }
-    body.preview-embedded .item-chip { padding: 4px 8px; }
-    body.preview-embedded .item-chip-img { width: 28px; height: 28px; }
-    body.preview-embedded .item-chip-name { font-size: 11px; }
-    body.preview-embedded .progress-title { font-size: 15px; }
-    body.preview-embedded .progress-status-title { font-size: 14px; }
-    body.preview-embedded .progress-status-sub { font-size: 12px; }
-    body.preview-embedded .stage-label { font-size: 10px; }
-    body.preview-embedded .contact-bar { padding: 4px 12px; }
-    body.preview-embedded .contact-bar-title { font-size: 12px; }
-    body.preview-embedded .contact-bar-item span { font-size: 11px; }
-    body.preview-embedded .sidebar-toggle { display: none; }
-    body.preview-embedded .right-sidebar { width: clamp(200px, 30vw, 320px); padding: 10px; gap: 12px; }
-    body.preview-embedded .carrier-card { padding: 12px; gap: 12px; }
-    body.preview-embedded .carrier-heading { font-size: 13px; line-height: 20px; }
-    body.preview-embedded .carrier-name { font-size: 13px; }
-    body.preview-embedded .carrier-logo { width: 36px; height: 36px; }
-    body.preview-embedded .carrier-profile { gap: 10px; }
-    body.preview-embedded .carrier-link span { font-size: 11px; }
-    body.preview-embedded .carrier-top { gap: 8px; }
-    body.preview-embedded .status-badge span { font-size: 10px; }
-    body.preview-embedded .status-badge { padding: 1px 8px; }
-    body.preview-embedded .timeline-card { padding: 10px; }
-    body.preview-embedded .timeline-title { font-size: 13px; line-height: 18px; margin-bottom: 4px; }
-    body.preview-embedded .tl-item { gap: 10px; }
-    body.preview-embedded .tl-col { width: 28px; }
-    body.preview-embedded .tl-text { gap: 2px; padding-bottom: 20px; }
-    body.preview-embedded .tl-event { font-size: 11px; line-height: 1.3; }
-    body.preview-embedded .tl-event.muted { font-size: 11px; }
-    body.preview-embedded .tl-time { font-size: 10px; line-height: 1.4; }
-    body.preview-embedded .tl-tick { width: 12px; height: 12px; }
-    body.preview-embedded .tl-tick svg { width: 8px; height: 8px; }
-    body.preview-embedded .tl-icon-pin { width: 20px; height: 20px; }
-    body.preview-embedded .tl-line { min-height: 12px; }
-    body.preview-embedded .contact-card { padding: 10px 14px; gap: 8px; }
-    body.preview-embedded .contact-title { font-size: 13px; line-height: 20px; }
-    body.preview-embedded .contact-item-label { font-size: 11px; }
-    body.preview-embedded .contact-item-value span { font-size: 12px; }
-    body.preview-embedded .action-btn { padding: 8px 12px; font-size: 12px; }
-    body.preview-embedded .main-card { padding: 12px; gap: 12px; }
-
-    /* ── Search page view ── */
+    /* Search view */
     .search-view { display: flex; flex-direction: column; flex: 1; min-height: 0; }
     .search-view-inner { display: flex; flex: 1; min-height: 0; }
     .search-view.hidden { display: none; }
     .tracking-view { display: none; flex-direction: column; flex: 1; min-height: 0; }
     .tracking-view.visible { display: flex; }
     .tracking-view .page-body { height: auto; flex: 1; }
-
     .search-content-col { flex: 0 0 55.3%; display: flex; align-items: center; padding: clamp(32px, 5vh, 80px) clamp(24px, 4vw, 60px); background: #fff; }
     .search-content-inner { display: flex; flex-direction: column; width: 100%; max-width: 900px; }
-    .search-badge { display: inline-flex; align-items: center; justify-content: center; padding: 4px 10px; border-radius: 9999px; background: rgba(202, 187, 248, 0.39); border: 1px solid #714BB7; margin-bottom: clamp(12px, 2vh, 24px); align-self: flex-start; }
-    .search-badge span { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; line-height: 16px; color: #714BB7; white-space: nowrap; }
+    .search-badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 9999px; background: rgba(202,187,248,0.39); border: 1px solid #714BB7; margin-bottom: clamp(12px, 2vh, 24px); align-self: flex-start; }
+    .search-badge span { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 11px; color: #714BB7; }
     .search-text-group { display: flex; flex-direction: column; gap: clamp(8px, 1vh, 12px); margin-bottom: clamp(20px, 3.5vh, 36px); }
-    .search-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: clamp(28px, 3.2vw, 44px); line-height: 1.25; color: #1f1541; letter-spacing: -0.24px; }
-    .search-subtitle { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: clamp(15px, 1.4vw, 24px); line-height: 1.4; color: #3a3a3a; letter-spacing: 0.036px; }
-    .search-tip { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: clamp(12px, 0.9vw, 16px); line-height: 1.6; color: #4f4f4f; letter-spacing: 0.024px; }
-    .search-box { display: flex; align-items: center; width: 100%; max-width: clamp(300px, 60vw, 865px); background: #fff; border: 1.254px solid rgba(0, 0, 0, 0.2); border-radius: 10px; padding: clamp(6px, 0.7vw, 10px); padding-left: clamp(10px, 1vw, 16px); margin-bottom: clamp(16px, 2.5vh, 32px); gap: 8px; }
-    .search-input { flex: 1; min-width: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: clamp(12px, 0.95vw, 17.5px); line-height: 1.4; color: #040404; border: none; outline: none; background: transparent; padding: 0 8px; }
-    .search-input::placeholder { color: #66727f; }
-    .search-track-btn { flex-shrink: 0; display: flex; align-items: center; justify-content: center; height: clamp(44px, 4vw, 60px); padding: 0 clamp(16px, 2vw, 30px); background: #1f1541; border-radius: 10px; border: none; cursor: pointer; transition: background 0.15s; }
-    .search-track-btn:hover { background: #2d1f5e; }
-    .search-track-btn span { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: clamp(13px, 0.9vw, 16px); color: #fff; letter-spacing: 0.032px; white-space: nowrap; }
-    .search-help-card { display: inline-flex; flex-direction: column; align-self: flex-start; background: #f7f7f7; border: 1px solid rgba(226, 232, 240, 0.11); border-radius: 16px; padding: clamp(12px, 1.2vw, 20px); gap: 2px; }
-    .search-help-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: clamp(10px, 0.65vw, 12px); line-height: 18px; color: #0b0b0b; text-transform: uppercase; margin-bottom: 2px; }
+    .search-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: clamp(28px, 3.2vw, 44px); line-height: 1.25; color: #1f1541; }
+    .search-subtitle { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: clamp(15px, 1.4vw, 24px); color: #3a3a3a; }
+    .search-tip { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: clamp(12px, 0.9vw, 16px); color: #4f4f4f; }
+    .search-box { display: flex; align-items: center; width: 100%; max-width: clamp(300px, 60vw, 865px); background: #fff; border: 1.254px solid rgba(0,0,0,0.2); border-radius: 10px; padding: clamp(6px, 0.7vw, 10px); padding-left: clamp(10px, 1vw, 16px); margin-bottom: clamp(16px, 2.5vh, 32px); gap: 8px; }
+    .search-input { flex: 1; min-width: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: clamp(12px, 0.95vw, 17.5px); color: #040404; border: none; outline: none; background: transparent; padding: 0 8px; }
+    .search-track-btn { flex-shrink: 0; display: flex; align-items: center; justify-content: center; height: clamp(44px, 4vw, 60px); padding: 0 clamp(16px, 2vw, 30px); background: #1f1541; border-radius: 10px; border: none; cursor: pointer; }
+    .search-track-btn span { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: clamp(13px, 0.9vw, 16px); color: #fff; }
+    .search-help-card { display: inline-flex; flex-direction: column; align-self: flex-start; background: #f7f7f7; border-radius: 16px; padding: clamp(12px, 1.2vw, 20px); gap: 2px; }
+    .search-help-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: clamp(10px, 0.65vw, 12px); color: #0b0b0b; text-transform: uppercase; margin-bottom: 2px; }
     .search-help-row { display: flex; align-items: center; gap: clamp(8px, 1.5vw, 24px); flex-wrap: wrap; }
     .search-help-item { display: flex; align-items: center; gap: 6px; padding: 4px 0; }
     .search-help-icon { width: clamp(14px, 1vw, 18px); height: clamp(14px, 1vw, 18px); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-    .search-help-text { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: clamp(12px, 0.9vw, 16px); line-height: 1.4; color: #0b0b0b; white-space: nowrap; }
+    .search-help-text { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: clamp(12px, 0.9vw, 16px); color: #0b0b0b; }
     .search-image-col { flex: 1; background: #e8e4fa; overflow: hidden; position: relative; }
     .search-image-col img { position: absolute; top: 0; left: -11.38%; width: 114.27%; height: 100%; object-fit: cover; }
-    .search-footer { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 12px clamp(24px, 4vw, 64px); border-top: 1px solid rgba(33, 33, 33, 0.1); opacity: 0.5; background: #fff; }
-    .search-footer p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(11px, 0.75vw, 14px); line-height: 19.5px; color: rgba(22, 22, 22, 0.35); }
-    .search-footer .normal { font-weight: 500; }
-    .search-footer .bold { font-weight: 600; text-transform: uppercase; }
+    .search-footer { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 12px clamp(24px, 4vw, 64px); border-top: 1px solid rgba(33,33,33,0.1); opacity: 0.5; background: #fff; }
+    .search-footer p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(11px, 0.75vw, 14px); color: rgba(22,22,22,0.35); }
 
-    /* Preview embedded scaling for search view */
-    body.preview-embedded .search-title { font-size: 20px; }
-    body.preview-embedded .search-subtitle { font-size: 13px; }
-    body.preview-embedded .search-tip { font-size: 10px; }
-    body.preview-embedded .search-input { font-size: 11px; }
-    body.preview-embedded .search-track-btn { height: 36px; padding: 0 16px; }
-    body.preview-embedded .search-track-btn span { font-size: 11px; }
-    body.preview-embedded .search-badge span { font-size: 9px; }
-    body.preview-embedded .search-help-text { font-size: 10px; }
-    body.preview-embedded .search-content-col { padding: 20px 24px; }
-    body.preview-embedded .search-box { padding: 4px; padding-left: 10px; }
+    /* Mobile */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; height: 64px; }
+      .nav-logo img { height: 30px; }
+      .demo-bar { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding: 0 16px; top: 64px; }
+      .demo-bar::-webkit-scrollbar { display: none; }
+      .demo-bar-label { display: none; }
+      .demo-tab { padding: 10px 12px; font-size: 12px; flex-shrink: 0; }
+      .page-body { flex-direction: column; height: auto; overflow: visible; }
+      .left-sidebar { width: 100%; min-width: 0; border-right: none; border-bottom: 1px solid #f2f4f7; padding: 20px 16px; gap: 16px; overflow-y: visible; }
+      .main-panel { padding: 16px; gap: 16px; overflow-y: visible; }
+      .delivery-row { flex-direction: column; gap: 12px; }
+      .delivery-right { flex-direction: column; align-items: flex-start; }
+      .stage-label { font-size: 11px; }
+    }
+    @media (max-width: 480px) {
+      nav { height: 56px; padding: 0 16px; }
+      .demo-bar { top: 56px; }
+      .page-title { font-size: 20px; }
+      .delivery-date { font-size: 22px; }
+      .stage-label { font-size: 10px; }
+      .form-row-2 { grid-template-columns: 1fr; }
+    }
   </style>
-</head>
+<script src="chrome-extension://liecbddmkiiihnedobmlmillhodjkdmb/js/recordConsoleEvents.js"></script><script src="chrome-extension://liecbddmkiiihnedobmlmillhodjkdmb/js/recordNetworkEvents.js"></script></head>
 <body>
 
-<!-- Navigation -->
 <nav id="main-nav">
-  <a href="search-page.html" class="nav-logo">
-    <img src="images/image 19 [Vectorized].svg" alt="AgeMate" />
+  <a href="https://seoul-v2.vercel.app/search-page.html" class="nav-logo">
+    <img src="images/image 19 [Vectorized].svg" alt="AgeMate">
   </a>
   <div class="nav-links">
     <a href="#">Shop</a>
@@ -517,8 +309,8 @@
   </div>
 </nav>
 
-<!-- ═══ SEARCH VIEW ═══ -->
-<div class="search-view" id="search-view">
+<!-- SEARCH VIEW -->
+<div class="search-view hidden" id="search-view">
   <div class="search-view-inner">
     <div class="search-content-col">
       <div class="search-content-inner">
@@ -526,25 +318,21 @@
         <div class="search-text-group">
           <h1 class="search-title" id="search-page-title">Track your order</h1>
           <p class="search-subtitle">Enter your tracking number to see the latest delivery updates.</p>
-          <p class="search-tip">&#x1F4A1; Your tracking number is in your shipping confirmation email</p>
+          <p class="search-tip">💡 Your tracking number is in your shipping confirmation email</p>
         </div>
         <div class="search-box">
-          <input class="search-input" id="search-tracking-input" type="text" placeholder="Enter your tracking number: e.g. AA1223456789AUS" autocomplete="off" />
+          <input class="search-input" id="search-tracking-input" type="text" placeholder="Enter your tracking number: e.g. AA1223456789AUS" autocomplete="off">
           <button class="search-track-btn" onclick="doSearch()"><span>Track my delivery</span></button>
         </div>
         <div class="search-help-card">
           <p class="search-help-label">Need help?</p>
           <div class="search-help-row">
             <div class="search-help-item">
-              <div class="search-help-icon">
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1.5" y="3.75" width="15" height="10.5" rx="1.5" stroke="#0b0b0b" stroke-width="1.4"/><path d="M1.5 5.25L9 10.5L16.5 5.25" stroke="#0b0b0b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
+              <div class="search-help-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1.5" y="3.75" width="15" height="10.5" rx="1.5" stroke="#0b0b0b" stroke-width="1.4"></rect><path d="M1.5 5.25L9 10.5L16.5 5.25" stroke="#0b0b0b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
               <span class="search-help-text" id="search-help-email">support@agemate.com</span>
             </div>
             <div class="search-help-item">
-              <div class="search-help-icon">
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 2.5h3l1.25 3.25-1.75 1.75a9.5 9.5 0 004.5 4.5l1.75-1.75 3.25 1.25v3a1 1 0 01-1 1C6.5 15.5 2.5 11.5 2.5 3.5a1 1 0 011-1z" stroke="#000" stroke-width="1.4" stroke-linejoin="round"/></svg>
-              </div>
+              <div class="search-help-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 2.5h3l1.25 3.25-1.75 1.75a9.5 9.5 0 004.5 4.5l1.75-1.75 3.25 1.25v3a1 1 0 01-1 1C6.5 15.5 2.5 11.5 2.5 3.5a1 1 0 011-1z" stroke="#000" stroke-width="1.4" stroke-linejoin="round"></path></svg></div>
               <span class="search-help-text" id="search-help-phone">+61 3 9000 1234</span>
             </div>
           </div>
@@ -552,80 +340,106 @@
       </div>
     </div>
     <div class="search-image-col" id="search-image-col">
-      <img src="images/Right Image Panel 1.png" alt="Product" id="search-product-img" />
+      <img src="images/Right Image Panel 1.png" alt="Product" id="search-product-img">
     </div>
   </div>
   <div class="search-footer" id="search-footer">
-    <div><p><span class="normal">Powered by </span><span class="bold">Borderless360</span></p></div>
+    <div><p><span style="font-weight:500;">Powered by </span><span style="font-weight:600;text-transform:uppercase;">Borderless360</span></p></div>
     <div><p style="font-weight:500;">Climate Neutral</p></div>
   </div>
 </div>
 
-<!-- ═══ TRACKING VIEW ═══ -->
-<div class="tracking-view" id="tracking-view">
+<!-- TRACKING VIEW -->
+<div class="tracking-view visible" id="tracking-view">
 
-<!-- Demo tab bar -->
 <div class="demo-bar">
   <span class="demo-bar-label">Demo:</span>
-  <button class="demo-tab active"              onclick="setState('shipped',this)">Shipped</button>
-  <button class="demo-tab"                     onclick="setState('intransit',this)">In Transit</button>
-  <button class="demo-tab"                     onclick="setState('localdelivery',this)">Local Delivery</button>
-  <button class="demo-tab tab-delivered"       onclick="setState('delivered',this)">Delivered</button>
-  <button class="demo-tab tab-delayed"         onclick="setState('delayed',this)">Delayed</button>
-  <button class="demo-tab tab-stuck"           onclick="setState('stuck',this)">Stuck / Lost</button>
-  <button class="demo-tab tab-updateaddress"   onclick="setState('updateaddress',this)">Update Address</button>
+  <button class="demo-tab active" onclick="setState(&#39;shipped&#39;,this)">Shipped</button>
+  <button class="demo-tab" onclick="setState(&#39;intransit&#39;,this)">In Transit</button>
+  <button class="demo-tab" onclick="setState(&#39;localdelivery&#39;,this)">Local Delivery</button>
+  <button class="demo-tab tab-delivered" onclick="setState(&#39;delivered&#39;,this)">Delivered</button>
+  <button class="demo-tab tab-delayed" onclick="setState(&#39;delayed&#39;,this)">Delayed</button>
+  <button class="demo-tab tab-stuck" onclick="setState(&#39;stuck&#39;,this)">Stuck / Lost</button>
+  <button class="demo-tab tab-updateaddress" onclick="setState(&#39;updateaddress&#39;,this)">Update Address</button>
   <span style="width:1px;height:20px;background:#e5e7eb;margin:0 8px;flex-shrink:0;"></span>
-  <a href="multi-package.html" class="demo-tab" style="text-decoration:none;">Multi Package</a>
+  <a href="https://seoul-v2.vercel.app/multi-package.html" class="demo-tab" style="text-decoration:none;">Multi Package</a>
 </div>
 
-<!-- Sub-state advance bar (shows on claim/return pages) -->
 <div class="advance-bar" id="advance-bar">
   <span class="advance-label">Demo sub-states:</span>
   <button class="advance-btn active-sub" id="adv-btn-1" onclick="setSubState(0)"></button>
-  <button class="advance-btn"            id="adv-btn-2" onclick="setSubState(1)"></button>
-  <button class="advance-btn hidden"     id="adv-btn-3" onclick="setSubState(2)"></button>
+  <button class="advance-btn" id="adv-btn-2" onclick="setSubState(1)"></button>
+  <button class="advance-btn hidden" id="adv-btn-3" onclick="setSubState(2)"></button>
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     NORMAL TWO-COLUMN LAYOUT (all 7 delivery states)
-═══════════════════════════════════════════════════ -->
+<!-- V2 LAYOUT -->
 <div class="page-body" id="normal-layout">
-  <div class="left-panel">
-    <div class="details-header">
-      <div class="page-title">Your order details</div>
-      <div class="info-row">
-        <div class="info-item">
-          <span class="info-label">Reference</span>
-          <span class="info-value order-ref-val">GVS9431669</span>
+  <!-- LEFT SIDEBAR -->
+  <div class="left-sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">Your order details</div>
+      <div class="sidebar-info">
+        <div class="sidebar-info-item">
+          <span class="sidebar-info-label">Reference</span>
+          <span class="sidebar-info-value order-ref-val">Q</span>
         </div>
-        <div class="info-item">
-          <span class="info-label">Delivery address</span>
-          <span class="info-value">Boronia, Victoria, AU</span>
+        <div class="sidebar-info-row">
+          <div class="sidebar-info-item">
+            <span class="sidebar-info-label">Delivery address</span>
+            <span class="sidebar-info-value">Boronia, Victoria, AU</span>
+          </div>
+          <div class="sidebar-info-item">
+            <span class="sidebar-info-label">Shipment route</span>
+            <span class="sidebar-info-value">HK <svg width="18" height="10" viewBox="0 0 18 10" fill="none"><line x1="0" y1="5" x2="14" y2="5" stroke="#040404" stroke-width="1.5"></line><path d="M10 1.5L14.5 5L10 8.5" stroke="#040404" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg> AU</span>
+          </div>
         </div>
-        <div class="info-item">
-          <span class="info-label">Shipment route</span>
-          <span class="info-value">HK
-            <svg width="18" height="10" viewBox="0 0 18 10" fill="none"><line x1="0" y1="5" x2="14" y2="5" stroke="#040404" stroke-width="1.5"/><path d="M10 1.5L14.5 5L10 8.5" stroke="#040404" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            AU
-          </span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Delivered by</span>
-          <span class="info-value" style="display:flex;align-items:center;gap:6px;"><img src="images/aus-post.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;">Australia Post</span>
+      </div>
+      <div class="sidebar-carrier" id="sidebar-carrier-section">
+        <div class="sidebar-carrier-logo"><img src="images/aus-post.png" alt="Australia Post"></div>
+        <div class="sidebar-carrier-info">
+          <span class="sidebar-carrier-label">Delivered by: <span class="sidebar-carrier-name">Australia Post</span></span>
+          <a href="#" class="sidebar-carrier-link"><span>Track on website</span><img src="icons/basic.svg" alt=""></a>
         </div>
       </div>
     </div>
-
-    <div class="main-card" id="main-card">
-      <!-- Delivery header -->
-      <div class="delivery-header">
-        <div class="calendar-icon" id="calendar-icon">
-          <img src="icons/calendar-icons/Icon=calendar, screen=lg.svg" alt="" width="72" height="72"/>
+    <div class="sidebar-card">
+      <div class="sidebar-contact-title">Contact Support</div>
+      <div class="sidebar-contact-items">
+        <div class="sidebar-contact-item">
+          <svg viewBox="0 0 16 16" fill="none"><rect x="1.33" y="2.67" width="13.33" height="10.67" rx="1.33" stroke="#4c60ff" stroke-width="1.2"></rect><path d="M1.33 4.67L8 9.33l6.67-4.66" stroke="#4c60ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span>support@youremail.com</span>
         </div>
-        <div class="delivery-info">
-          <p class="delivery-label" id="delivery-label">Expected Delivery</p>
-          <p class="delivery-date" id="delivery-date">18–20 Feb 2026</p>
-          <p class="delivery-note" id="delivery-note">Based on current carrier progress - Last updated 3 mins ago</p>
+        <div class="sidebar-contact-item">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3.11 2.22h2.67l1.11 2.89-1.56 1.56a8.44 8.44 0 004 4l1.56-1.56 2.89 1.11v2.67a.89.89 0 01-.89.89C6 13.78 2.22 10 2.22 3.11a.89.89 0 01.89-.89z" stroke="#4c60ff" stroke-width="1.2" stroke-linejoin="round"></path></svg>
+          <span>+852 3001 5360</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN PANEL -->
+  <div class="main-panel">
+    <div class="page-title">Delivery Progress</div>
+
+    <div class="main-card-wrap">
+      <div class="delivery-row">
+        <div class="delivery-left">
+          <div class="calendar-icon" id="calendar-icon"><img src="icons/calendar-icons/Icon=calendar, screen=lg.svg" alt="" width="72" height="72"></div>
+          <div class="delivery-info">
+            <p class="delivery-label" id="delivery-label">Expected Delivery</p>
+            <p class="delivery-date" id="delivery-date">18–20 Feb 2026</p>
+            <p class="delivery-note" id="delivery-note">Based on current carrier progress - Last updated 3 mins ago</p>
+          </div>
+        </div>
+        <div class="delivery-right" id="delivery-right-carrier">
+          <div class="delivery-right-top">
+            <div class="delivery-right-text">
+              <span class="delivery-right-label">Delivered by:</span>
+              <span class="delivery-right-value">Australia Post</span>
+            </div>
+            <div class="delivery-carrier-logo"><img src="images/aus-post.png" alt="Australia Post"></div>
+          </div>
+          <span class="delivery-tracking-num">TN: <span class="tracking-num-display">Q</span></span>
         </div>
         <div class="delivery-extra hidden" id="delivery-extra">
           <p class="delivery-extra-label" id="extra-label"></p>
@@ -634,319 +448,116 @@
         </div>
       </div>
 
-      <!-- Your items card -->
       <div class="items-card" id="items-card">
-        <div class="items-header">
-          <span class="items-title">Your items</span>
-          <span class="items-tracking-ref">Tracking Number: <span class="tracking-num-display">0210DAD9015248A2</span></span>
-        </div>
+        <span class="items-title">Your items</span>
         <div class="items-list" id="items-list">
-          <div class="item-chip">
-            <img class="item-chip-img" src="images/img.png" alt="Face cream"/>
-            <span class="item-chip-name">Face cream</span>
-            <span class="item-chip-qty">x1</span>
-          </div>
-          <div class="item-chip">
-            <img class="item-chip-img" src="images/img-1.png" alt="Vitamin water"/>
-            <span class="item-chip-name">Vitamin water</span>
-            <span class="item-chip-qty">x1</span>
-          </div>
-          <div class="item-chip">
-            <img class="item-chip-img" src="images/img-2.png" alt="Hand cream"/>
-            <span class="item-chip-name">Hand cream</span>
-            <span class="item-chip-qty">x1</span>
-          </div>
+          <div class="item-chip"><img class="item-chip-img" src="images/img.png" alt="Face cream"><span class="item-chip-name">Face cream</span><span class="item-chip-qty">x1</span></div>
+          <div class="item-chip"><img class="item-chip-img" src="images/img-1.png" alt="Vitamin water"><span class="item-chip-name">Vitamin water</span><span class="item-chip-qty">x1</span></div>
+          <div class="item-chip"><img class="item-chip-img" src="images/img-2.png" alt="Hand cream"><span class="item-chip-name">Hand cream</span><span class="item-chip-qty">x1</span></div>
         </div>
       </div>
 
-      <!-- Progress card -->
       <div class="progress-card" id="progress-card">
-        <div class="progress-header">
-          <span class="progress-title">Delivery progress</span>
-        </div>
         <div class="progress-bar-wrap normal" id="progress-bar-wrap">
           <p class="progress-status-title purple" id="progress-status-title">Your order is being shipped</p>
           <p class="progress-status-sub" id="progress-status-sub">Your item will be ready for transit soon</p>
-          <div class="stages" id="stages-container"></div>
+          <div class="stages" id="stages-container"><div class="stage stage-1 active-purple"><span class="stage-label dark">Shipped</span><div class="stage-dot dot-active"><img src="icons/State=Shipped.svg" width="28" height="28" style="display:block;"></div></div><div class="stage stage-2 "><span class="stage-label grey center">In Transit</span><div class="stage-dot dot-grey"><img src="icons/State=to do.svg" width="16" height="16" style="display:block;"></div></div><div class="stage stage-3 "><span class="stage-label grey right">Local delivery</span><div class="stage-dot dot-grey"><img src="icons/State=to do.svg" width="16" height="16" style="display:block;"></div></div><div class="stage stage-4 "><span class="stage-label grey right">Delivered</span><div class="stage-dot dot-grey"><img src="icons/State=to do.svg" width="16" height="16" style="display:block;"></div></div></div>
         </div>
       </div>
 
-      <!-- Action button -->
       <div id="action-btn-wrap"></div>
 
-      <!-- Address form (update address state only) -->
       <div id="address-form-section" class="address-form-section hidden">
         <div class="address-form-heading">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 1C6.69 1 4 3.69 4 7c0 4.75 6 12 6 12s6-7.25 6-12c0-3.31-2.69-6-6-6z" fill="#c01048" opacity="0.15"/><path d="M10 1C6.69 1 4 3.69 4 7c0 4.75 6 12 6 12s6-7.25 6-12c0-3.31-2.69-6-6-6z" stroke="#c01048" stroke-width="1.5"/><circle cx="10" cy="7" r="2" stroke="#c01048" stroke-width="1.5"/></svg>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 1C6.69 1 4 3.69 4 7c0 4.75 6 12 6 12s6-7.25 6-12c0-3.31-2.69-6-6-6z" fill="#c01048" opacity="0.15"></path><path d="M10 1C6.69 1 4 3.69 4 7c0 4.75 6 12 6 12s6-7.25 6-12c0-3.31-2.69-6-6-6z" stroke="#c01048" stroke-width="1.5"></path><circle cx="10" cy="7" r="2" stroke="#c01048" stroke-width="1.5"></circle></svg>
           Update your delivery address
         </div>
         <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Address line 1</label>
-            <input class="form-input" type="text" placeholder="Placeholder" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Address line 2</label>
-            <input class="form-input" type="text" placeholder="Placeholder" />
+          <div class="form-group"><label class="form-label">Address line 1</label><input class="form-input" type="text" placeholder="Placeholder"></div>
+          <div class="form-group"><label class="form-label">Address line 2</label><input class="form-input" type="text" placeholder="Placeholder"></div>
+          <div class="form-row-2">
+            <div class="form-group"><label class="form-label">City / Suburbs</label><input class="form-input" type="text" placeholder="Placeholder"></div>
+            <div class="form-group"><label class="form-label">State</label><input class="form-input" type="text" placeholder="Placeholder"></div>
           </div>
           <div class="form-row-2">
-            <div class="form-group">
-              <label class="form-label">City / Suburbs</label>
-              <input class="form-input" type="text" placeholder="Placeholder" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">State</label>
-              <input class="form-input" type="text" placeholder="Placeholder" />
-            </div>
+            <div class="form-group"><label class="form-label">Post code</label><input class="form-input" type="text" placeholder="Placeholder"></div>
+            <div class="form-group"><label class="form-label">Country</label><select class="form-select"><option value="" disabled="" selected="">Placeholder</option><option>Australia</option><option>New Zealand</option></select></div>
           </div>
-          <div class="form-row-2">
-            <div class="form-group">
-              <label class="form-label">Post code</label>
-              <input class="form-input" type="text" placeholder="Placeholder" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Country</label>
-              <select class="form-select">
-                <option value="" disabled selected>Placeholder</option>
-                <option>Australia</option>
-                <option>New Zealand</option>
-                <option>United States</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Phone number</label>
-            <input class="form-input" type="tel" placeholder="Placeholder" />
-          </div>
+          <div class="form-group"><label class="form-label">Phone number</label><input class="form-input" type="tel" placeholder="Placeholder"></div>
           <div><button class="update-address-btn" onclick="submitAddressUpdate()">Update address</button></div>
         </div>
       </div>
+    </div>
 
-      <!-- Contact support (compact bar) -->
-      <div class="contact-bar">
-        <span class="contact-bar-title">Contact Support:</span>
-        <div class="contact-bar-items">
-          <div class="contact-bar-item">
-            <svg viewBox="0 0 16 16" fill="none"><rect x="1.33" y="2.67" width="13.33" height="10.67" rx="1.33" stroke="#66727f" stroke-width="1.2"/><path d="M1.33 4.67L8 9.33l6.67-4.66" stroke="#66727f" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>support@youremail.com</span>
-          </div>
-          <div class="contact-bar-item">
-            <svg viewBox="0 0 16 16" fill="none"><path d="M3.11 2.22h2.67l1.11 2.89-1.56 1.56a8.44 8.44 0 004 4l1.56-1.56 2.89 1.11v2.67a.89.89 0 01-.89.89C6 13.78 2.22 10 2.22 3.11a.89.89 0 01.89-.89z" stroke="#66727f" stroke-width="1.2" stroke-linejoin="round"/></svg>
-            <span>+852 3001 5360</span>
-          </div>
+    <!-- Tracking History INLINE -->
+    <div class="tracking-history">
+      <div class="tracking-history-header" onclick="toggleTimeline()">
+        <span class="tracking-history-title">Tracking History:</span>
+        <div class="tracking-history-toggle open" id="timeline-toggle">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5l5 5 5-5" stroke="#344054" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
         </div>
       </div>
+      <div class="timeline" id="timeline-items"><div class="tl-item"><div class="tl-col"><img src="icons/box icon.svg" width="44" height="44" style="display:block;"><div class="tl-line" style="margin-top:4px;"></div></div><div class="tl-text" style=""><span class="tl-event">HK — Picked up from fulfilment facility</span><span class="tl-time">Shipped: <strong>Feb 17, 12:46pm</strong></span></div></div><div class="tl-item"><div class="tl-col"><div class="tl-tick"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div><div class="tl-text" style="padding-bottom:8px;"><span class="tl-event">Item picked and packed from warehouse</span><span class="tl-time">Shipped: <strong>Feb 17, 11:00am</strong></span></div></div></div>
     </div>
-  </div>
-
-  <!-- Right sidebar -->
-  <div class="sidebar-wrap">
-    <div class="right-sidebar" id="right-sidebar">
-      <div class="carrier-card">
-        <div class="carrier-top">
-        <p class="carrier-heading">Being delivered by:</p>
-        <div class="carrier-profile">
-          <div class="carrier-logo">
-            <img src="images/aus-post.png" alt="Australia Post" />
-          </div>
-          <div class="carrier-info">
-            <p class="carrier-name">Australia Post</p>
-            <a href="#" class="carrier-link">
-              <span>Track with Australia post</span>
-              <img src="icons/basic.svg" alt="" />
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="timeline-card">
-      <p class="timeline-title">Tracking History</p>
-      <div class="timeline" id="timeline-items"></div>
-    </div>
-    </div>
-    <button class="sidebar-toggle" id="sidebar-toggle" title="Toggle tracking history">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg>
-    </button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     CLAIM STATUS PAGE (after submitting claim)
-═══════════════════════════════════════════════════ -->
+<!-- CLAIM PAGE -->
 <div class="status-page hidden" id="claim-page">
   <div class="status-page-inner">
     <div class="page-title" id="claim-page-title">Your claim details</div>
-    <div class="status-info-row">
-      <div class="info-item">
-        <span class="info-label">Reference</span>
-        <span class="info-value order-ref-val">GVS9431669</span>
-      </div>
-      <div class="info-item" id="claim-delivered-by" style="display:none;">
-        <span class="info-label">Delivered by</span>
-        <span class="info-value">Australia Post</span>
-      </div>
+    <div class="sidebar-info">
+      <div class="sidebar-info-item"><span class="sidebar-info-label">Reference</span><span class="sidebar-info-value order-ref-val">Q</span></div>
+      <div class="sidebar-info-item" id="claim-delivered-by" style="display:none;"><span class="sidebar-info-label">Delivered by</span><span class="sidebar-info-value">Australia Post</span></div>
     </div>
     <div class="status-card">
       <div class="status-card-header">
-        <div class="calendar-icon">
-          <img src="icons/calendar-icons/Icon=info, screen=lg.svg" alt="" width="72" height="72"/>
-        </div>
-        <div class="status-card-header-info">
-          <p class="status-card-header-label" id="claim-header-label">Claim</p>
-          <p class="status-card-header-title" id="claim-header-title">Item reported lost</p>
-        </div>
+        <div class="calendar-icon"><img src="icons/calendar-icons/Icon=info, screen=lg.svg" alt="" width="72" height="72"></div>
+        <div class="status-card-header-info"><p class="status-card-header-label" id="claim-header-label">Claim</p><p class="status-card-header-title" id="claim-header-title">Item reported lost</p></div>
         <button class="view-order-btn">View your original order</button>
       </div>
-      <div class="items-card">
-        <div class="items-header">
-          <span class="items-title">Your items</span>
-          <span class="items-tracking-ref">Tracking Number: <span class="tracking-num-display">0210DAD9015248A2</span></span>
-        </div>
-        <div class="items-list">
-          <div class="item-chip">
-            <img class="item-chip-img" src="images/img.png" alt="Face cream"/>
-            <span class="item-chip-name">Face cream</span>
-            <span class="item-chip-qty">x1</span>
-          </div>
-        </div>
-      </div>
-      <div class="status-card-body">
-        <div class="status-section-row">
-          <p class="status-section-title" id="claim-section-title">Your lost package claim</p>
-        </div>
-        <!-- Claim progress bar / rejected alert (rendered by JS) -->
-        <div id="claim-bar-container"></div>
-      </div>
-      <div class="contact-bar">
-        <span class="contact-bar-title">Contact Support:</span>
-        <div class="contact-bar-items">
-          <div class="contact-bar-item">
-            <svg viewBox="0 0 16 16" fill="none"><rect x="1.33" y="2.67" width="13.33" height="10.67" rx="1.33" stroke="#66727f" stroke-width="1.2"/><path d="M1.33 4.67L8 9.33l6.67-4.66" stroke="#66727f" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>support@youremail.com</span>
-          </div>
-          <div class="contact-bar-item">
-            <svg viewBox="0 0 16 16" fill="none"><path d="M3.11 2.22h2.67l1.11 2.89-1.56 1.56a8.44 8.44 0 004 4l1.56-1.56 2.89 1.11v2.67a.89.89 0 01-.89.89C6 13.78 2.22 10 2.22 3.11a.89.89 0 01.89-.89z" stroke="#66727f" stroke-width="1.2" stroke-linejoin="round"/></svg>
-            <span>+852 3001 5360</span>
-          </div>
-        </div>
-      </div>
+      <div class="items-card"><span class="items-title">Your items</span><div class="items-list"><div class="item-chip"><img class="item-chip-img" src="images/img.png" alt="Face cream"><span class="item-chip-name">Face cream</span><span class="item-chip-qty">x1</span></div></div></div>
+      <div class="status-card-body"><p class="status-section-title" id="claim-section-title">Your lost package claim</p><div id="claim-bar-container"></div></div>
+      <div class="contact-bar"><span class="contact-bar-title">Contact Support:</span><div class="contact-bar-items"><div class="contact-bar-item"><svg viewBox="0 0 16 16" fill="none"><rect x="1.33" y="2.67" width="13.33" height="10.67" rx="1.33" stroke="#66727f" stroke-width="1.2"></rect><path d="M1.33 4.67L8 9.33l6.67-4.66" stroke="#66727f" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>support@youremail.com</span></div><div class="contact-bar-item"><svg viewBox="0 0 16 16" fill="none"><path d="M3.11 2.22h2.67l1.11 2.89-1.56 1.56a8.44 8.44 0 004 4l1.56-1.56 2.89 1.11v2.67a.89.89 0 01-.89.89C6 13.78 2.22 10 2.22 3.11a.89.89 0 01.89-.89z" stroke="#66727f" stroke-width="1.2" stroke-linejoin="round"></path></svg><span>+852 3001 5360</span></div></div></div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     RETURN STATUS PAGE (after submitting return)
-═══════════════════════════════════════════════════ -->
+<!-- RETURN PAGE -->
 <div class="status-page hidden" id="return-page">
   <div class="status-page-inner">
     <div class="page-title" id="return-page-title">Your return details</div>
-    <div class="status-info-row">
-      <div class="info-item">
-        <span class="info-label">Reference</span>
-        <span class="info-value order-ref-val">GVS9431669</span>
-      </div>
-    </div>
+    <div class="sidebar-info-item"><span class="sidebar-info-label">Reference</span><span class="sidebar-info-value order-ref-val">Q</span></div>
     <div class="status-card">
       <div class="status-card-header">
-        <div class="calendar-icon">
-          <img src="icons/calendar-icons/Icon=info, screen=lg.svg" alt="" width="72" height="72"/>
-        </div>
-        <div class="status-card-header-info">
-          <p class="status-card-header-label" id="return-header-label">Return</p>
-          <p class="status-card-header-title" id="return-header-title">Item returned</p>
-        </div>
+        <div class="calendar-icon"><img src="icons/calendar-icons/Icon=info, screen=lg.svg" alt="" width="72" height="72"></div>
+        <div class="status-card-header-info"><p class="status-card-header-label" id="return-header-label">Return</p><p class="status-card-header-title" id="return-header-title">Item returned</p></div>
         <button class="view-order-btn">View your original order</button>
       </div>
-      <div class="items-card">
-        <div class="items-header">
-          <span class="items-title">Your items</span>
-          <span class="items-tracking-ref">Tracking Number: <span class="tracking-num-display">0210DAD9015248A2</span></span>
-        </div>
-        <div class="items-list">
-          <div class="item-chip">
-            <img class="item-chip-img" src="images/img.png" alt="Face cream"/>
-            <span class="item-chip-name">Face cream</span>
-            <span class="item-chip-qty">x1</span>
-          </div>
-        </div>
-      </div>
-      <div class="status-card-body">
-        <div class="status-section-row">
-          <p class="status-section-title" id="return-section-title">Your returned order status</p>
-        </div>
-        <!-- Return progress bar / rejected alert (rendered by JS) -->
-        <div id="return-bar-container"></div>
-      </div>
-      <div class="contact-bar">
-        <span class="contact-bar-title">Contact Support:</span>
-        <div class="contact-bar-items">
-          <div class="contact-bar-item">
-            <svg viewBox="0 0 16 16" fill="none"><rect x="1.33" y="2.67" width="13.33" height="10.67" rx="1.33" stroke="#66727f" stroke-width="1.2"/><path d="M1.33 4.67L8 9.33l6.67-4.66" stroke="#66727f" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>support@youremail.com</span>
-          </div>
-          <div class="contact-bar-item">
-            <svg viewBox="0 0 16 16" fill="none"><path d="M3.11 2.22h2.67l1.11 2.89-1.56 1.56a8.44 8.44 0 004 4l1.56-1.56 2.89 1.11v2.67a.89.89 0 01-.89.89C6 13.78 2.22 10 2.22 3.11a.89.89 0 01.89-.89z" stroke="#66727f" stroke-width="1.2" stroke-linejoin="round"/></svg>
-            <span>+852 3001 5360</span>
-          </div>
-        </div>
-      </div>
+      <div class="items-card"><span class="items-title">Your items</span><div class="items-list"><div class="item-chip"><img class="item-chip-img" src="images/img.png" alt="Face cream"><span class="item-chip-name">Face cream</span><span class="item-chip-qty">x1</span></div></div></div>
+      <div class="status-card-body"><p class="status-section-title" id="return-section-title">Your returned order status</p><div id="return-bar-container"></div></div>
+      <div class="contact-bar"><span class="contact-bar-title">Contact Support:</span><div class="contact-bar-items"><div class="contact-bar-item"><svg viewBox="0 0 16 16" fill="none"><rect x="1.33" y="2.67" width="13.33" height="10.67" rx="1.33" stroke="#66727f" stroke-width="1.2"></rect><path d="M1.33 4.67L8 9.33l6.67-4.66" stroke="#66727f" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>support@youremail.com</span></div><div class="contact-bar-item"><svg viewBox="0 0 16 16" fill="none"><path d="M3.11 2.22h2.67l1.11 2.89-1.56 1.56a8.44 8.44 0 004 4l1.56-1.56 2.89 1.11v2.67a.89.89 0 01-.89.89C6 13.78 2.22 10 2.22 3.11a.89.89 0 01.89-.89z" stroke="#66727f" stroke-width="1.2" stroke-linejoin="round"></path></svg><span>+852 3001 5360</span></div></div></div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     CLAIM MODAL
-═══════════════════════════════════════════════════ -->
-<div class="modal-backdrop hidden" id="claim-modal" onclick="handleBackdropClick(event,'claim-modal')">
+<!-- CLAIM MODAL -->
+<div class="modal-backdrop hidden" id="claim-modal" onclick="handleBackdropClick(event,&#39;claim-modal&#39;)">
   <div class="modal-box" onclick="event.stopPropagation()">
-    <!-- Form state -->
     <div id="claim-form" style="display:flex;flex-direction:column;gap:20px;">
       <h2 class="modal-title" id="claim-modal-title">Make a claim</h2>
-      <p class="modal-desc">If your order hasn't arrived and the tracking shows no recent updates, you can file a lost package claim. We'll investigate and get back to you within 5 business days.</p>
-      <div class="modal-info-box">
-        <div class="modal-info-line">
-          <div class="modal-info-dot"></div>
-          <span><strong>Order Reference:</strong> <span style="color:#4a535c;font-weight:400;">GVS9431669</span></span>
-        </div>
-        <div class="modal-info-line" style="padding-left:22px;">
-          <span><strong>Last update:</strong> <span style="color:#4a535c;font-weight:400;">17 Feb 2026 - Australia Post regional facility</span></span>
-        </div>
-      </div>
-      <select class="modal-select">
-        <option value="" disabled selected>Reason for claim</option>
-        <option>Package not received</option>
-        <option>Tracking shows delivered but not received</option>
-        <option>Package lost in transit</option>
-      </select>
-      <div>
-        <p class="modal-textarea-label">Additional details</p>
-        <textarea class="modal-textarea" placeholder="Add any additional details about your missing order..." style="margin-top:8px;"></textarea>
-      </div>
-      <div class="modal-actions">
-        <button class="modal-btn-primary" id="claim-submit-btn" onclick="submitClaim()">Submit report</button>
-        <button class="modal-btn-cancel" onclick="closeModal('claim-modal')">Cancel</button>
-      </div>
+      <p class="modal-desc">If your order hasn't arrived and the tracking shows no recent updates, you can file a lost package claim.</p>
+      <div class="modal-info-box"><div class="modal-info-line"><div class="modal-info-dot"></div><span><strong>Order Reference:</strong> <span style="color:#4a535c;font-weight:400;">GVS9431669</span></span></div><div class="modal-info-line" style="padding-left:22px;"><span><strong>Last update:</strong> <span style="color:#4a535c;font-weight:400;">17 Feb 2026 - Australia Post regional facility</span></span></div></div>
+      <select class="modal-select"><option value="" disabled="" selected="">Reason for claim</option><option>Package not received</option><option>Tracking shows delivered but not received</option><option>Package lost in transit</option></select>
+      <div><p class="modal-textarea-label">Additional details</p><textarea class="modal-textarea" placeholder="Add any additional details..." style="margin-top:8px;"></textarea></div>
+      <div class="modal-actions"><button class="modal-btn-primary" id="claim-submit-btn" onclick="submitClaim()">Submit report</button><button class="modal-btn-cancel" onclick="closeModal(&#39;claim-modal&#39;)">Cancel</button></div>
     </div>
-    <!-- Success state -->
     <div id="claim-success" class="hidden">
       <div class="modal-success">
-        <div class="modal-success-icon">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M8 16.5l5.5 5.5L24 11" stroke="#12b76a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+        <div class="modal-success-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M8 16.5l5.5 5.5L24 11" stroke="#12b76a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
         <h2 class="modal-success-title" id="claim-success-title">Your claim has been submitted</h2>
-        <div class="modal-success-ref">
-          <span style="color:#4a535c;">Reference:</span>
-          <code id="claim-ref-number">CLM-94316</code>
-          <button class="modal-copy-btn" onclick="copyRef('claim-ref-number')" title="Copy reference">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" stroke-width="1.4"/></svg>
-          </button>
-        </div>
-        <div class="modal-next-steps">
-          <p class="modal-next-steps-title">What happens next</p>
-          <div class="modal-next-step"><div class="modal-next-step-dot"></div><span>We'll investigate your claim within <strong>5 business days</strong></span></div>
-          <div class="modal-next-step"><div class="modal-next-step-dot"></div><span>You'll receive email updates on the progress</span></div>
-          <div class="modal-next-step"><div class="modal-next-step-dot"></div><span>You can track your claim status on this page anytime</span></div>
-        </div>
+        <div class="modal-success-ref"><span style="color:#4a535c;">Reference:</span><code id="claim-ref-number">CLM-94316</code><button class="modal-copy-btn" onclick="copyRef(&#39;claim-ref-number&#39;)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"></rect><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" stroke-width="1.4"></path></svg></button></div>
+        <div class="modal-next-steps"><p class="modal-next-steps-title">What happens next</p><div class="modal-next-step"><div class="modal-next-step-dot"></div><span>We'll investigate within <strong>5 business days</strong></span></div><div class="modal-next-step"><div class="modal-next-step-dot"></div><span>You'll receive email updates</span></div><div class="modal-next-step"><div class="modal-next-step-dot"></div><span>Track your claim status on this page</span></div></div>
         <p class="modal-success-email">A confirmation email has been sent to your registered email address</p>
         <button class="modal-btn-view" onclick="viewClaimStatus()">View claim status</button>
       </div>
@@ -954,868 +565,102 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     RETURN MODAL — "Return your order"
-═══════════════════════════════════════════════════ -->
-<div class="modal-backdrop hidden" id="return-modal" onclick="handleBackdropClick(event,'return-modal')">
+<!-- RETURN MODAL -->
+<div class="modal-backdrop hidden" id="return-modal" onclick="handleBackdropClick(event,&#39;return-modal&#39;)">
   <div class="modal-box" onclick="event.stopPropagation()">
-    <!-- Form state -->
     <div id="return-form" style="display:flex;flex-direction:column;gap:20px;">
       <h2 class="modal-title">Return your order</h2>
       <p class="modal-desc">Tell us why you'd like to return this order and we'll get you a return label.</p>
-      <select class="modal-select">
-        <option value="" disabled selected>Reason for return</option>
-        <option>Wrong item received</option>
-        <option>Item damaged</option>
-        <option>Item not as described</option>
-        <option>Changed my mind</option>
-      </select>
-      <div>
-        <p class="modal-textarea-label">Additional details</p>
-        <textarea class="modal-textarea" placeholder="Add any additional details about your return..." style="margin-top:8px;"></textarea>
-      </div>
-      <div class="modal-actions">
-        <button class="modal-btn-primary" id="return-submit-btn" onclick="submitReturn()">Submit return</button>
-        <button class="modal-btn-cancel" onclick="closeModal('return-modal')">Cancel</button>
-      </div>
+      <select class="modal-select"><option value="" disabled="" selected="">Reason for return</option><option>Wrong item received</option><option>Item damaged</option><option>Item not as described</option><option>Changed my mind</option></select>
+      <div><p class="modal-textarea-label">Additional details</p><textarea class="modal-textarea" placeholder="Add any additional details..." style="margin-top:8px;"></textarea></div>
+      <div class="modal-actions"><button class="modal-btn-primary" id="return-submit-btn" onclick="submitReturn()">Submit return</button><button class="modal-btn-cancel" onclick="closeModal(&#39;return-modal&#39;)">Cancel</button></div>
     </div>
-    <!-- Success state -->
     <div id="return-success" class="hidden">
       <div class="modal-success">
-        <div class="modal-success-icon">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M8 16.5l5.5 5.5L24 11" stroke="#12b76a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+        <div class="modal-success-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M8 16.5l5.5 5.5L24 11" stroke="#12b76a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
         <h2 class="modal-success-title">Your return has been requested</h2>
-        <div class="modal-success-ref">
-          <span style="color:#4a535c;">Reference:</span>
-          <code id="return-ref-number">RTN-94316</code>
-          <button class="modal-copy-btn" onclick="copyRef('return-ref-number')" title="Copy reference">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" stroke-width="1.4"/></svg>
-          </button>
-        </div>
-        <div class="modal-next-steps">
-          <p class="modal-next-steps-title">What happens next</p>
-          <div class="modal-next-step"><div class="modal-next-step-dot"></div><span>A <strong>return shipping label</strong> will be sent to your email</span></div>
-          <div class="modal-next-step"><div class="modal-next-step-dot"></div><span>Pack the item and drop it off at your nearest post office</span></div>
-          <div class="modal-next-step"><div class="modal-next-step-dot"></div><span>Your refund will be processed within <strong>5-7 business days</strong> of receiving the item</span></div>
-        </div>
+        <div class="modal-success-ref"><span style="color:#4a535c;">Reference:</span><code id="return-ref-number">RTN-94316</code><button class="modal-copy-btn" onclick="copyRef(&#39;return-ref-number&#39;)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"></rect><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" stroke-width="1.4"></path></svg></button></div>
+        <div class="modal-next-steps"><p class="modal-next-steps-title">What happens next</p><div class="modal-next-step"><div class="modal-next-step-dot"></div><span>A <strong>return shipping label</strong> will be sent to your email</span></div><div class="modal-next-step"><div class="modal-next-step-dot"></div><span>Pack and drop off at your nearest post office</span></div><div class="modal-next-step"><div class="modal-next-step-dot"></div><span>Refund within <strong>5-7 business days</strong></span></div></div>
         <p class="modal-success-email">A confirmation email with your return label has been sent</p>
         <button class="modal-btn-view" onclick="viewReturnStatus()">View return status</button>
       </div>
     </div>
   </div>
 </div>
-</div><!-- /tracking-view -->
+</div>
 
 <script>
-// ── Sidebar toggle ──
-document.getElementById('sidebar-toggle').addEventListener('click', function() {
-  document.getElementById('right-sidebar').classList.toggle('collapsed');
-});
+function doSearch(){var v=document.getElementById('search-tracking-input').value.trim();if(!v){document.getElementById('search-tracking-input').focus();return;}document.querySelectorAll('.order-ref-val').forEach(function(e){e.textContent=v});document.querySelectorAll('.tracking-num-display').forEach(function(e){e.textContent=v});document.getElementById('search-view').classList.add('hidden');document.getElementById('tracking-view').classList.add('visible');setState('shipped',document.querySelector('.demo-tab'));}
+document.getElementById('search-tracking-input').addEventListener('keydown',function(e){if(e.key==='Enter')doSearch();});
 
-// ── Search → Tracking transition ──
-function doSearch() {
-  const val = document.getElementById('search-tracking-input').value.trim();
-  if (!val) { document.getElementById('search-tracking-input').focus(); return; }
+function toggleTimeline(){var items=document.getElementById('timeline-items');var toggle=document.getElementById('timeline-toggle');if(items.style.display==='none'){items.style.display='';toggle.classList.add('open');}else{items.style.display='none';toggle.classList.remove('open');}}
 
-  // Update tracking ref displays
-  document.querySelectorAll('.order-ref-val').forEach(el => el.textContent = val);
-  document.querySelectorAll('.tracking-num-display').forEach(el => el.textContent = val);
+var svgCheck='<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var svgPin='<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1C4.79 1 3 2.79 3 5c0 3.25 4 8 4 8s4-4.75 4-8c0-2.21-1.79-4-4-4z" stroke="#96a0ab" stroke-width="1.3"/><circle cx="7" cy="5" r="1.5" stroke="#96a0ab" stroke-width="1.3"/></svg>';
+var svgWarning='<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L1 18h18L10 2z" stroke="#b54708" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 8v4" stroke="#b54708" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14.5" r="0.75" fill="#b54708"/></svg>';
+var svgReturn='<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8a6 6 0 106-6H6" stroke="#344054" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 2v6h6" stroke="#344054" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var svgAlert='<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#c01048" stroke-width="1.5"/><path d="M10 6v5" stroke="#c01048" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="13.5" r="0.75" fill="#c01048"/></svg>';
+var svgAlertBtn='<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L1 14.5h14L8 1.5z" stroke="#344054" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 6v3.5" stroke="#344054" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.5" r="0.75" fill="#344054"/></svg>';
 
-  // Switch views
-  document.getElementById('search-view').classList.add('hidden');
-  document.getElementById('tracking-view').classList.add('visible');
+var iconShipped='<img src="icons/State=Shipped.svg" width="28" height="28" style="display:block;">';
+var iconInTransit='<img src="icons/State=in transit.svg" width="28" height="28" style="display:block;">';
+var iconLocalDeliv='<img src="icons/State=Local delivery.svg" width="28" height="28" style="display:block;">';
+var iconAlert28='<img src="icons/State=alert.svg" width="28" height="28" style="display:block;">';
+var iconCheckPurple='<img src="icons/State=complete.svg" width="28" height="28" style="display:block;">';
+var iconCheckGreen='<img src="icons/State=Delivered.svg" width="28" height="28" style="display:block;">';
+var iconTodo='<img src="icons/State=to do.svg" width="16" height="16" style="display:block;">';
+var iconBoxLarge='<img src="icons/box icon.svg" width="44" height="44" style="display:block;">';
 
-  // Init tracking state
-  setState('shipped', document.querySelector('.demo-tab'));
-}
+var headerIcons={calendar:'icons/calendar-icons/Icon=calendar, screen=lg.svg',alert:'icons/calendar-icons/Icon=alert, screen=lg.svg',warning:'icons/calendar-icons/Icon=warning, screen=lg.svg',info:'icons/calendar-icons/Icon=info, screen=lg.svg',success:'icons/calendar-icons/Icon=success, screen=lg.svg'};
 
-document.getElementById('search-tracking-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') doSearch();
-});
-
-// ── SVG helpers ──
-const svgCheck = `<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-const svgPin   = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1C4.79 1 3 2.79 3 5c0 3.25 4 8 4 8s4-4.75 4-8c0-2.21-1.79-4-4-4z" stroke="#96a0ab" stroke-width="1.3"/><circle cx="7" cy="5" r="1.5" stroke="#96a0ab" stroke-width="1.3"/></svg>`;
-const svgWarning = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L1 18h18L10 2z" stroke="#b54708" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 8v4" stroke="#b54708" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14.5" r="0.75" fill="#b54708"/></svg>`;
-const svgReturn  = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8a6 6 0 106-6H6" stroke="#344054" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 2v6h6" stroke="#344054" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-const svgAlert   = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#c01048" stroke-width="1.5"/><path d="M10 6v5" stroke="#c01048" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="13.5" r="0.75" fill="#c01048"/></svg>`;
-const svgAlertBtn= `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L1 14.5h14L8 1.5z" stroke="#344054" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 6v3.5" stroke="#344054" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.5" r="0.75" fill="#344054"/></svg>`;
-
-// ── Icon img helpers (correct file refs) ──
-const iconShipped    = `<img src="icons/State=Shipped.svg"        width="28" height="28" style="display:block;">`;
-const iconInTransit  = `<img src="icons/State=in transit.svg"     width="28" height="28" style="display:block;">`;
-const iconLocalDeliv = `<img src="icons/State=Local delivery.svg" width="28" height="28" style="display:block;">`;
-const iconAlert28    = `<img src="icons/State=alert.svg"          width="28" height="28" style="display:block;">`;
-const iconCheckPurple= `<img src="icons/State=complete.svg"       width="28" height="28" style="display:block;">`;
-const iconCheckGreen = `<img src="icons/State=Delivered.svg"      width="28" height="28" style="display:block;">`;
-const iconTodo       = `<img src="icons/State=to do.svg"          width="16" height="16" style="display:block;">`;
-const iconBoxLarge   = `<img src="icons/box icon.svg"             width="44" height="44" style="display:block;">`;
-
-// ── Header icon paths ──
-const headerIcons = {
-  calendar: 'icons/calendar-icons/Icon=calendar, screen=lg.svg',
-  alert:    'icons/calendar-icons/Icon=alert, screen=lg.svg',
-  warning:  'icons/calendar-icons/Icon=warning, screen=lg.svg',
-  info:     'icons/calendar-icons/Icon=info, screen=lg.svg',
-  success:  'icons/calendar-icons/Icon=success, screen=lg.svg',
+var STATES={
+shipped:{headerIcon:'calendar',badge:{cls:'badge-blue',text:'Shipped'},delivery:{label:'Expected Delivery',date:'18–20 Feb 2026',note:'Based on current carrier progress - Last updated 3 mins ago'},extra:null,progressWrap:'normal',statusTitleCls:'purple',statusTitle:'Your order is being shipped',statusSub:'Your item will be ready for transit soon',stages:[{label:'Shipped',lineColor:'active-purple',dotType:'active',icon:iconShipped},{label:'In Transit',lineColor:'',dotType:'grey'},{label:'Local delivery',lineColor:'',dotType:'grey'},{label:'Delivered',lineColor:'',dotType:'grey'}],actionBtn:null,showForm:false,timeline:[{type:'current',event:'HK — Picked up from fulfilment facility',time:'Shipped:',timeVal:'Feb 17, 12:46pm'},{type:'tick',last:true,event:'Item picked and packed from warehouse',time:'Shipped:',timeVal:'Feb 17, 11:00am'}]},
+intransit:{headerIcon:'calendar',badge:{cls:'badge-indigo',text:'In transit'},delivery:{label:'Expected Delivery',date:'18–20 Feb 2026',note:'Based on current carrier progress - Last updated 3 mins ago'},extra:null,progressWrap:'normal',statusTitleCls:'purple',statusTitle:'Your order is on its way',statusSub:'Your parcel is in transit to the destination country.',stages:[{label:'Shipped',lineColor:'active-purple',dotType:'check'},{label:'In Transit',lineColor:'active-purple',dotType:'active',icon:iconInTransit},{label:'Local delivery',lineColor:'',dotType:'grey'},{label:'Delivered',lineColor:'',dotType:'grey'}],actionBtn:null,showForm:false,timeline:[{type:'current',event:'Arrived at destination country',time:'In transit:',timeVal:'Feb 19, 06:05am'},{type:'tick',event:'Departed origin country',time:'In transit:',timeVal:'Feb 18, 18:22pm'},{type:'tick',event:'HK — Picked up from fulfilment facility',time:'Shipped:',timeVal:'Feb 17, 12:46pm'},{type:'tick',last:true,event:'Item picked and packed from warehouse',time:'Shipped:',timeVal:'Feb 17, 11:00am'}]},
+localdelivery:{headerIcon:'calendar',badge:{cls:'badge-purple',text:'Local Delivery'},delivery:{label:'Expected Delivery',date:'18–20 Feb 2026',note:'Based on current carrier progress - Last updated 3 mins ago'},extra:null,progressWrap:'normal',statusTitleCls:'purple',statusTitle:'Your order is out for delivery',statusSub:'Your parcel will be with you soon',stages:[{label:'Shipped',lineColor:'active-purple',dotType:'check'},{label:'In Transit',lineColor:'active-purple',dotType:'check'},{label:'Local delivery',lineColor:'active-purple',dotType:'active',icon:iconLocalDeliv},{label:'Delivered',lineColor:'',dotType:'grey'}],actionBtn:null,showForm:false,timeline:[{type:'pin',event:'Delivery to: Boronia, Victoria, AU',time:'Expected delivery:',timeVal:'20 Feb 2026, 09:15am'},{type:'current',event:'Out for Delivery',time:'Local Delivery:',timeVal:'Feb 20, 08:07am'},{type:'tick',event:'At Sorting facility',time:'In transit:',timeVal:'Feb 20, 06:23am'},{type:'tick',event:'Handed over to Australia Post',time:'In transit:',timeVal:'Feb 19, 07:45am'},{type:'tick',event:'Passed customs',time:'In transit:',timeVal:'Feb 19, 06:23am'},{type:'tick',last:true,event:'Arrived at destination country',time:'In transit:',timeVal:'Feb 19, 06:05am'}]},
+delivered:{headerIcon:'success',badge:{cls:'badge-green',text:'Delivered'},delivery:{label:'Delivered',date:'20 Feb 2026',note:'Based on current carrier progress – Updated 2 mins ago'},extra:{label:'Delivered in',value:'6',unit:'Days'},progressWrap:'delivered',statusTitleCls:'green',statusTitle:'Your order has been delivered',statusSub:'Your order was delivered on Saturday the 20th of February',stages:[{label:'Shipped',lineColor:'active-green',dotType:'check-green'},{label:'In Transit',lineColor:'active-green',dotType:'check-green'},{label:'Local delivery',lineColor:'active-green',dotType:'check-green'},{label:'Delivered',lineColor:'active-green',dotType:'check-green'}],actionBtn:{icon:svgReturn,text:'Return Items',onClick:"openModal('return-modal')"},showForm:false,timeline:[{type:'tick',event:'Delivered to: Boronia, Victoria, AU',time:'Left on door step:',timeVal:'20 Feb, 14:06pm'},{type:'tick',event:'Out for Delivery',time:'Local Delivery:',timeVal:'Feb 20, 08:07am'},{type:'tick',event:'At Sorting facility',time:'In transit:',timeVal:'Feb 20, 06:23am'},{type:'tick',event:'Handed over to Australia Post',time:'In transit:',timeVal:'Feb 19, 07:45am'},{type:'tick',event:'Passed customs',time:'In transit:',timeVal:'Feb 19, 06:23am'},{type:'tick',last:true,event:'Arrived at destination country',time:'In transit:',timeVal:'Feb 19, 06:05am'}]},
+delayed:{headerIcon:'warning',badge:{cls:'badge-orange',text:'Delayed'},delivery:{label:'Delayed by 2 days: New ETA:',date:'22–25 Feb 2026',note:'Based on current carrier progress - Last updated 3 mins ago'},extra:null,progressWrap:'delayed',statusTitleCls:'orange',statusTitle:'Your order is experiencing a delay',statusSub:"We haven't received updates from Australia Post. You may be eligible to file a claim.",stages:[{label:'Shipped',lineColor:'active-purple',dotType:'check'},{label:'In Transit',lineColor:'active-orange',dotType:'active',icon:iconAlert28,subLabel:'Delayed',subLabelCls:'orange'},{label:'Local delivery',lineColor:'',dotType:'grey'},{label:'Delivered',lineColor:'',dotType:'grey'}],actionBtn:{icon:svgAlertBtn,text:'Make a claim',onClick:"openModal('claim-modal')"},showForm:false,timeline:[{type:'current',event:'Being preprocessed at customs',time:'In transit:',timeVal:'Feb 19, 06:05am'},{type:'tick',event:'Arrived at destination country',time:'In transit:',timeVal:'Feb 19, 06:05am'},{type:'tick',event:'Departed origin country',time:'In transit:',timeVal:'Feb 18, 18:22pm'},{type:'tick',event:'HK — Picked up from fulfilment facility',time:'Shipped:',timeVal:'Feb 17, 12:46pm'},{type:'tick',last:true,event:'Item picked and packed from warehouse',time:'Shipped:',timeVal:'Feb 17, 11:00am'}]},
+stuck:{headerIcon:'alert',badge:{cls:'badge-red',text:'Stuck'},delivery:{label:'Expected Delivery',date:'Not available',note:'Based on current carrier progress - Last updated 3 mins ago'},extra:null,progressWrap:'danger',statusTitleCls:'red',statusTitle:'No tracking updates for 18 days',statusSub:"We haven't received updates from Australia Post. You may be eligible to file a claim.",stages:[{label:'Shipped',lineColor:'active-purple',dotType:'check'},{label:'In Transit',lineColor:'active-purple',dotType:'active',icon:iconAlert28,subLabel:'No updates',subLabelCls:'red'},{label:'Local delivery',lineColor:'',dotType:'grey'},{label:'Delivered',lineColor:'',dotType:'grey'}],actionBtn:{icon:svgAlertBtn,text:'Report as lost',onClick:"openModal('claim-modal')"},showForm:false,timeline:[{type:'current',event:'Being preprocessed at customs',time:'In transit:',timeVal:'Feb 19, 06:05am'},{type:'tick',event:'Arrived at destination country',time:'In transit:',timeVal:'Feb 19, 06:05am'},{type:'tick',event:'Departed origin country',time:'In transit:',timeVal:'Feb 18, 18:22pm'},{type:'tick',event:'HK — Picked up from fulfilment facility',time:'Shipped:',timeVal:'Feb 17, 12:46pm'},{type:'tick',last:true,event:'Item picked and packed from warehouse',time:'Shipped:',timeVal:'Feb 17, 11:00am'}]},
+updateaddress:{headerIcon:'alert',badge:{cls:'badge-red',text:'Action required'},delivery:{label:'Expected Delivery',date:'On hold',note:'Based on current carrier progress - Last updated 3 mins ago'},extra:null,progressWrap:'danger',statusTitleCls:'red',statusTitle:'Action required: Please verify your delivery address',statusSub:"There's an issue with your delivery address. Review and update the details so we can get your order to you.",stages:[{label:'Shipped',lineColor:'active-purple',dotType:'check'},{label:'In Transit',lineColor:'active-purple',dotType:'active',icon:iconAlert28,subLabel:'Action required',subLabelCls:'red'},{label:'Local delivery',lineColor:'',dotType:'grey'},{label:'Delivered',lineColor:'',dotType:'grey'}],actionBtn:null,showForm:true,timeline:[{type:'current',event:'Being preprocessed at customs',time:'In transit:',timeVal:'Feb 19, 06:05am'},{type:'tick',event:'Arrived at destination country',time:'In transit:',timeVal:'Feb 19, 06:05am'},{type:'tick',event:'Departed origin country',time:'In transit:',timeVal:'Feb 18, 18:22pm'},{type:'tick',event:'HK — Picked up from fulfilment facility',time:'Shipped:',timeVal:'Feb 17, 12:46pm'},{type:'tick',last:true,event:'Item picked and packed from warehouse',time:'Shipped:',timeVal:'Feb 17, 11:00am'}]}
 };
 
-// ── State data ──
-const STATES = {
-  shipped: {
-    headerIcon: 'calendar',
-    badge: { cls:'badge-blue', text:'Shipped' },
-    delivery: { label:'Expected Delivery', date:'18–20 Feb 2026', note:'Based on current carrier progress - Last updated 3 mins ago' },
-    extra: null,
-    progressWrap: 'normal',
-    statusTitleCls:'purple', statusTitle:'Your order is being shipped',
-    statusSub:'Your item will be ready for transit soon',
-    stages: [
-      { label:'Shipped',       lineColor:'active-purple', dotType:'active', icon:iconShipped },
-      { label:'In Transit',    lineColor:'',              dotType:'grey' },
-      { label:'Local delivery',lineColor:'',              dotType:'grey' },
-      { label:'Delivered',     lineColor:'',              dotType:'grey' },
-    ],
-    actionBtn: null,
-    showForm: false,
-    timeline: [
-      { type:'current', event:'HK — Picked up from fulfilment facility', time:'Shipped:', timeVal:'Feb 17, 12:46pm' },
-      { type:'tick', last:true, event:'Item picked and packed from warehouse', time:'Shipped:', timeVal:'Feb 17, 11:00am' },
-    ]
-  },
-  intransit: {
-    headerIcon: 'calendar',
-    badge: { cls:'badge-indigo', text:'In transit' },
-    delivery: { label:'Expected Delivery', date:'18–20 Feb 2026', note:'Based on current carrier progress - Last updated 3 mins ago' },
-    extra: null,
-    progressWrap: 'normal',
-    statusTitleCls:'purple', statusTitle:'Your order is on its way',
-    statusSub:'Your parcel is in transit to the destination country.',
-    stages: [
-      { label:'Shipped',       lineColor:'active-purple', dotType:'check' },
-      { label:'In Transit',    lineColor:'active-purple', dotType:'active', icon:iconInTransit },
-      { label:'Local delivery',lineColor:'',              dotType:'grey' },
-      { label:'Delivered',     lineColor:'',              dotType:'grey' },
-    ],
-    actionBtn: null,
-    showForm: false,
-    timeline: [
-      { type:'current', event:'Arrived at destination country', time:'In transit:', timeVal:'Feb 19, 06:05am' },
-      { type:'tick', event:'Departed origin country', time:'In transit:', timeVal:'Feb 18, 18:22pm' },
-      { type:'tick', event:'HK — Picked up from fulfilment facility', time:'Shipped:', timeVal:'Feb 17, 12:46pm' },
-      { type:'tick', last:true, event:'Item picked and packed from warehouse', time:'Shipped:', timeVal:'Feb 17, 11:00am' },
-    ]
-  },
-  localdelivery: {
-    headerIcon: 'calendar',
-    badge: { cls:'badge-purple', text:'Local Delivery' },
-    delivery: { label:'Expected Delivery', date:'18–20 Feb 2026', note:'Based on current carrier progress - Last updated 3 mins ago' },
-    extra: null,
-    progressWrap: 'normal',
-    statusTitleCls:'purple', statusTitle:'Your order is out for delivery',
-    statusSub:'Your parcel will be with you soon',
-    stages: [
-      { label:'Shipped',       lineColor:'active-purple', dotType:'check' },
-      { label:'In Transit',    lineColor:'active-purple', dotType:'check' },
-      { label:'Local delivery',lineColor:'active-purple', dotType:'active', icon:iconLocalDeliv },
-      { label:'Delivered',     lineColor:'',              dotType:'grey' },
-    ],
-    actionBtn: null,
-    showForm: false,
-    timeline: [
-      { type:'pin',  event:'Delivery to: Boronia, Victoria, AU', time:'Expected delivery:', timeVal:'20 Feb 2026, 09:15am' },
-      { type:'current', event:'Out for Delivery', time:'Local Delivery:', timeVal:'Feb 20, 08:07am' },
-      { type:'tick', event:'At Sorting facility', time:'In transit:', timeVal:'Feb 20, 06:23am' },
-      { type:'tick', event:'Handed over to Australia Post', time:'In transit:', timeVal:'Feb 19, 07:45am' },
-      { type:'tick', event:'Passed customs', time:'In transit:', timeVal:'Feb 19, 06:23am' },
-      { type:'tick', last:true, event:'Arrived at destination country', time:'In transit:', timeVal:'Feb 19, 06:05am' },
-    ]
-  },
-  delivered: {
-    headerIcon: 'success',
-    badge: { cls:'badge-green', text:'Delivered' },
-    delivery: { label:'Delivered', date:'Sat 20th Feb 2026', note:'' },
-    extra: { label:'Delivered in', value:'6', unit:'Days' },
-    progressWrap: 'delivered',
-    statusTitleCls:'green', statusTitle:'Your order has been delivered',
-    statusSub:'Your order was delivered on Saturday the 19th of February',
-    stages: [
-      { label:'Shipped',       lineColor:'active-green', dotType:'check-green' },
-      { label:'In Transit',    lineColor:'active-green', dotType:'check-green' },
-      { label:'Local delivery',lineColor:'active-green', dotType:'check-green' },
-      { label:'Delivered',     lineColor:'active-green', dotType:'check-green' },
-    ],
-    actionBtn: { icon:svgReturn, text:'Return Items', onClick:"openModal('return-modal')" },
-    showForm: false,
-    timeline: [
-      { type:'tick', event:'Delivered to mailbox', time:'Delivered ·', timeVal:'20 Feb, 14:06pm' },
-      { type:'tick', event:'Out for Delivery', time:'Local Delivery:', timeVal:'Feb 20, 08:07am' },
-      { type:'tick', event:'At Sorting facility', time:'In transit:', timeVal:'Feb 20, 06:23am' },
-      { type:'tick', event:'Handed over to Australia Post', time:'In transit:', timeVal:'Feb 19, 07:45am' },
-      { type:'tick', event:'Passed customs', time:'In transit:', timeVal:'Feb 19, 06:23am' },
-      { type:'tick', last:true, event:'Arrived at destination country', time:'In transit:', timeVal:'Feb 19, 06:05am' },
-    ]
-  },
-  delayed: {
-    headerIcon: 'warning',
-    badge: { cls:'badge-orange', text:'Delayed' },
-    delivery: { label:'Updated expected Delivery', date:'22–25 Feb 2026', note:'Based on current carrier progress - Last updated 3 mins ago' },
-    extra: { label:'Delayed by', value:'2', unit:'Days' },
-    progressWrap: 'delayed',
-    statusTitleCls:'orange', statusTitle:'Your order is experiencing a delay',
-    statusSub:"We haven't received updates from Australia Post. You may be eligible to file a claim.",
-    stages: [
-      { label:'Shipped',       lineColor:'active-purple', dotType:'check' },
-      { label:'In Transit',    lineColor:'active-orange', dotType:'active', icon:iconAlert28, subLabel:'Delayed', subLabelCls:'orange' },
-      { label:'Local delivery',lineColor:'',              dotType:'grey' },
-      { label:'Delivered',     lineColor:'',              dotType:'grey' },
-    ],
-    actionBtn: { icon:svgAlertBtn, text:'Make a claim', onClick:"openModal('claim-modal')" },
-    showForm: false,
-    timeline: [
-      { type:'current', event:'Being preprocessed at customs', time:'In transit:', timeVal:'Feb 19, 06:05am' },
-      { type:'tick', event:'Arrived at destination country', time:'In transit:', timeVal:'Feb 19, 06:05am' },
-      { type:'tick', event:'Departed origin country', time:'In transit:', timeVal:'Feb 18, 18:22pm' },
-      { type:'tick', event:'HK — Picked up from fulfilment facility', time:'Shipped:', timeVal:'Feb 17, 12:46pm' },
-      { type:'tick', last:true, event:'Item picked and packed from warehouse', time:'Shipped:', timeVal:'Feb 17, 11:00am' },
-    ]
-  },
-  stuck: {
-    headerIcon: 'alert',
-    badge: { cls:'badge-red', text:'Stuck' },
-    delivery: { label:'Expected Delivery', date:'Not available', note:'Based on current carrier progress - Last updated 3 mins ago' },
-    extra: null,
-    progressWrap: 'danger',
-    statusTitleCls:'red', statusTitle:'No tracking updates for 18 days',
-    statusSub:"We haven't received updates from Australia Post. You may be eligible to file a claim.",
-    stages: [
-      { label:'Shipped',       lineColor:'active-purple', dotType:'check' },
-      { label:'In Transit',    lineColor:'active-purple', dotType:'active', icon:iconAlert28, subLabel:'No updates', subLabelCls:'red' },
-      { label:'Local delivery',lineColor:'',              dotType:'grey' },
-      { label:'Delivered',     lineColor:'',              dotType:'grey' },
-    ],
-    actionBtn: { icon:svgAlertBtn, text:'Report as lost', onClick:"openModal('claim-modal')" },
-    showForm: false,
-    timeline: [
-      { type:'current', event:'Being preprocessed at customs', time:'In transit:', timeVal:'Feb 19, 06:05am' },
-      { type:'tick', event:'Arrived at destination country', time:'In transit:', timeVal:'Feb 19, 06:05am' },
-      { type:'tick', event:'Departed origin country', time:'In transit:', timeVal:'Feb 18, 18:22pm' },
-      { type:'tick', event:'HK — Picked up from fulfilment facility', time:'Shipped:', timeVal:'Feb 17, 12:46pm' },
-      { type:'tick', last:true, event:'Item picked and packed from warehouse', time:'Shipped:', timeVal:'Feb 17, 11:00am' },
-    ]
-  },
-  updateaddress: {
-    headerIcon: 'alert',
-    badge: { cls:'badge-red', text:'Action required' },
-    delivery: { label:'Expected Delivery', date:'Update address', note:'Based on current carrier progress - Last updated 3 mins ago' },
-    extra: null,
-    progressWrap: 'danger',
-    statusTitleCls:'red', statusTitle:'Action required: Please verify your delivery address',
-    statusSub:"There's an issue with your delivery address. Review and update the details so we can get your order to you.",
-    stages: [
-      { label:'Shipped',        lineColor:'active-purple', dotType:'check' },
-      { label:'In Transit',     lineColor:'active-purple', dotType:'active', icon:iconAlert28, subLabel:'Action required', subLabelCls:'red' },
-      { label:'Local delivery', lineColor:'',              dotType:'grey' },
-      { label:'Delivered',      lineColor:'',              dotType:'grey' },
-    ],
-    actionBtn: null,
-    showForm: true,
-    timeline: [
-      { type:'current', event:'Being preprocessed at customs', time:'In transit:', timeVal:'Feb 19, 06:05am' },
-      { type:'tick', event:'Arrived at destination country', time:'In transit:', timeVal:'Feb 19, 06:05am' },
-      { type:'tick', event:'Departed origin country', time:'In transit:', timeVal:'Feb 18, 18:22pm' },
-      { type:'tick', event:'HK — Picked up from fulfilment facility', time:'Shipped:', timeVal:'Feb 17, 12:46pm' },
-      { type:'tick', last:true, event:'Item picked and packed from warehouse', time:'Shipped:', timeVal:'Feb 17, 11:00am' },
-    ]
-  }
-};
+var CLAIM_STATES=[{title:'Your claim is under review',titleCls:'blue',wrapCls:'blue-wrap',sub:"We're working hard to resolve this for you.",stages:[{label:'Claim filed',lineColor:'line-blue',complete:true,green:false},{label:'Under Review',lineColor:'line-blue',complete:true,green:false},{label:'Resolved',lineColor:'',complete:false,green:false}]},{title:'Your claim has been resolved',titleCls:'green',wrapCls:'green-wrap',sub:"We're working hard to resolve this for you.",stages:[{label:'Claim filed',lineColor:'line-green',complete:true,green:true},{label:'Under Review',lineColor:'line-green',complete:true,green:true},{label:'Resolved',lineColor:'line-green',complete:true,green:true}]},{rejected:true,pageTitle:'Your claim details',headerLabel:'Claim',headerTitle:'Claim rejected',sectionTitle:'Your claim was unsuccessful',alertTitle:"There's an issue with your claim",alertDesc:"We'll be in touch <strong>shortly</strong> to explain the outcome and next steps."}];
+var RETURN_STATES=[{title:'Your return is in progress',titleCls:'purple',wrapCls:'blue-wrap',sub:"We're working hard to resolve this for you.",stages:[{label:'Return requested',lineColor:'line-blue',complete:true,green:false},{label:'Label sent',lineColor:'line-blue',complete:true,green:false},{label:'Item received',lineColor:'line-blue',complete:true,green:false},{label:'Processed',lineColor:'',complete:false,green:false}]},{title:'Your return has been processed',titleCls:'green',wrapCls:'green-wrap',sub:"We're working hard to resolve this for you.",stages:[{label:'Return requested',lineColor:'line-green',complete:true,green:true},{label:'Label sent',lineColor:'line-green',complete:true,green:true},{label:'Item received',lineColor:'line-green',complete:true,green:true},{label:'Processed',lineColor:'line-green',complete:true,green:true}]},{rejected:true,pageTitle:'Your return details',headerLabel:'Return',headerTitle:'Return rejected',sectionTitle:'Your returned order status',alertTitle:"There's an issue with your return",alertDesc:"Unfortunately we can't process your return at this time. <strong>We'll reach out shortly.</strong>"}];
 
-// ── Claim / Return sub-states ──
-const CLAIM_STATES = [
-  {
-    title:'Your claim is under review', titleCls:'blue', wrapCls:'blue-wrap',
-    sub:'We\'re working hard to resolve this for you.',
-    stages:[
-      { label:'Claim filed',   lineColor:'line-blue',  complete:true,  green:false },
-      { label:'Under Review',  lineColor:'line-blue',  complete:true,  green:false },
-      { label:'Resolved',      lineColor:'',           complete:false, green:false },
-    ]
-  },
-  {
-    title:'Your claim has been resolved', titleCls:'green', wrapCls:'green-wrap',
-    sub:'We\'re working hard to resolve this for you.',
-    stages:[
-      { label:'Claim filed',  lineColor:'line-green', complete:true, green:true },
-      { label:'Under Review', lineColor:'line-green', complete:true, green:true },
-      { label:'Resolved',     lineColor:'line-green', complete:true, green:true },
-    ]
-  },
-  {
-    rejected: true,
-    pageTitle: 'Your claim details',
-    headerLabel: 'Claim',
-    headerTitle: 'Claim rejected',
-    sectionTitle: 'Your claim was unsuccessful',
-    alertTitle: "There's an issue with your claim",
-    alertDesc: "We'll be in touch <strong>shortly</strong> to explain the outcome and next steps."
-  }
-];
+var currentClaimSub=0,currentReturnSub=0,currentPage='normal',currentState='shipped';
 
-const RETURN_STATES = [
-  {
-    title:'Your return is in progress', titleCls:'purple', wrapCls:'blue-wrap',
-    sub:'We\'re working hard to resolve this for you.',
-    stages:[
-      { label:'Return requested', lineColor:'line-blue', complete:true,  green:false },
-      { label:'Label sent',       lineColor:'line-blue', complete:true,  green:false },
-      { label:'Item received',    lineColor:'line-blue', complete:true,  green:false },
-      { label:'Processed',        lineColor:'',          complete:false, green:false },
-    ]
-  },
-  {
-    title:'Your return has been processed', titleCls:'green', wrapCls:'green-wrap',
-    sub:'We\'re working hard to resolve this for you.',
-    stages:[
-      { label:'Return requested', lineColor:'line-green', complete:true, green:true },
-      { label:'Label sent',       lineColor:'line-green', complete:true, green:true },
-      { label:'Item received',    lineColor:'line-green', complete:true, green:true },
-      { label:'Processed',        lineColor:'line-green', complete:true, green:true },
-    ]
-  },
-  {
-    rejected: true,
-    pageTitle: 'Your return details',
-    headerLabel: 'Return',
-    headerTitle: 'Return rejected',
-    sectionTitle: 'Your returned order status',
-    alertTitle: "There's an issue with your return",
-    alertDesc: "Unfortunately we can't process your return at this time. <strong>We'll reach out shortly.</strong>"
-  }
-];
+function renderStages(stages){return stages.map(function(s,i){var labelCls=s.dotType==='active'?(s.subLabelCls==='red'?'red':s.lineColor.includes('orange')?'orange':'dark'):(s.lineColor?'dark':'grey');var alignCls=i===0?'':i===1?' center':' right';var dotHtml='',dotCls='';if(s.dotType==='grey'){dotHtml=iconTodo;dotCls='dot-grey';}else if(s.dotType==='check'||s.dotType==='check-purple'){dotHtml=iconCheckPurple;dotCls='dot-check';}else if(s.dotType==='check-green'){dotHtml=iconCheckGreen;dotCls='dot-check';}else if(s.dotType==='active'){dotHtml=s.icon||'';dotCls='dot-active';}var subLabel=s.subLabel?'<div style="font-size:11px;color:'+(s.subLabelCls==='red'?'#c01048':'#b54708')+';font-weight:600;white-space:nowrap;position:absolute;top:30px;left:50%;transform:translateX(-50%);">'+s.subLabel+'</div>':'';return '<div class="stage stage-'+(i+1)+' '+s.lineColor+'"><span class="stage-label '+labelCls+alignCls+'">'+s.label+'</span><div class="stage-dot '+dotCls+'">'+dotHtml+subLabel+'</div></div>';}).join('');}
 
-let currentClaimSub  = 0;
-let currentReturnSub = 0;
-let currentPage = 'normal'; // 'normal' | 'claim' | 'return'
+function renderFlatStages(stages){return stages.map(function(s){var dotHtml=s.complete?(s.green?'<img src="icons/State=Delivered.svg" width="28" height="28" style="display:block;">':'<img src="icons/State=complete.svg" width="28" height="28" style="display:block;">'):'<img src="icons/State=to do.svg" width="16" height="16" style="display:block;">';var labelCls=s.complete?'dark':'grey';return '<div class="flat-stage '+s.lineColor+'"><span class="flat-stage-label '+labelCls+'">'+s.label+'</span><div class="flat-dot">'+dotHtml+'</div></div>';}).join('');}
 
-// ── Render delivery stages ──
-function renderStages(stages) {
-  return stages.map((s, i) => {
-    const labelCls = s.dotType === 'active'
-      ? (s.subLabelCls === 'red' ? 'red' : s.lineColor.includes('orange') ? 'orange' : 'dark')
-      : (s.lineColor ? 'dark' : 'grey');
-    const alignCls = i === 0 ? '' : i === 1 ? ' center' : ' right';
-    let dotHtml = '';
-    let dotCls  = '';
-    if (s.dotType === 'grey') {
-      dotHtml = iconTodo;
-      dotCls  = 'dot-grey';
-    } else if (s.dotType === 'check' || s.dotType === 'check-purple') {
-      dotHtml = iconCheckPurple;
-      dotCls  = 'dot-check';
-    } else if (s.dotType === 'check-green') {
-      dotHtml = iconCheckGreen;
-      dotCls  = 'dot-check';
-    } else if (s.dotType === 'active') {
-      dotHtml = s.icon || '';
-      dotCls  = 'dot-active';
-    }
-    const subLabel = s.subLabel
-      ? `<div style="font-size:11px;color:${s.subLabelCls==='red'?'#c01048':'#b54708'};font-weight:600;white-space:nowrap;position:absolute;top:30px;left:50%;transform:translateX(-50%);">${s.subLabel}</div>`
-      : '';
-    return `<div class="stage stage-${i+1} ${s.lineColor}">
-      <span class="stage-label ${labelCls}${alignCls}">${s.label}</span>
-      <div class="stage-dot ${dotCls}">${dotHtml}${subLabel}</div>
-    </div>`;
-  }).join('');
-}
+function renderTimeline(items){return items.map(function(item){var isLast=item.last;var colHtml='';if(item.type==='current'){colHtml=iconBoxLarge+(isLast?'':'<div class="tl-line" style="margin-top:4px;"></div>');}else if(item.type==='pin'){colHtml='<div class="tl-icon-pin">'+svgPin+'</div>'+(isLast?'':'<div class="tl-line dashed"></div>');}else if(item.type==='tick'){colHtml='<div class="tl-tick">'+svgCheck+'</div>'+(isLast?'':'<div class="tl-line"></div>');}return '<div class="tl-item"><div class="tl-col">'+colHtml+'</div><div class="tl-text" style="'+(isLast?'padding-bottom:8px;':'')+'"><span class="tl-event'+(item.type==='pin'?' muted':'')+'">'+item.event+'</span><span class="tl-time">'+item.time+' <strong>'+item.timeVal+'</strong></span></div></div>';}).join('');}
 
-// ── Render flat stages (claim / return) ──
-function renderFlatStages(stages) {
-  return stages.map(s => {
-    const dotHtml = s.complete
-      ? (s.green ? `<img src="icons/State=Delivered.svg" width="28" height="28" style="display:block;">`
-                 : `<img src="icons/State=complete.svg"  width="28" height="28" style="display:block;">`)
-      : `<img src="icons/State=to do.svg" width="16" height="16" style="display:block;">`;
-    const labelCls = s.complete ? 'dark' : 'grey';
-    return `<div class="flat-stage ${s.lineColor}">
-      <span class="flat-stage-label ${labelCls}">${s.label}</span>
-      <div class="flat-dot">${dotHtml}</div>
-    </div>`;
-  }).join('');
-}
+function setState(name,tabEl){currentState=name;document.querySelectorAll('.demo-tab').forEach(function(t){t.classList.remove('active');});if(tabEl)tabEl.classList.add('active');document.getElementById('normal-layout').classList.remove('hidden');document.getElementById('claim-page').classList.add('hidden');document.getElementById('return-page').classList.add('hidden');document.getElementById('advance-bar').classList.remove('visible');document.getElementById('adv-btn-3').classList.add('hidden');currentPage='normal';var s=STATES[name];document.getElementById('calendar-icon').querySelector('img').src=headerIcons[s.headerIcon];document.getElementById('delivery-label').textContent=s.delivery.label;document.getElementById('delivery-date').textContent=s.delivery.date;document.getElementById('delivery-note').textContent=s.delivery.note;var extraEl=document.getElementById('delivery-extra');if(s.extra){extraEl.classList.remove('hidden');document.getElementById('extra-label').textContent=s.extra.label;document.getElementById('extra-value').textContent=s.extra.value;document.getElementById('extra-unit').textContent=s.extra.unit;}else{extraEl.classList.add('hidden');}var wrap=document.getElementById('progress-bar-wrap');wrap.className='progress-bar-wrap '+s.progressWrap;var titleEl=document.getElementById('progress-status-title');titleEl.className='progress-status-title '+s.statusTitleCls;if(s.statusTitleCls==='orange'){titleEl.innerHTML=svgWarning+' '+s.statusTitle;}else if(s.statusTitleCls==='red'){titleEl.innerHTML=svgAlert+' '+s.statusTitle;}else{titleEl.textContent=s.statusTitle;}document.getElementById('progress-status-sub').textContent=s.statusSub;document.getElementById('stages-container').innerHTML=renderStages(s.stages);var actionWrap=document.getElementById('action-btn-wrap');if(s.actionBtn){actionWrap.innerHTML='<button class="action-btn" onclick="'+s.actionBtn.onClick+'">'+s.actionBtn.icon+' '+s.actionBtn.text+'</button>';}else{actionWrap.innerHTML='';}var formSection=document.getElementById('address-form-section');s.showForm?formSection.classList.remove('hidden'):formSection.classList.add('hidden');document.getElementById('timeline-items').innerHTML=renderTimeline(s.timeline);var sidebarCarrier=document.getElementById('sidebar-carrier-section');sidebarCarrier.style.display='';var deliveryCarrier=document.getElementById('delivery-right-carrier');if(name==='delivered'){deliveryCarrier.style.display='none';}else{deliveryCarrier.style.display='';}}
 
-// ── Render timeline ──
-function renderTimeline(items) {
-  return items.map(item => {
-    const isLast = item.last;
-    let colHtml = '';
-    if (item.type === 'current') {
-      colHtml = `${iconBoxLarge}${isLast ? '' : '<div class="tl-line" style="margin-top:4px;"></div>'}`;
-    } else if (item.type === 'pin') {
-      colHtml = `<div class="tl-icon-pin">${svgPin}</div>${isLast ? '' : '<div class="tl-line dashed"></div>'}`;
-    } else if (item.type === 'tick') {
-      colHtml = `<div class="tl-tick">${svgCheck}</div>${isLast ? '' : '<div class="tl-line"></div>'}`;
-    }
-    return `<div class="tl-item">
-      <div class="tl-col">${colHtml}</div>
-      <div class="tl-text" style="${isLast ? 'padding-bottom:8px;' : ''}">
-        <span class="tl-event${item.type==='pin'?' muted':''}">${item.event}</span>
-        <span class="tl-time">${item.time} <strong>${item.timeVal}</strong></span>
-      </div>
-    </div>`;
-  }).join('');
-}
+function setSubState(idx){document.querySelectorAll('.advance-btn').forEach(function(b,i){b.classList.toggle('active-sub',i===idx);});if(currentPage==='claim'){currentClaimSub=idx;renderClaimPage();}else if(currentPage==='return'){currentReturnSub=idx;renderReturnPage();}}
+function renderClaimPage(){var cs=CLAIM_STATES[currentClaimSub];var alertIcon='<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#d92d20" stroke-width="1.5"/><path d="M10 6.5v4" stroke="#d92d20" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="13.5" r="0.75" fill="#d92d20"/></svg>';if(cs.rejected){document.getElementById('claim-page-title').textContent=cs.pageTitle;document.getElementById('claim-header-label').textContent=cs.headerLabel;document.getElementById('claim-header-title').textContent=cs.headerTitle;document.getElementById('claim-section-title').textContent=cs.sectionTitle;document.getElementById('claim-delivered-by').style.display='';document.getElementById('claim-bar-container').innerHTML='<div class="rejected-alert"><p class="rejected-alert-title">'+alertIcon+' '+cs.alertTitle+'</p><p class="rejected-alert-desc">'+cs.alertDesc+'</p></div>';}else{document.getElementById('claim-page-title').textContent='Your claim details';document.getElementById('claim-header-label').textContent='Claim';document.getElementById('claim-header-title').textContent='Item reported lost';document.getElementById('claim-section-title').textContent='Your lost package claim';document.getElementById('claim-delivered-by').style.display='none';document.getElementById('claim-bar-container').innerHTML='<div class="flat-bar-wrap '+cs.wrapCls+'"><p class="flat-bar-title '+cs.titleCls+'">'+cs.title+'</p><p class="flat-bar-sub">'+cs.sub+'</p><div class="flat-stages">'+renderFlatStages(cs.stages)+'</div></div>';}}
+function renderReturnPage(){var rs=RETURN_STATES[currentReturnSub];var alertIcon='<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#d92d20" stroke-width="1.5"/><path d="M10 6.5v4" stroke="#d92d20" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="13.5" r="0.75" fill="#d92d20"/></svg>';if(rs.rejected){document.getElementById('return-page-title').textContent=rs.pageTitle;document.getElementById('return-header-label').textContent=rs.headerLabel;document.getElementById('return-header-title').textContent=rs.headerTitle;document.getElementById('return-section-title').textContent=rs.sectionTitle;document.getElementById('return-bar-container').innerHTML='<div class="rejected-alert"><p class="rejected-alert-title">'+alertIcon+' '+rs.alertTitle+'</p><p class="rejected-alert-desc">'+rs.alertDesc+'</p></div>';}else{document.getElementById('return-page-title').textContent='Your return details';document.getElementById('return-header-label').textContent='Return';document.getElementById('return-header-title').textContent='Item returned';document.getElementById('return-section-title').textContent='Your returned order status';document.getElementById('return-bar-container').innerHTML='<div class="flat-bar-wrap '+rs.wrapCls+'"><p class="flat-bar-title '+rs.titleCls+'">'+rs.title+'</p><p class="flat-bar-sub">'+rs.sub+'</p><div class="flat-stages">'+renderFlatStages(rs.stages)+'</div></div>';}}
+function showClaimPage(){currentPage='claim';document.getElementById('normal-layout').classList.add('hidden');document.getElementById('return-page').classList.add('hidden');document.getElementById('claim-page').classList.remove('hidden');document.getElementById('advance-bar').classList.add('visible');document.getElementById('adv-btn-1').textContent='Under Review';document.getElementById('adv-btn-2').textContent='Resolved';document.getElementById('adv-btn-3').textContent='Rejected';document.getElementById('adv-btn-3').classList.remove('hidden');setSubState(0);renderClaimPage();}
+function showReturnPage(){currentPage='return';document.getElementById('normal-layout').classList.add('hidden');document.getElementById('claim-page').classList.add('hidden');document.getElementById('return-page').classList.remove('hidden');document.getElementById('advance-bar').classList.add('visible');document.getElementById('adv-btn-1').textContent='In Progress';document.getElementById('adv-btn-2').textContent='Processed';document.getElementById('adv-btn-3').textContent='Rejected';document.getElementById('adv-btn-3').classList.remove('hidden');setSubState(0);renderReturnPage();}
 
-// ── setState ──
-var currentState = 'delivered';
-function setState(name, tabEl) {
-  currentState = name;
-  // Update tabs
-  document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
-  if (tabEl) tabEl.classList.add('active');
+function openModal(id){if(id==='claim-modal'){var title=currentState==='stuck'?'Report as lost':'Make a claim';document.getElementById('claim-modal-title').textContent=title;}document.getElementById(id).classList.remove('hidden');document.body.style.overflow='hidden';}
+function closeModal(id){document.getElementById(id).classList.add('hidden');document.body.style.overflow='';setTimeout(function(){if(id==='claim-modal'){document.getElementById('claim-form').classList.remove('hidden');document.getElementById('claim-success').classList.add('hidden');var b=document.getElementById('claim-submit-btn');b.innerHTML='Submit report';b.style.pointerEvents='';b.style.opacity='';}if(id==='return-modal'){document.getElementById('return-form').classList.remove('hidden');document.getElementById('return-success').classList.add('hidden');var b2=document.getElementById('return-submit-btn');b2.innerHTML='Submit return';b2.style.pointerEvents='';b2.style.opacity='';}},300);}
+function handleBackdropClick(e,id){if(e.target===e.currentTarget)closeModal(id);}
+function submitClaim(){var btn=document.getElementById('claim-submit-btn');btn.innerHTML='<span class="modal-spinner"></span>Submitting...';btn.style.pointerEvents='none';btn.style.opacity='0.7';setTimeout(function(){var successTitle=currentState==='stuck'?'Your report has been submitted':'Your claim has been submitted';document.getElementById('claim-success-title').textContent=successTitle;document.getElementById('claim-form').classList.add('hidden');document.getElementById('claim-success').classList.remove('hidden');},1200);}
+function viewClaimStatus(){closeModal('claim-modal');setTimeout(function(){document.getElementById('claim-form').classList.remove('hidden');document.getElementById('claim-success').classList.add('hidden');var b=document.getElementById('claim-submit-btn');b.innerHTML='Submit report';b.style.pointerEvents='';b.style.opacity='';},300);document.querySelectorAll('.demo-tab').forEach(function(t){t.classList.remove('active');});showClaimPage();}
+function submitReturn(){var btn=document.getElementById('return-submit-btn');btn.innerHTML='<span class="modal-spinner"></span>Submitting...';btn.style.pointerEvents='none';btn.style.opacity='0.7';setTimeout(function(){document.getElementById('return-form').classList.add('hidden');document.getElementById('return-success').classList.remove('hidden');},1200);}
+function viewReturnStatus(){closeModal('return-modal');setTimeout(function(){document.getElementById('return-form').classList.remove('hidden');document.getElementById('return-success').classList.add('hidden');var b=document.getElementById('return-submit-btn');b.innerHTML='Submit return';b.style.pointerEvents='';b.style.opacity='';},300);document.querySelectorAll('.demo-tab').forEach(function(t){t.classList.remove('active');});showReturnPage();}
+function copyRef(id){var text=document.getElementById(id).textContent;navigator.clipboard.writeText(text).then(function(){var btn=document.getElementById(id).nextElementSibling;var orig=btn.innerHTML;btn.innerHTML='<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8.5l2.5 2.5L12 5" stroke="#12b76a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';setTimeout(function(){btn.innerHTML=orig;},1500);});}
 
-  // Show normal layout, hide others
-  document.getElementById('normal-layout').classList.remove('hidden');
-  document.getElementById('claim-page').classList.add('hidden');
-  document.getElementById('return-page').classList.add('hidden');
-  document.getElementById('advance-bar').classList.remove('visible');
-  document.getElementById('adv-btn-3').classList.add('hidden');
-  currentPage = 'normal';
+function showToast(msg){var toast=document.getElementById('toast');document.getElementById('toast-text').textContent=msg;toast.classList.add('show');setTimeout(function(){toast.classList.remove('show');},3000);}
+function submitAddressUpdate(){showToast('Your address has been updated');setTimeout(function(){setState('intransit',document.querySelectorAll('.demo-tab')[1]);},800);}
 
-  const s = STATES[name];
-
-  // Delivery header
-  document.getElementById('calendar-icon').querySelector('img').src = headerIcons[s.headerIcon];
-  document.getElementById('delivery-label').textContent = s.delivery.label;
-  document.getElementById('delivery-date').textContent  = s.delivery.date;
-  document.getElementById('delivery-note').textContent  = s.delivery.note;
-  const extraEl = document.getElementById('delivery-extra');
-  if (s.extra) {
-    extraEl.classList.remove('hidden');
-    document.getElementById('extra-label').textContent = s.extra.label;
-    document.getElementById('extra-value').textContent = s.extra.value;
-    document.getElementById('extra-unit').textContent  = s.extra.unit;
-  } else {
-    extraEl.classList.add('hidden');
-  }
-
-  // Progress bar
-  const wrap = document.getElementById('progress-bar-wrap');
-  wrap.className = `progress-bar-wrap ${s.progressWrap}`;
-  const titleEl = document.getElementById('progress-status-title');
-  titleEl.className = `progress-status-title ${s.statusTitleCls}`;
-  if (s.statusTitleCls === 'orange') {
-    titleEl.innerHTML = `${svgWarning} ${s.statusTitle}`;
-  } else if (s.statusTitleCls === 'red') {
-    titleEl.innerHTML = `${svgAlert} ${s.statusTitle}`;
-  } else {
-    titleEl.textContent = s.statusTitle;
-  }
-  document.getElementById('progress-status-sub').textContent = s.statusSub;
-  document.getElementById('stages-container').innerHTML = renderStages(s.stages);
-
-  // Action button
-  const actionWrap = document.getElementById('action-btn-wrap');
-  if (s.actionBtn) {
-    actionWrap.innerHTML = `<button class="action-btn" onclick="${s.actionBtn.onClick}">${s.actionBtn.icon} ${s.actionBtn.text}</button>`;
-  } else {
-    actionWrap.innerHTML = '';
-  }
-
-  // Address form
-  const formSection = document.getElementById('address-form-section');
-  s.showForm ? formSection.classList.remove('hidden') : formSection.classList.add('hidden');
-
-  // Timeline
-  document.getElementById('timeline-items').innerHTML = renderTimeline(s.timeline);
-}
-
-// ── Sub-state (claim / return) ──
-function setSubState(idx) {
-  document.querySelectorAll('.advance-btn').forEach((b, i) => {
-    b.classList.toggle('active-sub', i === idx);
-  });
-
-  if (currentPage === 'claim') {
-    currentClaimSub = idx;
-    renderClaimPage();
-  } else if (currentPage === 'return') {
-    currentReturnSub = idx;
-    renderReturnPage();
-  }
-}
-
-function renderClaimPage() {
-  const cs = CLAIM_STATES[currentClaimSub];
-  var alertIcon = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#d92d20" stroke-width="1.5"/><path d="M10 6.5v4" stroke="#d92d20" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="13.5" r="0.75" fill="#d92d20"/></svg>';
-  if (cs.rejected) {
-    document.getElementById('claim-page-title').textContent = cs.pageTitle;
-    document.getElementById('claim-header-label').textContent = cs.headerLabel;
-    document.getElementById('claim-header-title').textContent = cs.headerTitle;
-    document.getElementById('claim-section-title').textContent = cs.sectionTitle;
-    document.getElementById('claim-delivered-by').style.display = '';
-    document.getElementById('claim-bar-container').innerHTML = `
-      <div class="rejected-alert">
-        <p class="rejected-alert-title">${alertIcon} ${cs.alertTitle}</p>
-        <p class="rejected-alert-desc">${cs.alertDesc}</p>
-      </div>`;
-  } else {
-    document.getElementById('claim-page-title').textContent = 'Your claim details';
-    document.getElementById('claim-header-label').textContent = 'Claim';
-    document.getElementById('claim-header-title').textContent = 'Item reported lost';
-    document.getElementById('claim-section-title').textContent = 'Your lost package claim';
-    document.getElementById('claim-delivered-by').style.display = 'none';
-    document.getElementById('claim-bar-container').innerHTML = `
-      <div class="flat-bar-wrap ${cs.wrapCls}">
-        <p class="flat-bar-title ${cs.titleCls}">${cs.title}</p>
-        <p class="flat-bar-sub">${cs.sub}</p>
-        <div class="flat-stages">${renderFlatStages(cs.stages)}</div>
-      </div>`;
-  }
-}
-
-function renderReturnPage() {
-  const rs = RETURN_STATES[currentReturnSub];
-  var alertIcon = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#d92d20" stroke-width="1.5"/><path d="M10 6.5v4" stroke="#d92d20" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="13.5" r="0.75" fill="#d92d20"/></svg>';
-  if (rs.rejected) {
-    document.getElementById('return-page-title').textContent = rs.pageTitle;
-    document.getElementById('return-header-label').textContent = rs.headerLabel;
-    document.getElementById('return-header-title').textContent = rs.headerTitle;
-    document.getElementById('return-section-title').textContent = rs.sectionTitle;
-    document.getElementById('return-bar-container').innerHTML = `
-      <div class="rejected-alert">
-        <p class="rejected-alert-title">${alertIcon} ${rs.alertTitle}</p>
-        <p class="rejected-alert-desc">${rs.alertDesc}</p>
-      </div>`;
-  } else {
-    document.getElementById('return-page-title').textContent = 'Your return details';
-    document.getElementById('return-header-label').textContent = 'Return';
-    document.getElementById('return-header-title').textContent = 'Item returned';
-    document.getElementById('return-section-title').textContent = 'Your returned order status';
-    document.getElementById('return-bar-container').innerHTML = `
-      <div class="flat-bar-wrap ${rs.wrapCls}">
-        <p class="flat-bar-title ${rs.titleCls}">${rs.title}</p>
-        <p class="flat-bar-sub">${rs.sub}</p>
-        <div class="flat-stages">${renderFlatStages(rs.stages)}</div>
-      </div>`;
-  }
-}
-
-function showClaimPage() {
-  currentPage = 'claim';
-  document.getElementById('normal-layout').classList.add('hidden');
-  document.getElementById('return-page').classList.add('hidden');
-  document.getElementById('claim-page').classList.remove('hidden');
-  // Advance bar
-  const advBar = document.getElementById('advance-bar');
-  advBar.classList.add('visible');
-  document.getElementById('adv-btn-1').textContent = 'Under Review';
-  document.getElementById('adv-btn-2').textContent = 'Resolved';
-  document.getElementById('adv-btn-3').textContent = 'Rejected';
-  document.getElementById('adv-btn-3').classList.remove('hidden');
-  setSubState(0);
-  renderClaimPage();
-}
-
-function showReturnPage() {
-  currentPage = 'return';
-  document.getElementById('normal-layout').classList.add('hidden');
-  document.getElementById('claim-page').classList.add('hidden');
-  document.getElementById('return-page').classList.remove('hidden');
-  // Advance bar
-  const advBar = document.getElementById('advance-bar');
-  advBar.classList.add('visible');
-  document.getElementById('adv-btn-1').textContent = 'In Progress';
-  document.getElementById('adv-btn-2').textContent = 'Processed';
-  document.getElementById('adv-btn-3').textContent = 'Rejected';
-  document.getElementById('adv-btn-3').classList.remove('hidden');
-  setSubState(0);
-  renderReturnPage();
-}
-
-// ── Modal helpers ──
-function openModal(id) {
-  if (id === 'claim-modal') {
-    var title = currentState === 'stuck' ? 'Report as lost' : 'Make a claim';
-    document.getElementById('claim-modal-title').textContent = title;
-  }
-  document.getElementById(id).classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(id) {
-  document.getElementById(id).classList.add('hidden');
-  document.body.style.overflow = '';
-  // Reset modal states after close animation
-  setTimeout(() => {
-    if (id === 'claim-modal') {
-      document.getElementById('claim-form').classList.remove('hidden');
-      document.getElementById('claim-success').classList.add('hidden');
-      const btn = document.getElementById('claim-submit-btn');
-      btn.innerHTML = 'Submit report'; btn.style.pointerEvents = ''; btn.style.opacity = '';
-    }
-    if (id === 'return-modal') {
-      document.getElementById('return-form').classList.remove('hidden');
-      document.getElementById('return-success').classList.add('hidden');
-      const btn = document.getElementById('return-submit-btn');
-      btn.innerHTML = 'Submit return'; btn.style.pointerEvents = ''; btn.style.opacity = '';
-    }
-  }, 300);
-}
-function handleBackdropClick(e, id) {
-  if (e.target === e.currentTarget) closeModal(id);
-}
-function submitClaim() {
-  const btn = document.getElementById('claim-submit-btn');
-  btn.innerHTML = '<span class="modal-spinner"></span>Submitting...';
-  btn.style.pointerEvents = 'none';
-  btn.style.opacity = '0.7';
-  setTimeout(() => {
-    var successTitle = currentState === 'stuck' ? 'Your report has been submitted' : 'Your claim has been submitted';
-    document.getElementById('claim-success-title').textContent = successTitle;
-    document.getElementById('claim-form').classList.add('hidden');
-    document.getElementById('claim-success').classList.remove('hidden');
-  }, 1200);
-}
-function viewClaimStatus() {
-  closeModal('claim-modal');
-  // Reset modal for next use
-  setTimeout(() => {
-    document.getElementById('claim-form').classList.remove('hidden');
-    document.getElementById('claim-success').classList.add('hidden');
-    const btn = document.getElementById('claim-submit-btn');
-    btn.innerHTML = 'Submit report';
-    btn.style.pointerEvents = '';
-    btn.style.opacity = '';
-  }, 300);
-  document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
-  showClaimPage();
-}
-function submitReturn() {
-  const btn = document.getElementById('return-submit-btn');
-  btn.innerHTML = '<span class="modal-spinner"></span>Submitting...';
-  btn.style.pointerEvents = 'none';
-  btn.style.opacity = '0.7';
-  setTimeout(() => {
-    document.getElementById('return-form').classList.add('hidden');
-    document.getElementById('return-success').classList.remove('hidden');
-  }, 1200);
-}
-function viewReturnStatus() {
-  closeModal('return-modal');
-  // Reset modal for next use
-  setTimeout(() => {
-    document.getElementById('return-form').classList.remove('hidden');
-    document.getElementById('return-success').classList.add('hidden');
-    const btn = document.getElementById('return-submit-btn');
-    btn.innerHTML = 'Submit return';
-    btn.style.pointerEvents = '';
-    btn.style.opacity = '';
-  }, 300);
-  document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
-  showReturnPage();
-}
-function copyRef(id) {
-  const text = document.getElementById(id).textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.getElementById(id).nextElementSibling;
-    const orig = btn.innerHTML;
-    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8.5l2.5 2.5L12 5" stroke="#12b76a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    setTimeout(() => { btn.innerHTML = orig; }, 1500);
-  });
-}
-
-// ── Toast ──
-function showToast(msg) {
-  var toast = document.getElementById('toast');
-  document.getElementById('toast-text').textContent = msg;
-  toast.classList.add('show');
-  setTimeout(function() { toast.classList.remove('show'); }, 3000);
-}
-
-// ── Address update ──
-function submitAddressUpdate() {
-  showToast('Your address has been updated');
-  setTimeout(function() {
-    setState('intransit', document.querySelectorAll('.demo-tab')[1]);
-  }, 800);
-}
-
-// ── Admin config listener (live preview via postMessage) ──
-window.addEventListener('message', function(e) {
-  if (!e.data || e.data.type !== 'admin-config') return;
-  const c = e.data.config;
-
-  // Nav background colour
-  const nav = document.querySelector('nav');
-  if (c.headerColour) nav.style.background = c.headerColour;
-
-  // Nav link colour
-  if (c.linkColour) {
-    document.querySelectorAll('.nav-links a').forEach(a => a.style.color = c.linkColour);
-  }
-
-  // Logo
-  const logoImg = document.querySelector('.nav-logo img');
-  if (c.logoUrl) {
-    logoImg.src = c.logoUrl;
-    logoImg.style.height = '40px';
-    logoImg.style.width = 'auto';
-  }
-
-  // Favicon
-  if (c.faviconUrl) {
-    let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-    link.rel = 'icon';
-    link.href = c.faviconUrl;
-    document.head.appendChild(link);
-  }
-
-  // Page title
-  if (c.pageTitle) {
-    document.querySelectorAll('.page-title').forEach(el => el.textContent = c.pageTitle);
-  }
-
-  // Fonts
-  if (c.titleFont) {
-    document.querySelectorAll('.page-title, .delivery-date, .carrier-heading, .contact-title, .contact-bar-title, .items-title').forEach(el => {
-      el.style.fontFamily = c.titleFont + ', sans-serif';
-    });
-  }
-  if (c.bodyFont) {
-    document.body.style.fontFamily = c.bodyFont + ', sans-serif';
-  }
-
-  // Nav links
-  if (c.navLinks) {
-    const navLinksEl = document.querySelector('.nav-links');
-    navLinksEl.innerHTML = '';
-    c.navLinks.forEach(link => {
-      if (link.text) {
-        const a = document.createElement('a');
-        a.href = link.url || '#';
-        a.textContent = link.text;
-        if (c.linkColour) a.style.color = c.linkColour;
-        navLinksEl.appendChild(a);
-      }
-    });
-  }
-
-  // Support contact details
-  document.querySelectorAll('.contact-bar').forEach(bar => {
-    const items = bar.querySelectorAll('.contact-bar-item span');
-    if (items[0] && c.supportEmail) items[0].textContent = c.supportEmail;
-    if (items[1] && c.supportPhone) items[1].textContent = c.supportPhone;
-  });
-
-  // Carrier card visibility
-  const carrierCard = document.querySelector('.carrier-card');
-  if (carrierCard) {
-    carrierCard.style.display = c.showCarrier ? '' : 'none';
-  }
-
-  // Delivery date visibility
-  const deliveryHeader = document.querySelector('.delivery-header');
-  if (deliveryHeader) {
-    deliveryHeader.style.display = c.showDeliveryDate ? '' : 'none';
-  }
-
-  // Delay notifications — hide "Delayed" demo tab state elements
-  const delayedTab = document.querySelector('.tab-delayed');
-  if (delayedTab) delayedTab.style.display = c.showDelays ? '' : 'none';
-
-  // Address notifications — hide "Update Address" demo tab state elements
-  const addressTab = document.querySelector('.tab-updateaddress');
-  if (addressTab) addressTab.style.display = c.showAddressNotif ? '' : 'none';
-
-  // Returns — hide return action buttons and return modal triggers
-  const returnBtns = document.querySelectorAll('.action-btn');
-  returnBtns.forEach(btn => {
-    if (btn.textContent.includes('Return')) {
-      btn.style.display = c.enableReturns ? '' : 'none';
-    }
-  });
-
-  // Claims — hide claim action buttons and claim modal triggers
-  returnBtns.forEach(btn => {
-    if (btn.textContent.includes('lost') || btn.textContent.includes('claim') || btn.textContent.includes('Claim')) {
-      btn.style.display = c.enableClaims ? '' : 'none';
-    }
-  });
-
-  // Show/hide return & claim modals based on which toggle was last tapped
-  var lastToggled = c._lastToggledFeature;
-
-  if (lastToggled === 'enableReturns') {
-    if (c.enableReturns) {
-      closeModal('claim-modal');
-      setState('delivered', document.querySelector('.demo-tab'));
-      setTimeout(function(){ openModal('return-modal'); }, 150);
-    } else {
-      closeModal('return-modal');
-      // If claims is still on, show claim modal instead
-      if (c.enableClaims) {
-        setState('delayed', document.querySelector('.demo-tab'));
-        setTimeout(function(){ openModal('claim-modal'); }, 150);
-      }
-    }
-  } else if (lastToggled === 'enableClaims') {
-    if (c.enableClaims) {
-      closeModal('return-modal');
-      setState('delayed', document.querySelector('.demo-tab'));
-      setTimeout(function(){ openModal('claim-modal'); }, 150);
-    } else {
-      closeModal('claim-modal');
-      // If returns is still on, show return modal instead
-      if (c.enableReturns) {
-        setState('delivered', document.querySelector('.demo-tab'));
-        setTimeout(function(){ openModal('return-modal'); }, 150);
-      }
-    }
-  }
-
-  // Store config globally for state changes
-  window.__adminConfig = c;
-
-  // When embedded as admin preview, skip search and show tracking
-  document.getElementById('search-view').classList.add('hidden');
-  var tv = document.getElementById('tracking-view');
-  if (!tv.classList.contains('visible')) {
-    tv.classList.add('visible');
-    setState('shipped', document.querySelector('.demo-tab'));
-  }
-
-  // Also update search view fields for Step 1 preview
-  if (c.pageTitle) document.getElementById('search-page-title').textContent = c.pageTitle;
-  if (c.supportEmail) document.getElementById('search-help-email').textContent = c.supportEmail;
-  if (c.supportPhone) document.getElementById('search-help-phone').textContent = c.supportPhone;
-
-  // Hide demo bar and advance bar when embedded as preview
-  document.querySelector('.demo-bar').style.display = 'none';
-  document.getElementById('advance-bar').style.display = 'none';
-
-  // Apply preview scaling
-  document.body.classList.add('preview-embedded');
-});
-
-// ── Init ──
-(function() {
-  const params = new URLSearchParams(window.location.search);
-  const ref = params.get('ref');
-  if (ref) {
-    // Direct link with ref — skip search, show tracking
-    document.querySelectorAll('.order-ref-val').forEach(el => el.textContent = ref);
-    document.querySelectorAll('.tracking-num-display').forEach(el => el.textContent = ref);
-    document.getElementById('search-view').classList.add('hidden');
-      document.getElementById('tracking-view').classList.add('visible');
-    setState('shipped', document.querySelector('.demo-tab'));
-  }
-  // Otherwise: search view is visible by default, tracking view hidden
-})();
+// Init
+(function(){var params=new URLSearchParams(window.location.search);var ref=params.get('ref');if(ref){document.querySelectorAll('.order-ref-val').forEach(function(e){e.textContent=ref;});document.querySelectorAll('.tracking-num-display').forEach(function(e){e.textContent=ref;});document.getElementById('search-view').classList.add('hidden');document.getElementById('tracking-view').classList.add('visible');setState('shipped',document.querySelector('.demo-tab'));}})();
 </script>
 <div class="toast" id="toast">
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#027a48" stroke-width="1.5"/><path d="M6.5 10.5l2.5 2.5 5-5" stroke="#027a48" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#027a48" stroke-width="1.5"></circle><path d="M6.5 10.5l2.5 2.5 5-5" stroke="#027a48" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
   <span id="toast-text"></span>
 </div>
-</body>
-</html>
+
+
+<div id="eagle-drag-images" style="position: fixed; top: -100000px;"></div><div id="1p-menu-live-region" role="status" aria-live="polite" aria-atomic="true" aria-relevant="all" style="clip: rect(0px, 0px, 0px, 0px); clip-path: inset(50%); height: 1px; overflow: hidden; position: fixed; top: 0px; left: 0px; white-space: nowrap; width: 1px; overflow-wrap: normal;">1Password menu is available. Press down arrow to select.</div></body></html>
