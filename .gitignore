@@ -1,2 +1,5 @@
 .vercel
-.vercel
+.DS_Store
+.context/
+.superpowers/
+.env.local
