@@ -409,6 +409,7 @@ var packages = [
     tn: '0210DAD901524999',
     cardTitle: 'Pkg 3 Delivered: 18 Feb',
     isDelivered: true,
+    deliveredInDays: 6,
     timeline: [
       { event: 'Delivered to mailbox', time: 'Delivered:', timeVal: 'Feb 18, 2026 11:30am', muted: false },
       { event: 'Out for delivery', time: 'Local Delivery:', timeVal: 'Feb 17, 2026 8:00am', muted: true },
@@ -531,7 +532,25 @@ function renderMainPanel() {
   document.getElementById('delivery-label').textContent = pkg.deliveryLabel;
   document.getElementById('delivery-date').textContent = pkg.expectedDate;
   document.getElementById('delivery-note').textContent = pkg.deliveryNote;
-  document.getElementById('delivery-tn').textContent = 'TN: ' + pkg.tn;
+
+  // Right side: carrier info OR "Delivered in X days"
+  var rightEl = document.getElementById('delivery-right');
+  if (pkg.isDelivered) {
+    rightEl.innerHTML = '<div class="delivery-extra">' +
+      '<p class="delivery-extra-label">Delivered in</p>' +
+      '<p class="delivery-extra-value">' + (pkg.deliveredInDays || 6) + '</p>' +
+      '<p class="delivery-extra-unit">Days</p>' +
+    '</div>';
+  } else {
+    rightEl.innerHTML = '<div class="delivery-right-top">' +
+      '<div class="delivery-right-text">' +
+        '<span class="delivery-right-label">Delivered by:</span>' +
+        '<span class="delivery-right-value">Australia Post</span>' +
+      '</div>' +
+      '<div class="delivery-carrier-logo"><img src="images/aus-post.png" alt="Australia Post" /></div>' +
+    '</div>' +
+    '<span class="delivery-tracking-num">TN: ' + pkg.tn + '</span>';
+  }
 
   // Items
   var itemsHtml = '';
