@@ -635,6 +635,67 @@ function render() {
 
 // Initial render
 render();
+
+// ── Branding ──
+function applyBranding(c) {
+  var nav = document.querySelector('nav');
+  if (nav && c.headerColour) nav.style.background = c.headerColour;
+
+  if (c.linkColour) {
+    document.querySelectorAll('.nav-links a').forEach(function(a) { a.style.color = c.linkColour; });
+  }
+
+  var logoImg = document.querySelector('.nav-logo img');
+  if (logoImg) {
+    if (!logoImg.dataset.defaultSrc) logoImg.dataset.defaultSrc = logoImg.getAttribute('src');
+    if (c.logoUrl) {
+      logoImg.src = c.logoUrl;
+      logoImg.style.height = '40px';
+      logoImg.style.width = 'auto';
+    } else {
+      logoImg.src = logoImg.dataset.defaultSrc;
+      logoImg.style.height = '';
+      logoImg.style.width = '';
+    }
+  }
+
+  if (c.faviconUrl) {
+    var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.rel = 'icon';
+    link.href = c.faviconUrl;
+    document.head.appendChild(link);
+  }
+
+  if (c.navLinks) {
+    var navLinksEl = document.querySelector('.nav-links');
+    if (navLinksEl) {
+      navLinksEl.innerHTML = '';
+      c.navLinks.forEach(function(lnk) {
+        if (lnk.text) {
+          var a = document.createElement('a');
+          a.href = lnk.url || '#';
+          a.textContent = lnk.text;
+          if (c.linkColour) a.style.color = c.linkColour;
+          navLinksEl.appendChild(a);
+        }
+      });
+    }
+  }
+
+  if (c.bodyFont) document.body.style.fontFamily = c.bodyFont + ', sans-serif';
+}
+
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'admin-config') return;
+  applyBranding(e.data.config);
+});
+
+// ── Apply saved branding from admin on page load ──
+(function() {
+  var saved = localStorage.getItem('tracking-admin-config');
+  if (!saved) return;
+  try { applyBranding(JSON.parse(saved)); } catch(err) {}
+})();
 </script>
 
 </body>

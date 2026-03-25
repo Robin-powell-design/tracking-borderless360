@@ -256,7 +256,10 @@
 
           <!-- Branding -->
           <div class="form-card">
-            <div class="card-header">Branding</div>
+            <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;">
+              Branding
+              <button onclick="resetToDefaults()" style="font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:#96a0ab;background:none;border:1px solid #ebedef;border-radius:6px;padding:4px 10px;cursor:pointer;" onmouseover="this.style.color='#66727f'" onmouseout="this.style.color='#96a0ab'">Reset</button>
+            </div>
 
             <!-- Page title -->
             <div class="card-section">
@@ -584,6 +587,24 @@
       </div>
     </div>
 
+<!-- ═══ SAVED MODAL ═══ -->
+<div id="saved-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;padding:32px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.2);text-align:center;">
+    <div style="width:48px;height:48px;background:#f0e8ff;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#6b1aff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:18px;color:#1e2125;margin-bottom:8px;">Configuration saved!</div>
+    <div style="font-family:'Montserrat',sans-serif;font-weight:500;font-size:14px;color:#66727f;margin-bottom:24px;line-height:1.6;">Your branding has been applied to all tracking pages.</div>
+    <div style="display:flex;gap:12px;justify-content:center;">
+      <button onclick="document.getElementById('saved-modal-overlay').style.display='none'" style="padding:10px 20px;border:1px solid #d0d5dd;border-radius:8px;background:#fff;font-family:'Montserrat',sans-serif;font-weight:600;font-size:14px;color:#344054;cursor:pointer;">Close</button>
+      <a href="search-page.html" target="_blank" style="padding:10px 20px;border-radius:8px;background:#6b1aff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+        View tracking demo
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
     <!-- ═══ BOTTOM BAR ═══ -->
     <div class="bottom-bar">
       <button class="btn-back" id="btn-back" onclick="prevStep()" style="visibility:hidden;">
@@ -654,7 +675,10 @@ function goToStep(step) {
 
 function nextStep() {
   if (currentStep < 2) goToStep(currentStep + 1);
-  else alert('Configuration saved!');
+  else {
+    const overlay = document.getElementById('saved-modal-overlay');
+    overlay.style.display = 'flex';
+  }
 }
 
 function prevStep() {
@@ -792,6 +816,75 @@ function sendConfig() {
 // ── Init: send config when iframe loads ──
 document.getElementById('preview-iframe').addEventListener('load', function() {
   setTimeout(sendConfig, 300);
+});
+
+// ── Reset to defaults ──
+function resetToDefaults() {
+  if (!confirm('Reset all branding to the original defaults? This will clear any saved settings.')) return;
+
+  config.pageTitle = 'Track your items';
+  config.headerColour = '#1f1541';
+  config.linkColour = '#47CD89';
+  config.titleFont = 'Plus Jakarta Sans';
+  config.bodyFont = 'Inter';
+  config.logoUrl = '';
+  config.faviconUrl = '';
+  config.pageImageUrl = '';
+  config.navLinks = [{ text: 'FAQ', url: 'https://myshop.com/FAQ' }];
+  config.supportEmail = 'support@yourcompany.com';
+  config.supportPhone = '+61 3 9000 1234';
+  config.showCarrier = false;
+  config.showDeliveryDate = false;
+  config.showDelays = false;
+  config.showAddressNotif = false;
+  config.enableReturns = false;
+  config.enableClaims = false;
+  config.gtmId = '';
+  config._lastToggledFeature = null;
+
+  document.getElementById('page-title').value = 'Track your items';
+  document.getElementById('support-email').value = 'support@yourcompany.com';
+  document.getElementById('support-phone').value = '+61 3 9000 1234';
+  if (document.getElementById('gtm-id')) document.getElementById('gtm-id').value = '';
+
+  document.getElementById('header-colour-text').value = '#1F1541';
+  document.getElementById('header-colour-picker').value = '#1f1541';
+  document.getElementById('link-colour-text').value = '#47CD89';
+  document.getElementById('link-colour-picker').value = '#47CD89';
+
+  document.getElementById('title-font').value = 'Plus Jakarta Sans';
+  document.getElementById('body-font').value = 'Inter';
+
+  const container = document.getElementById('nav-links-container');
+  container.innerHTML = `
+    <div class="nav-link-row">
+      <div style="flex:1;"><label style="font-family:'Montserrat',sans-serif;font-size:12px;color:#4a535c;display:block;margin-bottom:4px;">Link text</label><input class="field-input nav-link-text" type="text" value="FAQ" oninput="sendConfig()"></div>
+      <div style="flex:2;"><label style="font-family:'Montserrat',sans-serif;font-size:12px;color:#4a535c;display:block;margin-bottom:4px;">Link url</label><input class="field-input nav-link-url" type="text" value="https://myshop.com/FAQ" oninput="sendConfig()"></div>
+      <button class="remove-link-btn" onclick="removeNavLink(this)">&times;</button>
+    </div>`;
+
+  document.querySelectorAll('.toggle-switch[data-key]').forEach(function(sw) {
+    sw.classList.remove('on');
+    const expand = sw.closest('.toggle-row') && sw.closest('.toggle-row').nextElementSibling;
+    if (expand && expand.classList.contains('toggle-expand')) expand.classList.remove('open');
+  });
+
+  ['logo-upload-area', 'favicon-upload-area', 'page-image-upload-area'].forEach(function(id) {
+    const area = document.getElementById(id);
+    if (!area) return;
+    area.classList.remove('has-file');
+    area.querySelectorAll('img').forEach(function(img) { img.remove(); });
+    const iconBox = area.querySelector('.upload-icon-box');
+    if (iconBox) iconBox.style.display = '';
+  });
+
+  localStorage.removeItem('tracking-admin-config');
+  sendConfig();
+}
+
+// ── Clear config when admin tab is closed ──
+window.addEventListener('pagehide', function() {
+  localStorage.removeItem('tracking-admin-config');
 });
 </script>
 </body>

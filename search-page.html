@@ -171,33 +171,34 @@ document.querySelector('.search-placeholder').addEventListener('keydown', functi
   if (e.key === 'Enter') doSearch();
 });
 
-// ── Admin config listener (live preview via postMessage) ──
-window.addEventListener('message', function(e) {
-  if (!e.data || e.data.type !== 'admin-config') return;
-  const c = e.data.config;
-
-  // Nav background colour
+// ── Branding ──
+function applyBranding(c) {
   const nav = document.querySelector('nav');
-  if (c.headerColour) {
+  if (nav && c.headerColour) {
     nav.style.background = c.headerColour;
-    document.querySelector('.track-btn').style.background = c.headerColour;
+    const trackBtn = document.querySelector('.track-btn');
+    if (trackBtn) trackBtn.style.background = c.headerColour;
   }
 
-  // Nav link colour
   if (c.linkColour) {
     document.querySelectorAll('.nav-links a').forEach(a => a.style.color = c.linkColour);
   }
 
-  // Logo
   const logoImg = document.querySelector('.nav-logo img');
   const logoText = document.querySelector('.nav-logo .logo-text');
-  if (c.logoUrl) {
-    logoImg.src = c.logoUrl;
-    logoImg.style.display = 'block';
-    logoText.style.display = 'none';
+  if (logoImg) {
+    if (!logoImg.dataset.defaultSrc) logoImg.dataset.defaultSrc = logoImg.getAttribute('src');
+    if (c.logoUrl) {
+      logoImg.src = c.logoUrl;
+      logoImg.style.display = 'block';
+      if (logoText) logoText.style.display = 'none';
+    } else {
+      logoImg.src = logoImg.dataset.defaultSrc;
+      logoImg.style.display = '';
+      if (logoText) logoText.style.display = '';
+    }
   }
 
-  // Favicon
   if (c.faviconUrl) {
     let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
     link.rel = 'icon';
@@ -205,47 +206,55 @@ window.addEventListener('message', function(e) {
     document.head.appendChild(link);
   }
 
-  // Page image (right column)
   if (c.pageImageUrl) {
     const defaultImg = document.getElementById('default-img');
     const customImg = document.getElementById('custom-img');
-    defaultImg.style.display = 'none';
-    customImg.style.display = 'block';
-    customImg.src = c.pageImageUrl;
+    if (defaultImg) defaultImg.style.display = 'none';
+    if (customImg) { customImg.style.display = 'block'; customImg.src = c.pageImageUrl; }
   }
 
-  // Page title
   if (c.pageTitle) {
-    document.getElementById('page-title-display').textContent = c.pageTitle;
+    const el = document.getElementById('page-title-display');
+    if (el) el.textContent = c.pageTitle;
   }
 
-  // Fonts
   if (c.titleFont) {
-    document.querySelector('h1').style.fontFamily = c.titleFont + ', sans-serif';
+    const h1 = document.querySelector('h1');
+    if (h1) h1.style.fontFamily = c.titleFont + ', sans-serif';
   }
-  if (c.bodyFont) {
-    document.body.style.fontFamily = c.bodyFont + ', sans-serif';
-  }
+  if (c.bodyFont) document.body.style.fontFamily = c.bodyFont + ', sans-serif';
 
-  // Nav links
   if (c.navLinks) {
     const navLinksEl = document.querySelector('.nav-links');
-    navLinksEl.innerHTML = '';
-    c.navLinks.forEach(link => {
-      if (link.text) {
-        const a = document.createElement('a');
-        a.href = link.url || '#';
-        a.textContent = link.text;
-        if (c.linkColour) a.style.color = c.linkColour;
-        navLinksEl.appendChild(a);
-      }
-    });
+    if (navLinksEl) {
+      navLinksEl.innerHTML = '';
+      c.navLinks.forEach(lnk => {
+        if (lnk.text) {
+          const a = document.createElement('a');
+          a.href = lnk.url || '#';
+          a.textContent = lnk.text;
+          if (c.linkColour) a.style.color = c.linkColour;
+          navLinksEl.appendChild(a);
+        }
+      });
+    }
   }
 
-  // Support contact
-  if (c.supportEmail) document.getElementById('help-email').textContent = c.supportEmail;
-  if (c.supportPhone) document.getElementById('help-phone').textContent = c.supportPhone;
+  if (c.supportEmail) { const el = document.getElementById('help-email'); if (el) el.textContent = c.supportEmail; }
+  if (c.supportPhone) { const el = document.getElementById('help-phone'); if (el) el.textContent = c.supportPhone; }
+}
+
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'admin-config') return;
+  applyBranding(e.data.config);
 });
+
+// ── Apply saved branding from admin on page load ──
+(function() {
+  const saved = localStorage.getItem('tracking-admin-config');
+  if (!saved) return;
+  try { applyBranding(JSON.parse(saved)); } catch(e) {}
+})();
 </script>
 </body>
 </html>

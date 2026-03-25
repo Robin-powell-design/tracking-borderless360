@@ -52,7 +52,7 @@
     .sidebar-info-value { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 18px; line-height: 26px; color: #040404; display: flex; align-items: center; gap: 6px; }
     .sidebar-divider { border: none; border-top: 1px solid #f2f4f7; }
     .sidebar-carrier { display: flex; gap: 12px; align-items: center; }
-    .sidebar-carrier-logo { width: 64px; height: 64px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+    .sidebar-carrier-logo { width: 48px; height: 48px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
     .sidebar-carrier-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
     .sidebar-carrier-info { display: flex; flex-direction: column; gap: 2px; }
     .sidebar-carrier-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 15px; color: #040404; }
@@ -240,6 +240,21 @@
     .modal-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 8px; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── Admin iframe preview scaling ── */
+    body.preview-embedded { font-size: 12px; }
+    body.preview-embedded nav { height: 52px; padding: 0 20px; }
+    body.preview-embedded .nav-logo img { height: 24px; }
+    body.preview-embedded .nav-links a { font-size: 13px; padding: 4px 8px; }
+    body.preview-embedded .page-body { height: calc(100vh - 52px); }
+    body.preview-embedded .left-sidebar { width: 280px; min-width: 280px; padding: 16px; gap: 12px; }
+    body.preview-embedded .main-panel { padding: 16px 20px 24px; gap: 16px; }
+    body.preview-embedded .page-title { font-size: 20px; line-height: 24px; }
+    body.preview-embedded .sidebar-title { font-size: 15px; }
+    body.preview-embedded .delivery-date { font-size: 20px; }
+    body.preview-embedded .delivery-label { font-size: 12px; }
+    body.preview-embedded .delivery-note { font-size: 10px; }
+    body.preview-embedded .sidebar-card { padding: 16px; gap: 12px; }
+
     .hidden { display: none !important; }
 
     /* Search view */
@@ -362,7 +377,7 @@
   <button class="demo-tab tab-stuck" onclick="setState(&#39;stuck&#39;,this)">Stuck / Lost</button>
   <button class="demo-tab tab-updateaddress" onclick="setState(&#39;updateaddress&#39;,this)">Update Address</button>
   <span style="width:1px;height:20px;background:#e5e7eb;margin:0 8px;flex-shrink:0;"></span>
-  <a href="https://seoul-v2.vercel.app/multi-package.html" class="demo-tab" style="text-decoration:none;">Multi Package</a>
+  <a href="multi-package.html" class="demo-tab" style="text-decoration:none;">Multi Package</a>
 </div>
 
 <div class="advance-bar" id="advance-bar">
@@ -407,11 +422,11 @@
       <div class="sidebar-contact-items">
         <div class="sidebar-contact-item">
           <svg viewBox="0 0 16 16" fill="none"><rect x="1.33" y="2.67" width="13.33" height="10.67" rx="1.33" stroke="#4c60ff" stroke-width="1.2"></rect><path d="M1.33 4.67L8 9.33l6.67-4.66" stroke="#4c60ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-          <span>support@youremail.com</span>
+          <span id="sidebar-contact-email">support@youremail.com</span>
         </div>
         <div class="sidebar-contact-item">
           <svg viewBox="0 0 16 16" fill="none"><path d="M3.11 2.22h2.67l1.11 2.89-1.56 1.56a8.44 8.44 0 004 4l1.56-1.56 2.89 1.11v2.67a.89.89 0 01-.89.89C6 13.78 2.22 10 2.22 3.11a.89.89 0 01.89-.89z" stroke="#4c60ff" stroke-width="1.2" stroke-linejoin="round"></path></svg>
-          <span>+852 3001 5360</span>
+          <span id="sidebar-contact-phone">+852 3001 5360</span>
         </div>
       </div>
     </div>
@@ -656,6 +671,172 @@ function submitAddressUpdate(){showToast('Your address has been updated');setTim
 
 // Init
 (function(){var params=new URLSearchParams(window.location.search);var ref=params.get('ref');if(ref){document.querySelectorAll('.order-ref-val').forEach(function(e){e.textContent=ref;});document.querySelectorAll('.tracking-num-display').forEach(function(e){e.textContent=ref;});document.getElementById('search-view').classList.add('hidden');document.getElementById('tracking-view').classList.add('visible');setState('shipped',document.querySelector('.demo-tab'));}})();
+
+// ── Admin config listener (live preview via postMessage) ──
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'admin-config') return;
+  var c = e.data.config;
+
+  // Nav background colour
+  var nav = document.querySelector('nav');
+  if (c.headerColour) nav.style.background = c.headerColour;
+
+  // Nav link colour
+  if (c.linkColour) {
+    document.querySelectorAll('.nav-links a').forEach(function(a) { a.style.color = c.linkColour; });
+  }
+
+  // Logo
+  var logoImg = document.querySelector('.nav-logo img');
+  if (!logoImg.dataset.defaultSrc) logoImg.dataset.defaultSrc = logoImg.getAttribute('src');
+  if (c.logoUrl) {
+    logoImg.src = c.logoUrl;
+    logoImg.style.height = '40px';
+    logoImg.style.width = 'auto';
+  } else {
+    logoImg.src = logoImg.dataset.defaultSrc;
+    logoImg.style.height = '';
+    logoImg.style.width = '';
+  }
+
+  // Favicon
+  if (c.faviconUrl) {
+    var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.rel = 'icon';
+    link.href = c.faviconUrl;
+    document.head.appendChild(link);
+  }
+
+  // Page title
+  if (c.pageTitle) {
+    document.querySelectorAll('.page-title').forEach(function(el) { el.textContent = c.pageTitle; });
+  }
+
+  // Fonts
+  if (c.titleFont) {
+    document.querySelectorAll('.page-title, .delivery-date, .sidebar-title, .sidebar-contact-title').forEach(function(el) {
+      el.style.fontFamily = c.titleFont + ', sans-serif';
+    });
+  }
+  if (c.bodyFont) {
+    document.body.style.fontFamily = c.bodyFont + ', sans-serif';
+  }
+
+  // Nav links
+  if (c.navLinks) {
+    var navLinksEl = document.querySelector('.nav-links');
+    navLinksEl.innerHTML = '';
+    c.navLinks.forEach(function(lnk) {
+      if (lnk.text) {
+        var a = document.createElement('a');
+        a.href = lnk.url || '#';
+        a.textContent = lnk.text;
+        if (c.linkColour) a.style.color = c.linkColour;
+        navLinksEl.appendChild(a);
+      }
+    });
+  }
+
+  // Support contact details — sidebar
+  if (c.supportEmail) {
+    var emailEl = document.getElementById('sidebar-contact-email');
+    if (emailEl) emailEl.textContent = c.supportEmail;
+  }
+  if (c.supportPhone) {
+    var phoneEl = document.getElementById('sidebar-contact-phone');
+    if (phoneEl) phoneEl.textContent = c.supportPhone;
+  }
+
+  // Also update search view fields for Step 1 preview
+  if (c.pageTitle && document.getElementById('search-page-title')) document.getElementById('search-page-title').textContent = c.pageTitle;
+  if (c.supportEmail && document.getElementById('search-help-email')) document.getElementById('search-help-email').textContent = c.supportEmail;
+  if (c.supportPhone && document.getElementById('search-help-phone')) document.getElementById('search-help-phone').textContent = c.supportPhone;
+
+  // Carrier section visibility
+  var carrierSection = document.getElementById('sidebar-carrier-section');
+  if (carrierSection) carrierSection.style.display = c.showCarrier ? '' : 'none';
+
+  // Delivery date visibility
+  var deliveryRow = document.querySelector('.delivery-row');
+  if (deliveryRow) deliveryRow.style.display = c.showDeliveryDate ? '' : 'none';
+
+  // Delay tab visibility
+  var delayedTab = document.querySelector('.tab-delayed');
+  if (delayedTab) delayedTab.style.display = c.showDelays ? '' : 'none';
+
+  // Address notification tab visibility
+  var addressTab = document.querySelector('.tab-updateaddress');
+  if (addressTab) addressTab.style.display = c.showAddressNotif ? '' : 'none';
+
+  // Returns — hide/show Return action buttons
+  document.querySelectorAll('.action-btn').forEach(function(btn) {
+    if (btn.textContent.includes('Return')) btn.style.display = c.enableReturns ? '' : 'none';
+  });
+
+  // Claims — hide/show Claim action buttons
+  document.querySelectorAll('.action-btn').forEach(function(btn) {
+    if (btn.textContent.includes('lost') || btn.textContent.includes('claim') || btn.textContent.includes('Claim')) {
+      btn.style.display = c.enableClaims ? '' : 'none';
+    }
+  });
+
+  // Show/hide return & claim modals based on which toggle was last tapped
+  var lastToggled = c._lastToggledFeature;
+  if (lastToggled === 'enableReturns') {
+    if (c.enableReturns) {
+      closeModal('claim-modal');
+      setState('delivered', document.querySelector('.demo-tab'));
+      setTimeout(function() { openModal('return-modal'); }, 150);
+    } else {
+      closeModal('return-modal');
+      if (c.enableClaims) {
+        setState('delayed', document.querySelector('.demo-tab'));
+        setTimeout(function() { openModal('claim-modal'); }, 150);
+      }
+    }
+  } else if (lastToggled === 'enableClaims') {
+    if (c.enableClaims) {
+      closeModal('return-modal');
+      setState('delayed', document.querySelector('.demo-tab'));
+      setTimeout(function() { openModal('claim-modal'); }, 150);
+    } else {
+      closeModal('claim-modal');
+      if (c.enableReturns) {
+        setState('delivered', document.querySelector('.demo-tab'));
+        setTimeout(function() { openModal('return-modal'); }, 150);
+      }
+    }
+  }
+
+  // Store config globally for state changes
+  window.__adminConfig = c;
+
+  // When embedded as admin preview, skip search and show tracking
+  document.getElementById('search-view').classList.add('hidden');
+  var tv = document.getElementById('tracking-view');
+  if (!tv.classList.contains('visible')) {
+    tv.classList.add('visible');
+    setState('shipped', document.querySelector('.demo-tab'));
+  }
+
+  // Hide demo bar, advance bar, and apply preview scaling only when embedded as admin iframe
+  if (!e.data.fromStorage) {
+    document.querySelector('.demo-bar').style.display = 'none';
+    document.getElementById('advance-bar').style.display = 'none';
+    document.body.classList.add('preview-embedded');
+  }
+});
+
+// ── Apply saved branding from admin on page load ──
+(function() {
+  var saved = localStorage.getItem('tracking-admin-config');
+  if (!saved) return;
+  try {
+    window.dispatchEvent(new MessageEvent('message', {
+      data: { type: 'admin-config', config: JSON.parse(saved), fromStorage: true }
+    }));
+  } catch(err) {}
+})();
 </script>
 <div class="toast" id="toast">
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#027a48" stroke-width="1.5"></circle><path d="M6.5 10.5l2.5 2.5 5-5" stroke="#027a48" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>

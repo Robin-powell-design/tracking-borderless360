@@ -89,6 +89,10 @@ fs.writeFileSync(
         middlewarePath: "_middleware",
         continue: true,
       },
+      {
+        src: "/",
+        dest: "/admin.html",
+      },
     ],
   })
 );
