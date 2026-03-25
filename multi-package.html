@@ -62,6 +62,8 @@
     .pkg-badge-delivered { background: #00a870; }
     .pkg-badge-sm { width: 24px; height: 24px; }
     .pkg-badge-sm span { font-size: 11px; }
+    .pkg-badge-sm.pkg-badge-active { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1f1541; }
+    .pkg-badge-sm.pkg-badge-active.pkg-badge-delivered { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #00a870; }
 
     /* Package selector cards in sidebar */
     .sidebar-pkg-cards { display: flex; flex-direction: column; gap: 8px; }
@@ -485,10 +487,11 @@ function renderSidebarBadges() {
   var container = document.getElementById('sidebar-badges');
   var html = '';
   packages.forEach(function(pkg, i) {
+    var activeCls = (i === selectedPkg) ? ' pkg-badge-active' : '';
     if (pkg.isDelivered) {
-      html += '<div class="pkg-badge pkg-badge-delivered pkg-badge-sm"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>';
+      html += '<div class="pkg-badge pkg-badge-delivered pkg-badge-sm' + activeCls + '" onclick="selectPackage(' + i + ')" style="cursor:pointer;"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>';
     } else {
-      html += '<div class="pkg-badge pkg-badge-num pkg-badge-sm"><span>' + pkg.id + '</span></div>';
+      html += '<div class="pkg-badge pkg-badge-num pkg-badge-sm' + activeCls + '" onclick="selectPackage(' + i + ')" style="cursor:pointer;"><span>' + pkg.id + '</span></div>';
     }
   });
   container.innerHTML = html;
