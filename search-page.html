@@ -55,6 +55,26 @@
     .footer-left .bold { font-weight: 600; text-transform: uppercase; }
     .footer-right p { font-weight: 500; }
 
+    /* ── Admin iframe preview scaling ── */
+    body.preview-embedded { font-size: 10px; }
+    body.preview-embedded nav { height: 40px; padding: 0 12px; }
+    body.preview-embedded .nav-logo-text { font-size: 10px; letter-spacing: 0.5px; }
+    body.preview-embedded .nav-links span,
+    body.preview-embedded .nav-links a { font-size: 10px; padding: 3px 6px; }
+    body.preview-embedded .content-col { padding: 16px 20px; }
+    body.preview-embedded .content-inner { max-width: 70%; }
+    body.preview-embedded .text-group { gap: 4px; margin-bottom: 14px; }
+    body.preview-embedded h1 { font-size: 18px; line-height: 1.3; }
+    body.preview-embedded .subtitle { font-size: 11px; }
+    body.preview-embedded .tip { font-size: 9px; }
+    body.preview-embedded .search-box { max-width: 100%; padding: 4px 4px 4px 10px; gap: 4px; border-radius: 6px; }
+    body.preview-embedded .search-placeholder { font-size: 10px; padding: 4px 4px; }
+    body.preview-embedded .track-btn { height: 32px; padding: 0 14px; border-radius: 5px; }
+    body.preview-embedded .track-btn span { font-size: 10px; }
+    body.preview-embedded footer { bottom: 8px; padding: 6px 12px; }
+    body.preview-embedded footer p { font-size: 8px; }
+    body.preview-embedded .footer-left .bold { font-size: 8px; }
+
     /* ── Responsive ── */
     @media (max-width: 768px) {
       .page-body { padding: 0 16px; }
@@ -196,6 +216,9 @@ function applyBranding(c) {
 window.addEventListener('message', function(e) {
   if (!e.data || e.data.type !== 'admin-config') return;
   applyBranding(e.data.config);
+  if (!e.data.fromStorage) {
+    document.body.classList.add('preview-embedded');
+  }
 });
 
 // ── Apply saved branding from admin on page load ──
