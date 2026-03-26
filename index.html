@@ -24,7 +24,7 @@
     nav {
       flex-shrink: 0;
       width: 100%;
-      background: #1f1541;
+      background: #6B1AFF;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -36,9 +36,12 @@
       flex-shrink: 0;
       display: flex;
       align-items: center;
+      text-decoration: none;
     }
+    .nav-logo-text { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(13px, 1.1vw, 16px); color: #fff; letter-spacing: 0.8px; }
+    .nav-logo-text span { color: #05E7FF; }
     .nav-logo img {
-      display: block;
+      display: none;
       height: clamp(28px, 2.8vw, 40.5px);
       width: auto;
       aspect-ratio: 139.725 / 40.5;
@@ -178,7 +181,7 @@
       justify-content: center;
       height: clamp(44px, 4vw, 60px);
       padding: 0 clamp(16px, 2vw, 30px);
-      background: #1f1541;
+      background: #6B1AFF;
       border-radius: 10px;
       border: none;
       cursor: pointer;
@@ -432,7 +435,8 @@
   <!-- Navigation -->
   <nav>
     <div class="nav-logo">
-      <img src="images/image 19 [Vectorized].svg" alt="AgeMate" />
+      <span class="nav-logo-text">BORDERLESS<span>360</span></span>
+      <img src="" alt="Logo" />
     </div>
     <div class="nav-links">
       <a href="#">Shop</a>

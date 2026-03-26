@@ -343,15 +343,15 @@
                   <div class="colour-field">
                     <label>Header colour</label>
                     <div class="colour-input-wrap">
-                      <input class="field-input" type="text" id="header-colour-text" value="#1F1541" oninput="syncColour('header')">
-                      <input type="color" class="colour-swatch" id="header-colour-picker" value="#1f1541" oninput="syncColourFromPicker('header')">
+                      <input class="field-input" type="text" id="header-colour-text" value="#6B1AFF" oninput="syncColour('header')">
+                      <input type="color" class="colour-swatch" id="header-colour-picker" value="#6B1AFF" oninput="syncColourFromPicker('header')">
                     </div>
                   </div>
                   <div class="colour-field">
                     <label>Navigation link colour</label>
                     <div class="colour-input-wrap">
-                      <input class="field-input" type="text" id="link-colour-text" value="#47CD89" oninput="syncColour('link')">
-                      <input type="color" class="colour-swatch" id="link-colour-picker" value="#47CD89" oninput="syncColourFromPicker('link')">
+                      <input class="field-input" type="text" id="link-colour-text" value="#FFFFFF" oninput="syncColour('link')">
+                      <input type="color" class="colour-swatch" id="link-colour-picker" value="#FFFFFF" oninput="syncColourFromPicker('link')">
                     </div>
                   </div>
                 </div>
@@ -621,14 +621,14 @@
 let currentStep = 1;
 const config = {
   pageTitle: 'Track your items',
-  headerColour: '#1f1541',
-  linkColour: '#47CD89',
+  headerColour: '#6B1AFF',
+  linkColour: '#FFFFFF',
   titleFont: 'Plus Jakarta Sans',
   bodyFont: 'Inter',
   logoUrl: '',
   faviconUrl: '',
   pageImageUrl: '',
-  navLinks: [{ text: 'FAQ', url: 'https://myshop.com/FAQ' }],
+  navLinks: [{ text: 'Shop', url: '#' }, { text: 'FAQ', url: '#' }],
   supportEmail: 'support@yourcompany.com',
   supportPhone: '+61 3 9000 1234',
   showCarrier: true,
@@ -823,8 +823,8 @@ function resetToDefaults() {
   if (!confirm('Reset all branding to the original defaults? This will clear any saved settings.')) return;
 
   config.pageTitle = 'Track your items';
-  config.headerColour = '#1f1541';
-  config.linkColour = '#47CD89';
+  config.headerColour = '#6B1AFF';
+  config.linkColour = '#FFFFFF';
   config.titleFont = 'Plus Jakarta Sans';
   config.bodyFont = 'Inter';
   config.logoUrl = '';
@@ -847,10 +847,10 @@ function resetToDefaults() {
   document.getElementById('support-phone').value = '+61 3 9000 1234';
   if (document.getElementById('gtm-id')) document.getElementById('gtm-id').value = '';
 
-  document.getElementById('header-colour-text').value = '#1F1541';
-  document.getElementById('header-colour-picker').value = '#1f1541';
-  document.getElementById('link-colour-text').value = '#47CD89';
-  document.getElementById('link-colour-picker').value = '#47CD89';
+  document.getElementById('header-colour-text').value = '#6B1AFF';
+  document.getElementById('header-colour-picker').value = '#6B1AFF';
+  document.getElementById('link-colour-text').value = '#FFFFFF';
+  document.getElementById('link-colour-picker').value = '#FFFFFF';
 
   document.getElementById('title-font').value = 'Plus Jakarta Sans';
   document.getElementById('body-font').value = 'Inter';

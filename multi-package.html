@@ -10,21 +10,23 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
-    body { min-height: 100vh; display: flex; flex-direction: column; font-family: 'Plus Jakarta Sans', sans-serif; background: #f1f2f4; }
+    body { min-height: 100vh; display: flex; flex-direction: column; font-family: 'Montserrat', sans-serif; background: #f1f2f4; }
 
     /* Nav */
-    nav { flex-shrink: 0; width: 100%; background: #1f1541; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 87px; z-index: 200; position: sticky; top: 0; }
-    .nav-logo { flex-shrink: 0; display: flex; align-items: center; }
-    .nav-logo img { display: block; height: 40.5px; width: auto; object-fit: contain; max-width: none; }
+    nav { flex-shrink: 0; width: 100%; background: #6B1AFF; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 87px; z-index: 200; position: sticky; top: 0; }
+    .nav-logo { flex-shrink: 0; display: flex; align-items: center; text-decoration: none; }
+    .nav-logo-text { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 16px; color: #fff; letter-spacing: 0.8px; }
+    .nav-logo-text span { color: #05E7FF; }
+    .nav-logo img { display: none; height: 40.5px; width: auto; object-fit: contain; max-width: none; }
     .nav-links { display: flex; align-items: center; }
-    .nav-links a { padding: 6.75px 13.5px; border-radius: 100px; text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: #fff; }
+    .nav-links a, .nav-links span { padding: 6.75px 13.5px; border-radius: 100px; text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: #fff; }
 
     /* Demo bar */
     .demo-bar { background: #fff; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; padding: 0 32px; gap: 2px; flex-shrink: 0; flex-wrap: wrap; position: sticky; top: 87px; z-index: 199; }
     .demo-bar-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: #96a0ab; text-transform: uppercase; letter-spacing: 0.08em; margin-right: 8px; white-space: nowrap; }
     .demo-tab { padding: 13px 16px; border: none; background: none; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; color: #66727f; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.15s, border-color 0.15s; white-space: nowrap; text-decoration: none; }
     .demo-tab:hover { color: #1f1541; }
-    .demo-tab.active { color: #4c60ff; border-bottom-color: #4c60ff; font-weight: 600; }
+    .demo-tab.active { color: #6B1AFF; border-bottom-color: #6B1AFF; font-weight: 600; }
 
     /* V2 Layout */
     .page-body { flex: 1; display: flex; align-items: stretch; height: calc(100vh - 87px - 43px); overflow: hidden; }
@@ -33,47 +35,47 @@
 
     /* Sidebar styles */
     .sidebar-card { background: #fafafa; border-radius: 12px; padding: 28px 24px; display: flex; flex-direction: column; gap: 20px; }
-    .sidebar-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 20px; line-height: 28px; color: rgba(0,0,0,0.8); }
+    .sidebar-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 20px; line-height: 28px; color: rgba(0,0,0,0.8); }
     .sidebar-info { display: flex; flex-direction: column; gap: 12px; }
     .sidebar-info-row { display: flex; gap: 24px; }
     .sidebar-info-item { display: flex; flex-direction: column; flex: 1; }
-    .sidebar-info-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 14px; line-height: 20px; color: #858585; }
-    .sidebar-info-value { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 18px; line-height: 26px; color: #040404; display: flex; align-items: center; gap: 6px; }
+    .sidebar-info-label { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; line-height: 20px; color: #858585; }
+    .sidebar-info-value { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 18px; line-height: 26px; color: #040404; display: flex; align-items: center; gap: 6px; }
     .sidebar-divider { border: none; border-top: 1px solid #f2f4f7; }
     .sidebar-carrier { display: flex; gap: 12px; align-items: center; }
     .sidebar-carrier-logo { width: 48px; height: 48px; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
     .sidebar-carrier-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
     .sidebar-carrier-info { display: flex; flex-direction: column; gap: 2px; }
-    .sidebar-carrier-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 15px; color: #040404; }
-    .sidebar-carrier-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 15px; color: #040404; }
+    .sidebar-carrier-label { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 15px; color: #040404; }
+    .sidebar-carrier-name { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 15px; color: #040404; }
     .sidebar-carrier-link { display: flex; align-items: center; gap: 4px; text-decoration: none; }
-    .sidebar-carrier-link span { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 15px; color: #4c60ff; }
+    .sidebar-carrier-link span { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 15px; color: #6B1AFF; }
     .sidebar-carrier-link img { width: 16px; height: 16px; }
 
     /* Package count section */
     .sidebar-pkg-count { display: flex; align-items: center; gap: 12px; }
-    .sidebar-pkg-count-text { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 16px; color: #040404; flex: 1; }
+    .sidebar-pkg-count-text { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 16px; color: #040404; flex: 1; }
     .sidebar-pkg-count-badges { display: flex; gap: 6px; align-items: center; }
 
     /* Package numbered badges */
     .pkg-badge { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .pkg-badge-num { background: #1f1541; }
+    .pkg-badge-num { background: #6B1AFF; }
     .pkg-badge-num span { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 13px; color: #fff; }
     .pkg-badge-delivered { background: #00a870; }
     .pkg-badge-sm { width: 24px; height: 24px; }
     .pkg-badge-sm span { font-size: 11px; }
-    .pkg-badge-sm.pkg-badge-active { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1f1541; }
+    .pkg-badge-sm.pkg-badge-active { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #6B1AFF; }
     .pkg-badge-sm.pkg-badge-active.pkg-badge-delivered { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #00a870; }
 
     /* Package selector cards in sidebar */
     .sidebar-pkg-cards { display: flex; flex-direction: column; gap: 8px; }
     .sidebar-pkg-card { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; background: #f9fafb; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.15s; border-left: 3px solid transparent; }
     .sidebar-pkg-card:hover { background: #f3f4f6; }
-    .sidebar-pkg-card.selected { background: #fafbff; border-color: #d9d6fe; border-left-color: #5233b2; }
+    .sidebar-pkg-card.selected { background: #fafbff; border-color: #d9d6fe; border-left-color: #6B1AFF; }
     .sidebar-pkg-card.selected.delivered-selected { background: #f6fef9; border-color: #a9efcc; border-left-color: #12b76a; }
     .sidebar-pkg-card-info { flex: 1; min-width: 0; }
-    .sidebar-pkg-card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #344054; }
-    .sidebar-pkg-card-tn { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; color: #96a0ab; margin-top: 2px; }
+    .sidebar-pkg-card-title { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 14px; color: #344054; }
+    .sidebar-pkg-card-tn { font-family: 'Montserrat', sans-serif; font-size: 12px; color: #96a0ab; margin-top: 2px; }
     .sidebar-pkg-card-status { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 9999px; flex-shrink: 0; white-space: nowrap; }
     .sidebar-pkg-card-status.status-purple { background: rgba(157,128,249,0.2); }
     .sidebar-pkg-card-status.status-purple span { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; line-height: 18px; color: #8744ff; }
@@ -81,14 +83,14 @@
     .sidebar-pkg-card-status.status-green span { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 12px; line-height: 18px; color: #027a48; }
 
     /* Contact support in sidebar */
-    .sidebar-contact-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 18px; color: rgba(0,0,0,0.8); margin-bottom: 12px; }
+    .sidebar-contact-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 18px; color: rgba(0,0,0,0.8); margin-bottom: 12px; }
     .sidebar-contact-items { display: flex; flex-direction: row; gap: 32px; }
     .sidebar-contact-item { display: flex; align-items: center; gap: 8px; }
-    .sidebar-contact-item svg { width: 18px; height: 18px; flex-shrink: 0; color: #4c60ff; }
-    .sidebar-contact-item span { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 15px; color: #4c60ff; }
+    .sidebar-contact-item svg { width: 18px; height: 18px; flex-shrink: 0; color: #6B1AFF; }
+    .sidebar-contact-item span { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 15px; color: #6B1AFF; }
 
     /* Main panel */
-    .page-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 28px; line-height: 32px; color: rgba(0,0,0,0.8); }
+    .page-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 28px; line-height: 32px; color: rgba(0,0,0,0.8); }
     .main-card-wrap { background: #fff; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
 
     /* Delivery row */
@@ -96,32 +98,32 @@
     .delivery-left { display: flex; gap: 16px; align-items: center; flex: 1; }
     .calendar-icon { width: 72px; height: 72px; border-radius: 7.89px; background: #f4f4f4; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
     .delivery-info { display: flex; flex-direction: column; gap: 4px; }
-    .delivery-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #4a535c; }
-    .delivery-date { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; font-size: 28px; line-height: 1; color: #040404; }
-    .delivery-note { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 12px; color: #96a0ab; }
+    .delivery-label { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 14px; color: #4a535c; }
+    .delivery-date { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 28px; line-height: 1; color: #040404; }
+    .delivery-note { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 12px; color: #96a0ab; }
     .delivery-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
     .delivery-right-top { display: flex; align-items: center; gap: 12px; }
     .delivery-right-text { display: flex; flex-direction: column; align-items: flex-end; }
-    .delivery-right-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 12px; color: #858585; line-height: 1.3; }
-    .delivery-right-value { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #040404; line-height: 1.3; }
+    .delivery-right-label { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 12px; color: #858585; line-height: 1.3; }
+    .delivery-right-value { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 14px; color: #040404; line-height: 1.3; }
     .delivery-carrier-logo { width: 48px; height: 48px; border-radius: 8px; overflow: hidden; }
     .delivery-carrier-logo img { width: 100%; height: 100%; object-fit: contain; }
-    .delivery-tracking-num { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 12px; color: #4c60ff; }
+    .delivery-tracking-num { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 12px; color: #6B1AFF; }
 
     /* Delivered extra card */
     .delivery-extra { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; background: #fff; border-radius: 8px; padding: 12px 20px; text-align: center; border: 1px solid #e5e7eb; align-self: stretch; min-width: 100px; }
-    .delivery-extra-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 14px; color: #4a535c; }
-    .delivery-extra-value { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; font-size: 28px; line-height: 1; color: #040404; }
-    .delivery-extra-unit { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 14px; color: #4a535c; }
+    .delivery-extra-label { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: #4a535c; }
+    .delivery-extra-value { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 28px; line-height: 1; color: #040404; }
+    .delivery-extra-unit { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 14px; color: #4a535c; }
 
     /* Items */
     .items-card { display: flex; flex-direction: column; gap: 12px; }
-    .items-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 16px; color: #141414; }
+    .items-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 16px; color: #141414; }
     .items-list { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     .item-chip { display: flex; align-items: center; gap: 8px; height: 36px; background: #f1f2f4; border: 1px solid #ebedef; border-radius: 4px; padding-right: 12px; flex-shrink: 0; }
     .item-chip-img { width: 36px; height: 36px; border-radius: 4px 0 0 4px; overflow: hidden; flex-shrink: 0; object-fit: cover; }
-    .item-chip-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 12px; color: #4a535c; }
-    .item-chip-qty { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 12px; color: #66727f; }
+    .item-chip-name { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 12px; color: #4a535c; }
+    .item-chip-qty { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 12px; color: #66727f; }
 
     /* Progress */
     .progress-card { padding: 0; display: flex; flex-direction: column; gap: 16px; }
@@ -129,14 +131,14 @@
     .progress-bar-wrap.normal   { background: #fafbff; }
     .progress-bar-wrap.delivered { background: #f6fef9; border: 1px solid #a9efcc; }
     .progress-status-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 18px; line-height: 28px; }
-    .progress-status-title.purple { color: #5233b2; }
+    .progress-status-title.purple { color: #6B1AFF; }
     .progress-status-title.green  { color: #027a48; }
     .progress-status-sub { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 14px; line-height: 24px; color: #707070; }
 
     /* Delivery progress stages */
     .stages { display: flex; align-items: flex-end; padding: 16px 0 44px; }
     .stage { display: flex; flex-direction: column; justify-content: space-between; height: 48px; position: relative; padding-bottom: 14px; border-bottom: 2px solid #d7d7d7; }
-    .stage.active-purple { border-bottom-color: #5233b2; }
+    .stage.active-purple { border-bottom-color: #6B1AFF; }
     .stage.active-green  { border-bottom-color: #12b76a; }
     .stage-1 { width: 20%; } .stage-2 { width: 28%; } .stage-3 { flex: 1; } .stage-4 { flex: 1; }
     .stage-label { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px; line-height: 1.4; white-space: nowrap; }
@@ -162,8 +164,8 @@
     .timeline { display: flex; flex-direction: column; padding-left: 4px; }
     .tl-item { display: flex; gap: 16px; align-items: flex-start; }
     .tl-col { display: flex; flex-direction: column; align-items: center; width: 44px; flex-shrink: 0; align-self: stretch; }
-    .tl-tick { width: 16px; height: 16px; border-radius: 50%; background: #4c60ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .tl-line { flex: 1; width: 2px; background: #4c60ff; min-height: 20px; }
+    .tl-tick { width: 16px; height: 16px; border-radius: 50%; background: #6B1AFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .tl-line { flex: 1; width: 2px; background: #6B1AFF; min-height: 20px; }
     .tl-line.dashed { background: repeating-linear-gradient(to bottom, #d0d5dd 0, #d0d5dd 4px, transparent 4px, transparent 8px); }
     .tl-text { flex: 1; display: flex; flex-direction: column; gap: 6px; padding-top: 2px; min-width: 0; padding-bottom: 40px; }
     .tl-event { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px; line-height: 1.4; color: #141414; }
@@ -211,11 +213,12 @@
 <!-- Navigation -->
 <nav id="main-nav">
   <div class="nav-logo">
-    <img src="images/image 19 [Vectorized].svg" alt="AgeMate" />
+    <span class="nav-logo-text">BORDERLESS<span>360</span></span>
+    <img src="" alt="Logo" />
   </div>
   <div class="nav-links">
-    <a href="#">Shop</a>
-    <a href="#">FAQ</a>
+    <span>Shop</span>
+    <span>FAQ</span>
   </div>
 </nav>
 
@@ -271,11 +274,11 @@
       <div class="sidebar-contact-title">Contact Support</div>
       <div class="sidebar-contact-items">
         <div class="sidebar-contact-item">
-          <svg viewBox="0 0 16 16" fill="none"><rect x="1.33" y="2.67" width="13.33" height="10.67" rx="1.33" stroke="#4c60ff" stroke-width="1.2"/><path d="M1.33 4.67L8 9.33l6.67-4.66" stroke="#4c60ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 16 16" fill="none"><rect x="1.33" y="2.67" width="13.33" height="10.67" rx="1.33" stroke="#6B1AFF" stroke-width="1.2"/><path d="M1.33 4.67L8 9.33l6.67-4.66" stroke="#6B1AFF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span>support@youremail.com</span>
         </div>
         <div class="sidebar-contact-item">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M3.11 2.22h2.67l1.11 2.89-1.56 1.56a8.44 8.44 0 004 4l1.56-1.56 2.89 1.11v2.67a.89.89 0 01-.89.89C6 13.78 2.22 10 2.22 3.11a.89.89 0 01.89-.89z" stroke="#4c60ff" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3.11 2.22h2.67l1.11 2.89-1.56 1.56a8.44 8.44 0 004 4l1.56-1.56 2.89 1.11v2.67a.89.89 0 01-.89.89C6 13.78 2.22 10 2.22 3.11a.89.89 0 01.89-.89z" stroke="#6B1AFF" stroke-width="1.2" stroke-linejoin="round"/></svg>
           <span>+852 3001 5360</span>
         </div>
       </div>
