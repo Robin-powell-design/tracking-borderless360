@@ -75,8 +75,40 @@
     body.preview-embedded footer p { font-size: 8px; }
     body.preview-embedded .footer-left .bold { font-size: 8px; }
 
-    /* ── Responsive ── */
-    @media (max-width: 768px) {
+    /* ── Phone preview override (when admin switches to phone frame) ── */
+    body.preview-embedded.phone-preview .page-body { flex-direction: column; align-items: stretch; justify-content: flex-start; overflow: visible; background: url('images/background-blobs.png') center 40% / cover no-repeat; }
+    body.preview-embedded.phone-preview .content-col { flex: 1; width: 100%; background: #fff; border-radius: 16px 16px 0 0; margin-top: 60px; padding: 24px 32px 0; z-index: 2; align-items: flex-start; }
+    body.preview-embedded.phone-preview .content-inner { max-width: 100%; width: 100%; align-items: flex-start; text-align: left; flex: 1; }
+    body.preview-embedded.phone-preview .text-group { align-items: flex-start; gap: 4px; margin-bottom: 16px; }
+    body.preview-embedded.phone-preview h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+    body.preview-embedded.phone-preview .subtitle { font-size: 10px; line-height: 1.5; color: #3a3a3a; }
+    body.preview-embedded.phone-preview .tip { font-size: 8px; color: #777; }
+    body.preview-embedded.phone-preview .search-box { flex-direction: column; align-items: stretch; background: transparent; border: none; padding: 0; gap: 8px; max-width: 100%; box-shadow: none; border-radius: 0; }
+    body.preview-embedded.phone-preview .search-placeholder { height: 36px; background: #fff; border: 1px solid rgba(0,0,0,0.15); border-radius: 6px; padding: 0 10px; font-size: 9px; display: block; flex: none; width: 100%; }
+    body.preview-embedded.phone-preview .track-btn { height: 38px; width: 100%; border-radius: 6px; padding: 0; }
+    body.preview-embedded.phone-preview .track-btn span { font-size: 10px; font-weight: 700; }
+    body.preview-embedded.phone-preview footer { position: relative; bottom: auto; margin-top: auto; padding: 4px 12px; border-top: 1px solid rgba(0,0,0,0.1); opacity: 0.5; }
+
+    /* ── Mobile ── */
+    @media (max-width: 500px) {
+      body { background: #f1f2f4; }
+      .page-body { flex-direction: column; align-items: stretch; justify-content: flex-start; overflow: visible; background: url('images/background-blobs.png') center 40% / cover no-repeat; min-height: 200px; }
+      .content-col { flex: 1; width: 100%; background: #fff; border-radius: 24px 24px 0 0; margin-top: -24px; padding: 40px 32px 0; z-index: 2; align-items: flex-start; }
+      .content-inner { max-width: 100%; width: 100%; align-items: flex-start; text-align: left; flex: 1; }
+      .text-group { align-items: flex-start; gap: 6px; margin-bottom: 24px; }
+      h1 { font-size: 32px; font-weight: 700; color: #1a1a2e; }
+      .subtitle { font-size: 16px; line-height: 1.7; color: #3a3a3a; }
+      .tip { font-size: 12px; color: #777; }
+      .search-box { flex-direction: column; align-items: stretch; background: transparent; border: none; border-radius: 0; padding: 0; gap: 16px; max-width: 100%; box-shadow: none; }
+      .search-placeholder { height: 60px; background: #fff; border: 1px solid rgba(0,0,0,0.15); border-radius: 8px; padding: 0 16px; font-size: 14px; display: block; flex: none; width: 100%; }
+      .track-btn { height: 63px; width: 100%; border-radius: 8px; padding: 0; }
+      .track-btn span { font-size: 17px; font-weight: 700; }
+      footer { position: relative; bottom: auto; margin-top: auto; padding: 8px 32px; border-top: 1px solid rgba(0,0,0,0.1); opacity: 0.5; }
+      footer p { font-size: 12px; }
+    }
+
+    /* ── Tablet ── */
+    @media (min-width: 501px) and (max-width: 768px) {
       .page-body { padding: 0 16px; }
       .content-col { padding: 32px 0; }
       .content-inner { max-width: 100%; }
@@ -214,7 +246,12 @@ function applyBranding(c) {
 }
 
 window.addEventListener('message', function(e) {
-  if (!e.data || e.data.type !== 'admin-config') return;
+  if (!e.data) return;
+  if (e.data.type === 'preview-mode') {
+    document.body.classList.toggle('phone-preview', e.data.mode === 'mobile');
+    return;
+  }
+  if (e.data.type !== 'admin-config') return;
   applyBranding(e.data.config);
   if (!e.data.fromStorage) {
     document.body.classList.add('preview-embedded');

@@ -793,6 +793,10 @@ function setPreviewMode(mode) {
   document.getElementById('toggle-desktop').classList.toggle('active', mode === 'desktop');
   document.getElementById('toggle-mobile').classList.toggle('active', mode === 'mobile');
   frame.classList.toggle('mobile', mode === 'mobile');
+  var iframe = frame.querySelector('iframe');
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.postMessage({ type: 'preview-mode', mode: mode }, '*');
+  }
 }
 
 // ── Send config to iframe ──
